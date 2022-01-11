@@ -1,6 +1,7 @@
 import cx from 'classnames'
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import * as Colyseus from 'colyseus.js'
 
 import RoomBorder from '../svg/room/roomborder.svg';
 import RoomButton from '../svg/room/roombutton.svg';
@@ -10,8 +11,24 @@ import RoomLine2 from '../svg/room/roomline-2.svg';
 import RoomLine3 from '../svg/room/roomline-3.svg';
 import RoomTitleBorderBottom from '../svg/room/roomtitleborder-bottom.svg';
 import RoomTitleBorderTop from '../svg/room/roomtitleborder-top.svg';
+import AvailableRoom from '../components/availableroom.component';
 
 const Rooms = () => {
+    const [client, setClient] = useState<Colyseus.Client>();
+
+    useEffect(() => {
+        setClient(new Colyseus.Client('ws://localhost:3030'));
+
+        return () => {
+            console.log('On unmount');
+            setClient(undefined);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!client) return;
+        client.joinOrCreate('MyRoom');
+    }, [client]);
 
     const roomDetails = [
         {
@@ -98,16 +115,9 @@ const Rooms = () => {
                         <div className='w-1/3'></div>
                     </div>
                     <div className='flex flex-col h-full w-full overflow-y-auto scrollbar-hide gap-[5px]'>
-                        {roomDetails.map(({ name, players }) => {
+                        {roomDetails.map(({ name, players }, idx) => {
                             return (
-                                <div className='flex flex-row w-full text-xs md:text-xl justify-center items-center text-center'>
-                                    <div className='w-1/3 break-words'>{name}</div>
-                                    <div className='w-1/3'>{players}</div>
-                                    <div className='w-1/3 relative flex justify-center items-center my-auto'>
-                                        <RoomButton classname='w-1/3 h-auto m-auto btn-base min-w-[60px]' />
-                                        <div className='absolute pointer-events-none'>JOIN</div>
-                                    </div>
-                                </div>
+                                <AvailableRoom key={`${name}-${idx}`} name={name} players={players} />
                             );
                         })}
                     </div>

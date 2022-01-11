@@ -22,9 +22,9 @@ class App {
             transport: new WebSocketTransport({
                 server: createServer(app),
                 verifyClient: function(info, next) {
-                    const IS_VALID_ORIGIN = info.origin === 'http://localhost:3000';
-                    console.log(info.origin);
-                    next(IS_VALID_ORIGIN);
+                    // TODO: change VALID_ORIGIN to proper modain on production 
+                    const VALID_ORIGIN = 'http://localhost:3000';
+                    next(VALID_ORIGIN === info.origin);
                 }
             }),
         });
