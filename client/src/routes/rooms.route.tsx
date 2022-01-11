@@ -19,10 +19,11 @@ const Rooms = () => {
     useEffect(() => {
         setClient(new Colyseus.Client('ws://localhost:3030'));
 
+        // OnDestroy || Unmount
         return () => {
             console.log('On unmount');
             setClient(undefined);
-        }
+        };
     }, []);
 
     useEffect(() => {
