@@ -1,0 +1,43 @@
+:root {
+    --array-length: 770;
+    --offset-length: 770;
+}
+
+.btn-base {
+    /* transition: ease 1.5s; */
+}
+
+.btn-base:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px #ffd58c) drop-shadow(0 0 12px #ffd58c66);
+}
+
+.fill {
+    fill: url(#my-gradient);
+    clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+    transition: ease-in-out 0.5s;
+}
+
+.btn-base:hover .fill {
+    clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%);
+}
+
+.path {
+    stroke-dasharray: var(--array-length);
+    stroke-dashoffset: var(--offset-length);
+    transition: ease 2s;
+}
+
+.btn-base:hover .path{
+    stroke-dashoffset: 0;
+} 
+
+.diamond{
+    fill-opacity: 0;
+    transition: ease 1.2s;
+} 
+
+.btn-base:hover .diamond{
+    fill-opacity: 1;
+}
+

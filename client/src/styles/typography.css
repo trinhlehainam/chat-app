@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Odinson";
+    src: url("../fonts/Odinson.ttf") format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Dalek";
+    src: url('../fonts/DalekPinpointBold.ttf') format('truetype');
+    font-weight: bold;
+}
