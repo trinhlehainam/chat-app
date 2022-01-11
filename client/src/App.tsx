@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { Routes as Switch, Route, useLocation } from 'react-router-dom'
-import Colyseus from 'colyseus.js'
+import * as Colyseus from 'colyseus.js'
 
 import Home from "./routes/home.route";
 import Title from './components/title.component'
@@ -15,9 +15,9 @@ const App = () => {
     useEffect(() => {
         setClient(new Colyseus.Client('ws://localhost:3030'));
 
-        client?.joinOrCreate('myRoom');
-
     }, []);
+
+    client && client.joinOrCreate('MyRoom');
 
     const location = useLocation();
     return (
