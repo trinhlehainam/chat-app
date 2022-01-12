@@ -26,6 +26,11 @@ const Rooms = () => {
 
     useEffect(() => {
         if (!client) return;
+        const data = client.getAvailableRooms('MyRoom');
+        client.joinOrCreate('MyRoom')
+        .then((room) => {
+            setRoom(room);
+        });
         client.getAvailableRooms('MyRoom')
         .then((rooms) => {
             setAvaiRooms(rooms);
@@ -40,41 +45,6 @@ const Rooms = () => {
             room.leave();
         };
     }, [room]);
-
-    const roomDetails = [
-        {
-            name: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-            players: '1/3'
-        },
-        {
-            name: 'BBBBBB',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-        {
-            name: 'CCCCCCC',
-            players: '1/3'
-        },
-    ];
 
     // TODO: layout close button
 
@@ -126,9 +96,9 @@ const Rooms = () => {
                         <div className='w-1/3'></div>
                     </div>
                     <div className='flex flex-col h-full w-full overflow-y-auto scrollbar-hide gap-[5px]'>
-                        {roomDetails.map(({ name, players }, idx) => {
+                        {avaiRooms && avaiRooms.map(({ roomId, clients, maxClients }, idx) => {
                             return (
-                                <AvailableRoom key={`${name}-${idx}`} name={name} players={players} />
+                                <AvailableRoom key={`${roomId}-${clients}/${maxClients}`} name={roomId} players={`${clients}/${maxClients}`} />
                             );
                         })}
                     </div>
@@ -140,7 +110,15 @@ const Rooms = () => {
                     'flex justify-center items-center -space-x-1 sm:gap-x-8'
                 )}
                 >
-                    <div className='relative flex justify-center items-center'>
+                    <div 
+                    className='relative flex justify-center items-center cursor-pointer'
+                    onClick={() => {
+                        client && client.getAvailableRooms('MyRoom')
+                        .then((rooms) => {
+                            setAvaiRooms(rooms);
+                        });
+                    }}
+                    >
                         <RoomButton classname='h-auto w-2/3 min-w-[80px] btn-base' />
                         <div className='absolute text-yellow-custom text-md sm:text-2xl pointer-events-none'>REFRESH</div>
                     </div>
