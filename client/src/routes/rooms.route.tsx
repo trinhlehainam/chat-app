@@ -15,21 +15,28 @@ import AvailableRoom from '../components/availableroom.component';
 
 const Rooms = () => {
     const [client, setClient] = useState<Colyseus.Client>();
+    const [room, setRoom] = useState<Colyseus.Room>();
 
     useEffect(() => {
         setClient(new Colyseus.Client('ws://localhost:3030'));
-
-        // OnDestroy || Unmount
-        return () => {
-            console.log('On unmount');
-            setClient(undefined);
-        };
     }, []);
 
     useEffect(() => {
         if (!client) return;
-        client.joinOrCreate('MyRoom');
+        client.joinOrCreate('MyRoom')
+        .then((room) => {
+            setRoom(room);
+        });
+
     }, [client]);
+
+    useEffect(() => {
+        if (!room) return;
+
+        return () => {
+            room.leave();
+        }
+    }, [room]);
 
     const roomDetails = [
         {
