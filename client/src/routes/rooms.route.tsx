@@ -16,16 +16,19 @@ import AvailableRoom from '../components/availableroom.component';
 const Rooms = () => {
     const [client, setClient] = useState<Colyseus.Client>();
     const [room, setRoom] = useState<Colyseus.Room>();
-
+    const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
+    
     useEffect(() => {
-        setClient(new Colyseus.Client('ws://localhost:3030'));
+        // TODO: change SERVER_ENPOINT to proper domain on deployment
+        const SERVER_ENDPOINT = 'ws://localhost:3030'
+        setClient(new Colyseus.Client(SERVER_ENDPOINT));
     }, []);
 
     useEffect(() => {
         if (!client) return;
-        client.joinOrCreate('MyRoom')
-        .then((room) => {
-            setRoom(room);
+        client.getAvailableRooms('MyRoom')
+        .then((rooms) => {
+            setAvaiRooms(rooms);
         });
 
     }, [client]);
@@ -35,7 +38,7 @@ const Rooms = () => {
 
         return () => {
             room.leave();
-        }
+        };
     }, [room]);
 
     const roomDetails = [
@@ -141,7 +144,13 @@ const Rooms = () => {
                         <RoomButton classname='h-auto w-2/3 min-w-[80px] btn-base' />
                         <div className='absolute text-yellow-custom text-md sm:text-2xl pointer-events-none'>REFRESH</div>
                     </div>
-                    <Link to='/lobby' className='relative flex justify-center items-center'>
+                    <Link 
+                        to='/lobby' 
+                        className='relative flex justify-center items-center'
+                        onClick={() => {
+                            client && client.create('MyRoom');
+                        }}
+                    >
                         <RoomButton classname='h-auto w-2/3 min-w-[80px] btn-base' />
                         <div className='absolute text-yellow-custom text-md sm:text-2xl pointer-events-none'>CREATE</div>
                     </Link>
