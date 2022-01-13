@@ -1,10 +1,11 @@
 import { FC } from "react";
 
 interface Props {
-    classname: string
+    classname: string;
+    onClick?: Function
 }
 
-const RoomButton: FC<Props> = ({classname}) => {
+const RoomButton: FC<Props> = ({classname, onClick}) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -14,6 +15,7 @@ const RoomButton: FC<Props> = ({classname}) => {
             viewBox="0 0 93.134 37.332"
             preserveAspectRatio="none"
             className={classname}
+            onClick={() => onClick && onClick()}
         >
             <defs>
                 <radialGradient id="my-gradient">

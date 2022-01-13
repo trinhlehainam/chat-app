@@ -1,11 +1,16 @@
 import cx from 'classnames'
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobbychatbox.component';
 import PlayerCards from '../components/playercards.component';
+import RoomContext from '../contexts/room.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
+    const {
+        room, setRoom
+    } = useContext(RoomContext);
 
     return (
         <div
@@ -26,7 +31,16 @@ const Lobby = () => {
                         <Button classname='h-auto btn-base peer' />
                         <div className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>PLAY</div>
                     </Link>
-                    <Link to='/rooms' className='relative flex justify-center items-center w-1/2 scale-75'>
+                    <Link
+                     to='/rooms'
+                    className='relative flex justify-center items-center w-1/2 scale-75'
+                    onClick={() => {
+                        room && room.leave()
+                        .then(() => {
+                            setRoom && setRoom(undefined);
+                        });
+                    }}
+                      >
                         <Button classname='h-auto btn-base peer' />
                         <div className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>LEAVE</div>
                     </Link>
