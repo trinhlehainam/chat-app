@@ -16,7 +16,7 @@ const Play = () => {
                 "sm:text-5xl"
             )}
         >
-            <Menu context={playMenu} />
+            <Menu menus={playMenu} />
         </div>
     );
 };

@@ -3,15 +3,19 @@ import { motion, Variants } from 'framer-motion'
 import cx from 'classnames'
 
 import Icon from "../svg/icon.svg"
+import { useNavigate } from "react-router-dom";
 
-type Props = {
+interface Props {
     classname: string,
     text: string
     enter_delay: number,
-    exit_delay: number
+    exit_delay: number,
+    path: string
 };
 
-const Button: FC<Props> = ({ classname, text, enter_delay, exit_delay }) => {
+const Button: FC<Props> = ({ classname, text, enter_delay, exit_delay, path }) => {
+    const navigate = useNavigate();
+
     const variants: Variants = {
         hidden: {
             y: '100vh',
@@ -52,6 +56,8 @@ const Button: FC<Props> = ({ classname, text, enter_delay, exit_delay }) => {
             exit='exit'
             whileHover='hover'
             whileTap='hover'
+
+            onClick={() => navigate(path) }
         >
             <Icon />
             <div className="absolute m-auto text-center text-[#ffd58c] select-none">

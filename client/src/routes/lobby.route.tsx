@@ -1,6 +1,6 @@
 import cx from 'classnames'
 import { useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobbychatbox.component';
 import PlayerCards from '../components/playercards.component';
@@ -8,6 +8,8 @@ import RoomContext from '../contexts/room.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
+    const navigate = useNavigate();
+
     const {
         room, setRoom
     } = useContext(RoomContext);
@@ -27,23 +29,32 @@ const Lobby = () => {
             >
                 <PlayerCards />
                 <div className='flex mt-20 translate-x-1/4 w-1/2'>
-                    <Link to='/play' className='relative flex justify-center items-center w-1/2'>
+                    <div
+                        className='relative flex justify-center items-center w-1/2 cursor-pointer'
+                        onClick={() => navigate('/game')}
+                    >
                         <Button classname='h-auto btn-base peer' />
-                        <div className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>PLAY</div>
-                    </Link>
-                    <Link
-                     to='/rooms'
-                    className='relative flex justify-center items-center w-1/2 scale-75'
-                    onClick={() => {
-                        room && room.leave()
-                        .then(() => {
-                            setRoom && setRoom(undefined);
-                        });
-                    }}
-                      >
+                        <div
+                            className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>
+                            PLAY
+                        </div>
+                    </div>
+                    <div
+                        className='relative flex justify-center items-center w-1/2 scale-75 cursor-pointer'
+                        onClick={() => {
+                            room && room.leave()
+                                .then(() => {
+                                    setRoom && setRoom(undefined);
+                                });
+                            navigate('/rooms')
+                        }}
+                    >
                         <Button classname='h-auto btn-base peer' />
-                        <div className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>LEAVE</div>
-                    </Link>
+                        <div
+                            className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>
+                            LEAVE
+                        </div>
+                    </div>
                 </div>
                 <LobbyChatBox />
             </div>

@@ -1,7 +1,6 @@
 import cx from 'classnames'
 
 import Button from '../components/button.component'
-import { Link } from 'react-router-dom';
 import { FC } from 'react';
 
 
@@ -11,10 +10,10 @@ interface Menu {
 };
 
 interface Props {
-    context: Array<Menu>
+    menus: Array<Menu>
 };
 
-const Menu: FC<Props> = ({context}) => {
+const Menu: FC<Props> = ({ menus }) => {
     return (
         <div
             className={cx(
@@ -22,13 +21,15 @@ const Menu: FC<Props> = ({context}) => {
                 "sm:gap-1 sm:[--offset-length:-770]",
             )}
         >
-            {context.map(({ text, path }, idx) => {
+            {menus.map(({ text, path }, idx) => {
                 const enter = 1 + 0.2 * idx;
                 const exit = 0.8 - 0.2 * idx;
                 return (
-                    <Link className='w-3/5 sm:w-full' to={path} key={`${text}-${idx}`}>
-                        <Button classname="mx-auto" text={text} enter_delay={enter} exit_delay={exit} />
-                    </Link>
+                    <Button
+                        key={`${text}-${idx}`}
+                        classname="w-3/5 sm:w-full mx-auto cursor-pointer"
+                        text={text} enter_delay={enter} exit_delay={exit} path={path}
+                    />
                 )
             })}
         </div>

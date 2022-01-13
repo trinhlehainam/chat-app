@@ -1,7 +1,7 @@
 import { Client, Room } from "colyseus.js";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Routes as Switch, Route, useLocation } from "react-router-dom";
+import { Routes as Switch, Route, useLocation, useNavigate } from "react-router-dom";
 
 import RoomContext from "./contexts/room.context";
 import Home from "./routes/home.route";

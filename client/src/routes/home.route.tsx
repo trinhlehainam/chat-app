@@ -15,7 +15,7 @@ const Home = () => {
                 "sm:text-5xl"
             )}
         >
-            <Menu context={homeMenu} />
+            <Menu menus={homeMenu} />
         </div>
     );
 };

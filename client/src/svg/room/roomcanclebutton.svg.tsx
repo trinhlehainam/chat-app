@@ -1,10 +1,14 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     classname: string
+    path: string
 }
 
-const RoomCancelButton: FC<Props> = ({classname}) => {
+const RoomCancelButton: FC<Props> = ({ classname, path }) => {
+    const navigate = useNavigate();
+
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -14,6 +18,7 @@ const RoomCancelButton: FC<Props> = ({classname}) => {
             viewBox="0 0 71.126 71.127"
             preserveAspectRatio="none"
             className={classname}
+            onClick={() => navigate(path)}
         >
             <g transform="translate(592.125 -323.404)">
                 <g transform="matrix(.03528 0 0 -.03528 -648.21 873.441)">
