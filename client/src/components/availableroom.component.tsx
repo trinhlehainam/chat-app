@@ -1,4 +1,3 @@
-import { Client, Room } from "colyseus.js";
 import { FC, useContext } from "react";
 import RoomContext from "../contexts/room.context";
 import RoomButton from "../svg/room/roombutton.svg";

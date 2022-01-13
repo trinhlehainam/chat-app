@@ -1,6 +1,6 @@
 import cx from 'classnames'
-import { useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobbychatbox.component';
 import PlayerCards from '../components/playercards.component';

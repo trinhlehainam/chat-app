@@ -57,7 +57,7 @@ const Button: FC<Props> = ({ classname, text, enter_delay, exit_delay, path }) =
             whileHover='hover'
             whileTap='hover'
 
-            onClick={() => navigate(path) }
+            onClick={() => navigate(path)}
         >
             <Icon />
             <div className="absolute m-auto text-center text-[#ffd58c] select-none">

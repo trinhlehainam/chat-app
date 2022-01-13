@@ -127,7 +127,7 @@ const Rooms = () => {
                         </div>
                     </div>
                     <div
-                        className="relative flex justify-center items-center"
+                        className="relative flex justify-center items-center cursor-pointer"
                         onClick={() => {
                             client && client.create('MyRoom')
                                 .then((room) => {
@@ -141,7 +141,7 @@ const Rooms = () => {
                             CREATE
                         </div>
                     </div>
-                    <div className="relative flex justify-center items-center">
+                    <div className="relative flex justify-center items-center cursor-pointer">
                         <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
                         <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
                             FIND
