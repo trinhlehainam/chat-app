@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobbychatbox.component';
@@ -13,6 +13,19 @@ const Lobby = () => {
     const {
         room, setRoom
     } = useContext(RoomContext);
+
+    const leave = () => {
+        room && room.leave()
+        .then(() => {
+            setRoom && setRoom(undefined);
+        });
+        navigate('/rooms')
+    };
+
+    useEffect(() => {
+        if (!room) return;
+        console.log(room.state);
+    },[room])
 
     return (
         <div
@@ -41,13 +54,7 @@ const Lobby = () => {
                     </div>
                     <div
                         className='relative flex justify-center items-center w-1/2 scale-75 cursor-pointer'
-                        onClick={() => {
-                            room && room.leave()
-                                .then(() => {
-                                    setRoom && setRoom(undefined);
-                                });
-                            navigate('/rooms')
-                        }}
+                        onClick={() => leave()}
                     >
                         <Button classname='h-auto btn-base peer' />
                         <div

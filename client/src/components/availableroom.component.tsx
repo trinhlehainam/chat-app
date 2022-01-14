@@ -1,4 +1,5 @@
 import { FC, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import RoomContext from "../contexts/room.context";
 import RoomButton from "../svg/room/roombutton.svg";
 
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const AvailableRoom: FC<Props> = ({ name, players}) => {
+  const navigate = useNavigate();
+
     const {
         client, setRoom
     } = useContext(RoomContext);
@@ -24,6 +27,7 @@ const AvailableRoom: FC<Props> = ({ name, players}) => {
             .then((room) => {
                 setRoom && setRoom(room);
             });
+            navigate('/lobby')
           }}
         />
         <div className="absolute pointer-events-none">JOIN</div>
