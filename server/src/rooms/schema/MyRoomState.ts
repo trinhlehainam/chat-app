@@ -1,7 +1,7 @@
 import { Schema, Context, type } from "@colyseus/schema";
+import ChatState from "./ChatState";
 
 export class MyRoomState extends Schema {
 
-  @type("string") mySynchronizedProperty: string = "Hello world";
-
+  @type(ChatState) chatState = new ChatState();
 }

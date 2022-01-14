@@ -35,14 +35,6 @@ const Rooms = () => {
         });
     }, [client, setRoom]);
 
-    useEffect(() => {
-        if (!room) return;
-
-        return () => {
-            room.leave();
-        };
-    }, [room]);
-
     // TODO: layout close button
 
     return (

@@ -24,7 +24,6 @@ const Lobby = () => {
 
     useEffect(() => {
         if (!room) return;
-        console.log(room.state);
     },[room])
 
     return (

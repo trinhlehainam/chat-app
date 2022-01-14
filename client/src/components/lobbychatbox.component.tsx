@@ -1,6 +1,39 @@
+import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent } from 'react';
 import cx from 'classnames'
 
+import RoomContext from '../contexts/room.context';
+
 const LobbyChatBox = () => {
+    const {room} = useContext(RoomContext);
+
+    const [message, setMessage] = useState('');
+    const [chat, setChat] = useState<Array<string>>([]);
+
+    useEffect(() => {
+        if (!room) return;
+        room.send('requireInit');
+
+        room.onMessage('initState', (messages) => {
+            setChat(messages);
+        });
+
+        room.onMessage('syncChat', (messages) => {
+            setChat(messages);
+        });
+
+    },[room])
+
+    const changeMessage = (e: ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+    }
+
+    const sendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            room && room.send('newMessage', message);
+            setMessage('');
+        }
+    }
+
     return (
         <div
             className={cx(
@@ -11,6 +44,9 @@ const LobbyChatBox = () => {
             <input
                 type='text'
                 className='peer outline-none border-2 border-yellow-custom bg-gray-700/90 w-full text-lg px-2'
+                value={message}
+                onChange={changeMessage}
+                onKeyPress={sendMessage}
             />
             <div
                 className={cx(
@@ -22,6 +58,7 @@ const LobbyChatBox = () => {
                     'overflow-auto scrollbar-hide'
                 )}
             >
+                {chat.map((mess, idx) => <div key={idx} className='mx-4'>{mess}</div>)}
             </div>
         </div>
     )
