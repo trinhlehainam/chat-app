@@ -1,25 +1,21 @@
 import cx from "classnames";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import * as Colyseus from "colyseus.js";
 
 import RoomBorder from "../svg/room/roomborder.svg";
-import RoomButton from "../svg/room/roombutton.svg";
 import RoomCancelButton from "../svg/room/roomcanclebutton.svg";
 import RoomLine1 from "../svg/room/roomline-1.svg";
 import RoomLine2 from "../svg/room/roomline-2.svg";
 import RoomLine3 from "../svg/room/roomline-3.svg";
-import RoomTitleBorderBottom from "../svg/room/roomtitleborder-bottom.svg";
-import RoomTitleBorderTop from "../svg/room/roomtitleborder-top.svg";
-import AvailableRoom from "../components/availableroom.component";
+import AvailableRoom from "../components/rooms/availableroom.component";
 import RoomContext from "../contexts/room.context";
+import RoomTitle from "../components/rooms/title.component";
+import NavButtons from "../components/rooms/navbuttons.component";
 
 const Rooms = () => {
-    const { client, setClient, room, setRoom } = useContext(RoomContext);
+    const { client, setClient, setRoom } = useContext(RoomContext);
 
     const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         // TODO: change SERVER_ENPOINT to proper domain on deployment
@@ -53,18 +49,14 @@ const Rooms = () => {
             >
                 <RoomBorder classname="w-[90%] h-full mx-auto" />
                 <div className="absolute flex flex-col items-center w-full h-full">
-                    <div
-                        className={cx(
+                    <RoomTitle
+                        classname={cx(
                             "flex flex-col items-center",
                             "mt-16",
                             "text-yellow-custom text-3xl",
                             "md:text-5xl"
                         )}
-                    >
-                        <RoomTitleBorderTop classname="w-[80%] sm:w-fit h-auto" />
-                        <div className="my-2">ROOMS</div>
-                        <RoomTitleBorderBottom classname="w-[80%] sm:w-fit h-auto" />
-                    </div>
+                    />
                     <RoomLine1 classname="w-[75%] h-auto max-h-6 mt-8 mx-auto" />
                     <div className={cx(
                         "flex flex-row justify-center items-center",
@@ -96,48 +88,13 @@ const Rooms = () => {
                         </div>
                     </div>
                     <RoomLine3 classname="w-[75%] h-auto max-h-12 mx-auto mb-4" />
-                    <div
-                        className={cx(
+                    <NavButtons
+                        classname={cx(
                             "flex justify-center items-center -space-x-1 sm:gap-x-8",
                             "w-3/4 mx-auto mb-16",
                         )}
-                    >
-                        <div
-                            className="relative flex justify-center items-center cursor-pointer"
-                            onClick={() => {
-                                client &&
-                                    client.getAvailableRooms("MyRoom").then((rooms) => {
-                                        setAvaiRooms(rooms);
-                                    });
-                            }}
-                        >
-                            <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
-                            <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
-                                REFRESH
-                            </div>
-                        </div>
-                        <div
-                            className="relative flex justify-center items-center cursor-pointer"
-                            onClick={() => {
-                                client && client.create('MyRoom')
-                                    .then((room) => {
-                                        setRoom && setRoom(room);
-                                    });
-                                navigate('/lobby');
-                            }}
-                        >
-                            <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
-                            <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
-                                CREATE
-                            </div>
-                        </div>
-                        <div className="relative flex justify-center items-center cursor-pointer">
-                            <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
-                            <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
-                                FIND
-                            </div>
-                        </div>
-                    </div>
+                        setAvaiRooms={setAvaiRooms}
+                    />
                     <RoomCancelButton
                         classname={cx(
                             "w-[64px] h-auto sm:hidden"

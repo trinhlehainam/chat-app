@@ -1,9 +1,9 @@
 import cx from 'classnames'
 
-import BorderBottom from '../svg/lobby/border-bottom.svg';
-import BorderTop from '../svg/lobby/border-top.svg';
-import IconBorder from '../svg/lobby/iconborder.svg';
-import PlayerBorder from '../svg/lobby/playerborder.svg';
+import BorderBottom from '../../svg/lobby/border-bottom.svg';
+import BorderTop from '../../svg/lobby/border-top.svg';
+import IconBorder from '../../svg/lobby/iconborder.svg';
+import PlayerBorder from '../../svg/lobby/playerborder.svg';
 
 const PlayerCards = () => {
     return (

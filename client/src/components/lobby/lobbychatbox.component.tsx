@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent } from 'react';
 import cx from 'classnames'
 
-import RoomContext from '../contexts/room.context';
+import RoomContext from '../../contexts/room.context';
 
 const LobbyChatBox = () => {
     const {room} = useContext(RoomContext);

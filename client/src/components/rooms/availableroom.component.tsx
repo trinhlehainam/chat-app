@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import RoomContext from "../contexts/room.context";
-import RoomButton from "../svg/room/roombutton.svg";
+import RoomContext from "../../contexts/room.context";
+import RoomButton from "../../svg/room/roombutton.svg";
 
 interface Props {
   name: string;
