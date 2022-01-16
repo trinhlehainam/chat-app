@@ -4,7 +4,7 @@ import { createServer } from 'http'
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
 import { WebSocketTransport } from '@colyseus/ws-transport'
-import { MyRoom } from './rooms/MyRoom';
+import { LobbyRoom } from './rooms/LobbyRoom';
 
 class App {
     private port: number;
@@ -31,7 +31,7 @@ class App {
     }
 
     init(): App {
-        this.server.define("MyRoom", MyRoom);
+        this.server.define("Lobby", LobbyRoom);
 
         return this;
     }

@@ -1,11 +1,11 @@
 import { Room, Client } from "colyseus";
-import { MyRoomState } from "./schema/MyRoomState";
+import { LobbyRoomState } from "./schema/LobbyRoomState";
 
-export class MyRoom extends Room<MyRoomState> {
+export class LobbyRoom extends Room<LobbyRoomState> {
   maxClients: number = 4;
 
   onCreate (options: any) {
-    this.setState(new MyRoomState());
+    this.setState(new LobbyRoomState());
 
     this.onMessage("requireInit", (client, message) => {
       client.send('initState', this.state.chatState.messages);

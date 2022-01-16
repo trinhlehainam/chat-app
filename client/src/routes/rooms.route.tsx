@@ -14,6 +14,10 @@ import NavButtons from "../components/rooms/navbuttons.component";
 import { useNavigate } from "react-router-dom";
 import RoomContext from "../contexts/room.context";
 
+enum RoomType {
+    LOBBY= 'Lobby',
+};
+
 const Rooms = () => {
     const { client, setClient, setRoom } = useContext(GlobalContext);
 
@@ -24,13 +28,13 @@ const Rooms = () => {
     const navigate = useNavigate();
 
     const refresh = () => {
-        client && client.getAvailableRooms("MyRoom").then((rooms) => {
+        client && client.getAvailableRooms("Lobby").then((rooms) => {
             setAvaiRooms(rooms);
         });
     };
 
     const create = () => {
-        client && client.create('MyRoom')
+        client && client.create(RoomType.LOBBY)
             .then((room) => {
                 setRoom && setRoom(room);
             });
@@ -68,7 +72,7 @@ const Rooms = () => {
     useEffect(() => {
         if (!client) return;
 
-        client.getAvailableRooms("MyRoom")
+        client.getAvailableRooms("Lobby")
             .then((rooms) => {
                 setAvaiRooms(rooms);
             });
@@ -95,9 +99,9 @@ const Rooms = () => {
                             )}
                         >
                             <RoomBorder classname="absolute w-full h-full mx-auto" />
-                            <div className="sm:text-5xl mb-16 sm:mb-10">ROOM IS INVALID</div>
+                            <div className="sm:text-5xl mb-16 sm:mb-10 select-none">ROOM IS INVALID</div>
                             <RoomCancelButton
-                                classname="w-[20%] sm:w-[15%] h-auto z-20"
+                                classname="w-[20%] sm:w-[15%] h-auto z-20 cursor-pointer"
                                 onClick={cancelMessage}
                             />
                         </div>
