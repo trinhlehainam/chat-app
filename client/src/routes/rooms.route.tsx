@@ -87,6 +87,7 @@ const Rooms = () => {
                 setPassword('');
             })
             .catch((e) => {
+                //NOTE: inline error message (message show in the same box)
                 setFindError(true);
                 setFindErrorMessage(e.message);
             });
