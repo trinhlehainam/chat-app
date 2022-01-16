@@ -16,7 +16,7 @@ import AvailableRoom from "../components/rooms/availableroom.component";
 import RoomTitle from "../components/rooms/title.component";
 import NavButtons from "../components/rooms/navbuttons.component";
 import CreateBox from "../components/rooms/createbox.component";
-import InvalidMessage from "../components/rooms/invalidmessage.component";
+import JoinMessageBox from "../components/rooms/joinerrorbox.component";
 import FindBox from "../components/rooms/findbox.component";
 
 enum RoomType {
@@ -27,6 +27,7 @@ const Rooms = () => {
     const { client, setClient, setRoom } = useContext(GlobalContext);
     const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
     const [isJoinError, setJoinError] = useState(true);
+    const [joinErrorMessage, setJoinErrorMessage] = useState('');
     const [isCreateState, setCreateState] = useState(false);
     const [roomName, setRoomName] = useState('');
     const [password, setPassword] = useState('');
@@ -49,6 +50,10 @@ const Rooms = () => {
                 setRoom && setRoom(room);
             });
         navigate('/lobby');
+
+        // Reset input state
+        setRoomName('');
+        setPassword('');
     };
 
     const join = (roomId: string) => {
@@ -58,37 +63,50 @@ const Rooms = () => {
                 navigate('/lobby')
             })
             .catch((e) => {
-                console.log(e.message);
+                setJoinErrorMessage(e.message);
                 setJoinError(false);
             });
     };
 
     const joinWithFind = (roomId: string, password: string) => {
-        client && client.joinById(roomId, {password: password})
+        client && client.joinById(roomId, { password: password })
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby')
             })
             .catch((e) => {
-                console.log(e.message);
+                setJoinErrorMessage(e.message);
                 setJoinError(false);
             });
+
+        // Reset input state
+        setFindState(false);
+        setRoomId('');
+        setPassword('');
     };
 
     const cancelMessage = () => {
         setJoinError(true);
+        resetInput();
         refresh();
+    };
+
+    const resetInput = () => {
+        setRoomId('');
+        setRoomName('');
+        setPassword('');
     };
 
     const context = {
         isJoinError, setJoinError,
+        joinErrorMessage, setJoinErrorMessage,
         isCreateState, setCreateState,
         roomName, setRoomName,
         password, setPassword,
         isFindState, setFindState,
         roomId, setRoomId,
         refresh, create, join, cancelMessage,
-        joinWithFind
+        joinWithFind, resetInput
     };
 
     useEffect(() => {
@@ -114,7 +132,7 @@ const Rooms = () => {
                     "text-yellow-custom"
                 )}
             >
-                {!isJoinError && <InvalidMessage />}
+                {!isJoinError && <JoinMessageBox />}
                 {isCreateState && <CreateBox />}
                 {isFindState && <FindBox />}
                 <div
@@ -146,7 +164,7 @@ const Rooms = () => {
                         <RoomLine2 classname="w-[75%] h-auto max-h-4 mx-auto" />
                         <div
                             className={cx(
-                                "w-[75%] h-full max-h-[30.0%] overflow-hidden",
+                                "w-[75%] h-full max-h-[20%] sm:max-h-[30.0%] overflow-hidden",
                                 "flex flex-col items-center mx-auto mt-4",
                             )}
                         >
@@ -168,12 +186,12 @@ const Rooms = () => {
                         <NavButtons
                             classname={cx(
                                 "flex justify-center items-center -space-x-1 sm:gap-x-8",
-                                "w-3/4 mx-auto mb-16",
+                                "w-3/4 mx-auto",
                             )}
                         />
                         <RoomCancelButton
                             classname={cx(
-                                "w-[64px] h-auto sm:hidden"
+                                "w-[64px] h-auto lg:hidden mt-4"
                             )}
                             fillClass=""
                         />

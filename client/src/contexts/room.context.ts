@@ -4,6 +4,9 @@ interface Props {
     isJoinError: boolean,
     setJoinError: Dispatch<SetStateAction<boolean>>
 
+    joinErrorMessage: string,
+    setJoinErrorMessage: Dispatch<SetStateAction<string>>,
+
     isCreateState: boolean,
     setCreateState: Dispatch<SetStateAction<boolean>>
 
@@ -25,6 +28,7 @@ interface Props {
     find: Function
     cancelMessage: Function,
     joinWithFind: Function
+    resetInput: Function,
 }
 
 const RoomContext = createContext<Partial<Props>>({});

@@ -10,7 +10,7 @@ const FindBox = () => {
     const {
         roomId, setRoomId,
         password, setPassword,
-        setFindState, joinWithFind
+        setFindState, joinWithFind, resetInput
     } = useContext(RoomContext);
 
     return (
@@ -35,7 +35,10 @@ const FindBox = () => {
                 <RoomCancelButton
                     classname="absolute right-0 top-0 w-[30%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30"
                     fillClass="fill-black"
-                    onClick={() => setFindState && setFindState(false)}
+                    onClick={() => {
+                        setFindState && setFindState(false);
+                        resetInput && resetInput();
+                    }}
                 />
                 <div className="flex flex-col sm:flex-row justify-center items-center z-20 w-full sm:text-2xl gap-2">
                     <div className="sm:w-1/4">ROOM ID</div>
