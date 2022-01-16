@@ -1,10 +1,10 @@
 import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent } from 'react';
 import cx from 'classnames'
 
-import RoomContext from '../../contexts/room.context';
+import GlobalContext from '../../contexts/global.context';
 
 const LobbyChatBox = () => {
-    const {room} = useContext(RoomContext);
+    const {room} = useContext(GlobalContext);
 
     const [message, setMessage] = useState('');
     const [chat, setChat] = useState<Array<string>>([]);

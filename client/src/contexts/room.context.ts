@@ -1,13 +1,14 @@
-import { Client, Room } from "colyseus.js";
-import { Dispatch, SetStateAction, createContext } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 
 interface Props {
-    client?: Client;
-    setClient: Dispatch<SetStateAction<Client | undefined>>;
-    
-    room?: Room;
-    setRoom: Dispatch<SetStateAction<Room | undefined>>;
-};
+    isValidRoom: boolean,
+    setValidRoom: Dispatch<SetStateAction<boolean>>
+
+    refresh: Function,
+    create: Function,
+    join: Function,
+    find: Function
+}
 
 const RoomContext = createContext<Partial<Props>>({});
 

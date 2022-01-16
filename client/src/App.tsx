@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Routes as Switch, Route, useLocation } from "react-router-dom";
 
-import RoomContext from "./contexts/room.context";
+import GlobalContext from "./contexts/global.context";
 import Home from "./routes/home.route";
 import Title from "./components/title.component";
 import Play from "./routes/play.route";
@@ -26,7 +26,7 @@ const App = () => {
     return (
         <>
             <Title />
-            <RoomContext.Provider value={roomContext}>
+            <GlobalContext.Provider value={roomContext}>
                 <AnimatePresence exitBeforeEnter>
                     <Switch location={location} key={location.key}>
                         <Route path={"/"} element={<Home />} />
@@ -35,7 +35,7 @@ const App = () => {
                         {room && <Route path={"/lobby"} element={<Lobby />} />}
                     </Switch>
                 </AnimatePresence>
-            </RoomContext.Provider>
+            </GlobalContext.Provider>
         </>
     );
 };

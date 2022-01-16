@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobby/lobbychatbox.component';
 import PlayerCards from '../components/lobby/playercards.component';
-import RoomContext from '../contexts/room.context';
+import GlobalContext from '../contexts/global.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
@@ -12,7 +12,7 @@ const Lobby = () => {
 
     const {
         room, setRoom
-    } = useContext(RoomContext);
+    } = useContext(GlobalContext);
 
     const leave = () => {
         room && room.leave()

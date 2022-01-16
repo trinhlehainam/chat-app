@@ -1,18 +1,15 @@
-import { Dispatch, FC, SetStateAction, useContext } from 'react'
-import { useNavigate } from 'react-router-dom';
-import {RoomAvailable} from 'colyseus.js'
+import { FC, useContext } from 'react'
 
-import RoomContext from '../../contexts/room.context';
 import RoomButton from '../../svg/room/roombutton.svg';
+import RoomContext from '../../contexts/room.context';
 
 interface Props {
     classname: string
-    setAvaiRooms: Dispatch<SetStateAction<RoomAvailable[]>>
 }
 
-const NavButtons: FC<Props> = ({ classname, setAvaiRooms }) => {
-    const {client, setRoom} = useContext(RoomContext);
-    const navigate = useNavigate();
+const NavButtons: FC<Props> = ({ classname }) => {
+
+    const { refresh, create } = useContext(RoomContext);
 
     return (
         <div
@@ -20,12 +17,7 @@ const NavButtons: FC<Props> = ({ classname, setAvaiRooms }) => {
         >
             <div
                 className="relative flex justify-center items-center cursor-pointer"
-                onClick={() => {
-                    client &&
-                        client.getAvailableRooms("MyRoom").then((rooms) => {
-                            setAvaiRooms(rooms);
-                        });
-                }}
+                onClick={() => refresh && refresh()}
             >
                 <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
                 <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
@@ -34,13 +26,7 @@ const NavButtons: FC<Props> = ({ classname, setAvaiRooms }) => {
             </div>
             <div
                 className="relative flex justify-center items-center cursor-pointer"
-                onClick={() => {
-                    client && client.create('MyRoom')
-                        .then((room) => {
-                            setRoom && setRoom(room);
-                        });
-                    navigate('/lobby');
-                }}
+                onClick={() => create && create()}
             >
                 <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
                 <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">
