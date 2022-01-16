@@ -9,7 +9,7 @@ interface Props {
 
 const NavButtons: FC<Props> = ({ classname }) => {
 
-    const { refresh, create } = useContext(RoomContext);
+    const { refresh, setCreateState } = useContext(RoomContext);
 
     return (
         <div
@@ -26,7 +26,7 @@ const NavButtons: FC<Props> = ({ classname }) => {
             </div>
             <div
                 className="relative flex justify-center items-center cursor-pointer"
-                onClick={() => create && create()}
+                onClick={() => setCreateState && setCreateState(true)}
             >
                 <RoomButton classname="h-auto w-2/3 min-w-[80px] btn-base" />
                 <div className="absolute text-yellow-custom text-md sm:text-2xl pointer-events-none">

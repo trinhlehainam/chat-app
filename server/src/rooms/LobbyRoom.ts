@@ -2,32 +2,43 @@ import { Room, Client } from "colyseus";
 import { LobbyRoomState } from "./schema/LobbyRoomState";
 
 export class LobbyRoom extends Room<LobbyRoomState> {
-  maxClients: number = 4;
+    maxClients: number = 4;
 
-  onCreate (options: any) {
-    this.setState(new LobbyRoomState());
+    onCreate(options: any) {
+        if (options.password) {
+            this.setPrivate();
+        }
 
-    this.onMessage("requireInit", (client, message) => {
-      client.send('initState', this.state.chatState.messages);
-    });
+        this.setState(new LobbyRoomState());
 
-    this.onMessage("newMessage", (client, message) => {
-      this.state.chatState.messages.push(message);
-      this.broadcast('syncChat', this.state.chatState.messages);
-    });
+        this.setMetadata({ name: options.name })
 
-  }
+        this.onMessage("requireInit", (client, message) => {
+            // NOTE:Asign host to first client
+            if (this.clients.length === 1) {
+                this.state.hostClient = client.id;
+            }
 
-  onJoin (client: Client, options: any) {
-    console.log(client.sessionId, "joined!");
-  }
+            client.send('initState', this.state.chatState.messages);
+        });
 
-  onLeave (client: Client, consented: boolean) {
-    console.log(client.sessionId, "left!");
-  }
+        this.onMessage("newMessage", (client, message) => {
+            this.state.chatState.messages.push(message);
+            this.broadcast('syncChat', this.state.chatState.messages);
+        });
 
-  onDispose() {
-    console.log("room", this.roomId, "disposing...");
-  }
+    }
+
+    onJoin(client: Client, options: any) {
+        console.log(client.sessionId, "joined!");
+    }
+
+    onLeave(client: Client, consented: boolean) {
+        console.log(client.sessionId, "left!");
+    }
+
+    onDispose() {
+        console.log("room", this.roomId, "disposing...");
+    }
 
 }

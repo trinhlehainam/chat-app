@@ -31,7 +31,9 @@ class App {
     }
 
     init(): App {
-        this.server.define("Lobby", LobbyRoom);
+        this.server
+        .define("Lobby", LobbyRoom)
+        .filterBy(['password']);
 
         return this;
     }

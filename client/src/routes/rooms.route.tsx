@@ -13,28 +13,33 @@ import RoomTitle from "../components/rooms/title.component";
 import NavButtons from "../components/rooms/navbuttons.component";
 import { useNavigate } from "react-router-dom";
 import RoomContext from "../contexts/room.context";
+import RoomButton from "../svg/room/roombutton.svg";
+import CreateBox from "../components/rooms/createbox.component";
+import InvalidMessage from "../components/rooms/invalidmessage.component";
 
 enum RoomType {
-    LOBBY= 'Lobby',
+    LOBBY = 'Lobby',
 };
 
 const Rooms = () => {
     const { client, setClient, setRoom } = useContext(GlobalContext);
-
     const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
-
     const [isValidRoom, setValidRoom] = useState(true);
+    const [isCreating, setCreate] = useState(false);
+    const [roomName, setRoomName] = useState('');
+    const [password, setPassword] = useState('');
 
     const navigate = useNavigate();
 
     const refresh = () => {
-        client && client.getAvailableRooms("Lobby").then((rooms) => {
-            setAvaiRooms(rooms);
-        });
+        client && client.getAvailableRooms("Lobby")
+            .then((rooms) => {
+                setAvaiRooms(rooms);
+            });
     };
 
-    const create = () => {
-        client && client.create(RoomType.LOBBY)
+    const create = (roomName: string, password: string) => {
+        client && client.create(RoomType.LOBBY, {name: roomName, password: password})
             .then((room) => {
                 setRoom && setRoom(room);
             });
@@ -60,7 +65,10 @@ const Rooms = () => {
 
     const context = {
         isValidRoom, setValidRoom,
-        refresh, create, join
+        isCreating, setCreate,
+        roomName, setRoomName,
+        password, setPassword,
+        refresh, create, join, cancelMessage
     };
 
     useEffect(() => {
@@ -72,10 +80,7 @@ const Rooms = () => {
     useEffect(() => {
         if (!client) return;
 
-        client.getAvailableRooms("Lobby")
-            .then((rooms) => {
-                setAvaiRooms(rooms);
-            });
+        refresh();
     }, [client, setRoom]);
 
     // TODO: layout close button
@@ -89,31 +94,15 @@ const Rooms = () => {
                     "text-yellow-custom"
                 )}
             >
-                {!isValidRoom &&
-                    (
-                        <div
-                            className={cx(
-                                "absolute w-[60%] h-[50%] max-w-[740px] bg-black/80 backdrop-blur-xl",
-                                "flex flex-col items-center justify-center",
-                                "z-10"
-                            )}
-                        >
-                            <RoomBorder classname="absolute w-full h-full mx-auto" />
-                            <div className="sm:text-5xl mb-16 sm:mb-10 select-none">ROOM IS INVALID</div>
-                            <RoomCancelButton
-                                classname="w-[20%] sm:w-[15%] h-auto z-20 cursor-pointer"
-                                onClick={cancelMessage}
-                            />
-                        </div>
-                    )
-                }
+                {!isValidRoom && <InvalidMessage /> }
+                {isCreating && <CreateBox /> }
                 <div
                     className={cx(
                         "w-full h-full p-4 max-w-[1280px] ",
                         "relative flex flex-col items-center"
                     )}
                 >
-                    <RoomBorder classname="w-[90%] h-full mx-auto" />
+                    <RoomBorder classname="w-[90%] h-full mx-auto" fillclass=""/>
                     <div className="absolute flex flex-col items-center w-full h-full">
                         <RoomTitle
                             classname={cx(
@@ -142,11 +131,11 @@ const Rooms = () => {
                         >
                             <div className="flex flex-col h-full w-full overflow-y-auto scrollbar-hide gap-[5px]">
                                 {avaiRooms &&
-                                    avaiRooms.map(({ roomId, clients, maxClients }, idx) => {
+                                    avaiRooms.map(({ roomId, clients, maxClients, metadata }, idx) => {
                                         return (
                                             <AvailableRoom
-                                                key={`${roomId}-${clients}/${maxClients}-${idx}`}
-                                                name={roomId}
+                                                key={`${roomId}-${idx}`}
+                                                name={metadata.name ? metadata.name : roomId}
                                                 players={`${clients}/${maxClients}`}
                                             />
                                         );
@@ -164,6 +153,7 @@ const Rooms = () => {
                             classname={cx(
                                 "w-[64px] h-auto sm:hidden"
                             )}
+                            fillClass=""
                         />
                     </div>
                 </div>

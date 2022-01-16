@@ -1,11 +1,12 @@
 import { FC } from "react";
 
 interface Props {
-    classname: string
+    classname: string,
+    fillClass: string,
     onClick?: Function
 }
 
-const RoomCancelButton: FC<Props> = ({ classname, onClick }) => {
+const RoomCancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
 
     return (
         <svg
@@ -34,6 +35,7 @@ const RoomCancelButton: FC<Props> = ({ classname, onClick }) => {
                         strokeLinejoin="miter"
                         strokeMiterlimit="10"
                         strokeOpacity="1"
+                        className={fillClass}
                     >
                         <path
                             strokeWidth="40"
