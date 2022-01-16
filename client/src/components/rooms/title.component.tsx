@@ -13,7 +13,7 @@ const RoomTitle: FC<Props> = ({ classname }) => {
             className={classname}
         >
             <RoomTitleBorderTop classname="w-[80%] sm:w-fit h-auto" />
-            <div className="my-2">ROOMS</div>
+            <div className="my-2 select-none">ROOMS</div>
             <RoomTitleBorderBottom classname="w-[80%] sm:w-fit h-auto" />
         </div>
     );

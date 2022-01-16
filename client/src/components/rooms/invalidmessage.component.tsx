@@ -9,18 +9,29 @@ const InvalidMessage = () => {
     return (
         <div
             className={cx(
-                "absolute w-[60%] h-[50%] max-w-[740px] bg-black/80 backdrop-blur-xl",
-                "flex flex-col items-center justify-center",
+                "absolute w-full h-full",
+                "flex items-center justify-center",
                 "z-10"
             )}
         >
-            <RoomBorder classname="absolute w-full h-full mx-auto" fillclass="" />
-            <div className="sm:text-5xl select-none">ROOM IS INVALID</div>
-            <RoomCancelButton
-                classname="w-[20%] sm:w-[15%] h-auto z-20 mb-16 sm:mt-10 cursor-pointer"
-                fillClass=""
-                onClick={() => cancelMessage && cancelMessage()}
-            />
+            <div
+                className={cx(
+                    "absolute w-[60%] h-[20%] sm:h-[50%] max-w-[740px]",
+                    "flex flex-col items-center justify-center gap-6 sm:gap-8",
+                    "z-10"
+                )}
+            >
+                <RoomBorder
+                    classname="absolute w-full h-full mx-auto"
+                    fillclass="fill-black/80 backdrop-blur-xl"
+                />
+                <div className="sm:text-6xl select-none z-20">ROOM IS INVALID</div>
+                <RoomCancelButton
+                    classname="absolute right-0 top-0 w-[30%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30"
+                    fillClass="fill-black"
+                    onClick={() => cancelMessage && cancelMessage()}
+                />
+            </div>
         </div>
     );
 };

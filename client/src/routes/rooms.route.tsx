@@ -1,21 +1,23 @@
 import cx from "classnames";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as Colyseus from "colyseus.js";
+
+import GlobalContext from "../contexts/global.context";
+import RoomContext from "../contexts/room.context";
 
 import RoomBorder from "../svg/room/roomborder.svg";
 import RoomCancelButton from "../svg/room/roomcanclebutton.svg";
 import RoomLine1 from "../svg/room/roomline-1.svg";
 import RoomLine2 from "../svg/room/roomline-2.svg";
 import RoomLine3 from "../svg/room/roomline-3.svg";
+
 import AvailableRoom from "../components/rooms/availableroom.component";
-import GlobalContext from "../contexts/global.context";
 import RoomTitle from "../components/rooms/title.component";
 import NavButtons from "../components/rooms/navbuttons.component";
-import { useNavigate } from "react-router-dom";
-import RoomContext from "../contexts/room.context";
-import RoomButton from "../svg/room/roombutton.svg";
 import CreateBox from "../components/rooms/createbox.component";
 import InvalidMessage from "../components/rooms/invalidmessage.component";
+import FindBox from "../components/rooms/findbox.component";
 
 enum RoomType {
     LOBBY = 'Lobby',
@@ -24,10 +26,12 @@ enum RoomType {
 const Rooms = () => {
     const { client, setClient, setRoom } = useContext(GlobalContext);
     const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
-    const [isValidRoom, setValidRoom] = useState(true);
-    const [isCreating, setCreate] = useState(false);
+    const [isJoinError, setJoinError] = useState(true);
+    const [isCreateState, setCreateState] = useState(false);
     const [roomName, setRoomName] = useState('');
     const [password, setPassword] = useState('');
+    const [isFindState, setFindState] = useState(false);
+    const [roomId, setRoomId] = useState('');
 
     const navigate = useNavigate();
 
@@ -39,36 +43,52 @@ const Rooms = () => {
     };
 
     const create = (roomName: string, password: string) => {
-        client && client.create(RoomType.LOBBY, {name: roomName, password: password})
+        client && client.create(RoomType.LOBBY, { name: roomName, password: password })
             .then((room) => {
+                console.log(room.id);
                 setRoom && setRoom(room);
             });
         navigate('/lobby');
     };
 
-    const join = (name: string) => {
-        client && client.joinById(name)
+    const join = (roomId: string) => {
+        client && client.joinById(roomId)
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby')
             })
-            .catch((error) => {
-                console.log(error);
-                setValidRoom(false);
+            .catch((e) => {
+                console.log(e.message);
+                setJoinError(false);
+            });
+    };
+
+    const joinWithFind = (roomId: string, password: string) => {
+        client && client.joinById(roomId, {password: password})
+            .then((room) => {
+                setRoom && setRoom(room);
+                navigate('/lobby')
+            })
+            .catch((e) => {
+                console.log(e.message);
+                setJoinError(false);
             });
     };
 
     const cancelMessage = () => {
-        setValidRoom(true);
+        setJoinError(true);
         refresh();
     };
 
     const context = {
-        isValidRoom, setValidRoom,
-        isCreating, setCreate,
+        isJoinError, setJoinError,
+        isCreateState, setCreateState,
         roomName, setRoomName,
         password, setPassword,
-        refresh, create, join, cancelMessage
+        isFindState, setFindState,
+        roomId, setRoomId,
+        refresh, create, join, cancelMessage,
+        joinWithFind
     };
 
     useEffect(() => {
@@ -94,15 +114,16 @@ const Rooms = () => {
                     "text-yellow-custom"
                 )}
             >
-                {!isValidRoom && <InvalidMessage /> }
-                {isCreating && <CreateBox /> }
+                {!isJoinError && <InvalidMessage />}
+                {isCreateState && <CreateBox />}
+                {isFindState && <FindBox />}
                 <div
                     className={cx(
                         "w-full h-full p-4 max-w-[1280px] ",
                         "relative flex flex-col items-center"
                     )}
                 >
-                    <RoomBorder classname="w-[90%] h-full mx-auto" fillclass=""/>
+                    <RoomBorder classname="w-[90%] h-full mx-auto" fillclass="" />
                     <div className="absolute flex flex-col items-center w-full h-full">
                         <RoomTitle
                             classname={cx(
@@ -118,9 +139,9 @@ const Rooms = () => {
                             "w-[75%] my-4 mx-auto",
                             "text-lg sm:text-3xl text-center"
                         )}>
-                            <div className="w-1/3">NAME</div>
-                            <div className="w-1/3">PLAYERS</div>
-                            <div className="w-1/3"></div>
+                            <div className="w-1/3 select-none">NAME</div>
+                            <div className="w-1/3 select-none">PLAYERS</div>
+                            <div className="w-1/3 select-none"></div>
                         </div>
                         <RoomLine2 classname="w-[75%] h-auto max-h-4 mx-auto" />
                         <div
@@ -135,7 +156,8 @@ const Rooms = () => {
                                         return (
                                             <AvailableRoom
                                                 key={`${roomId}-${idx}`}
-                                                name={metadata.name ? metadata.name : roomId}
+                                                roomId={roomId}
+                                                name={metadata.name}
                                                 players={`${clients}/${maxClients}`}
                                             />
                                         );
