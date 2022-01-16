@@ -32,6 +32,8 @@ const Rooms = () => {
     const [roomName, setRoomName] = useState('');
     const [password, setPassword] = useState('');
     const [isFindState, setFindState] = useState(false);
+    const [isFindError, setFindError] = useState(false);
+    const [findErrorMessage, setFindErrorMessage] = useState('');
     const [roomId, setRoomId] = useState('');
 
     const navigate = useNavigate();
@@ -48,12 +50,17 @@ const Rooms = () => {
             .then((room) => {
                 console.log(room.id);
                 setRoom && setRoom(room);
-            });
-        navigate('/lobby');
 
-        // Reset input state
-        setRoomName('');
-        setPassword('');
+                navigate('/lobby');
+
+                // Reset input state
+                setRoomName('');
+                setPassword('');
+            })
+            .catch((e) => {
+                console.log(password);
+                console.log(roomId, e)
+            });
     };
 
     const join = (roomId: string) => {
@@ -73,16 +80,17 @@ const Rooms = () => {
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby')
+
+                // Reset input state
+                setFindState(false);
+                setRoomId('');
+                setPassword('');
             })
             .catch((e) => {
-                setJoinErrorMessage(e.message);
-                setJoinError(false);
+                setFindError(true);
+                setFindErrorMessage(e.message);
             });
 
-        // Reset input state
-        setFindState(false);
-        setRoomId('');
-        setPassword('');
     };
 
     const cancelMessage = () => {
@@ -104,6 +112,8 @@ const Rooms = () => {
         roomName, setRoomName,
         password, setPassword,
         isFindState, setFindState,
+        isFindError, setFindError,
+        findErrorMessage, setFindErrorMessage,
         roomId, setRoomId,
         refresh, create, join, cancelMessage,
         joinWithFind, resetInput

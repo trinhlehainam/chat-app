@@ -10,7 +10,9 @@ const FindBox = () => {
     const {
         roomId, setRoomId,
         password, setPassword,
-        setFindState, joinWithFind, resetInput
+        setFindState, joinWithFind, resetInput,
+        isFindError, setFindError,
+        findErrorMessage, setFindErrorMessage
     } = useContext(RoomContext);
 
     return (
@@ -24,7 +26,7 @@ const FindBox = () => {
             <div
                 className={cx(
                     "absolute w-[60%] h-[50%] max-w-[740px]",
-                    "flex flex-col items-center justify-center gap-6 sm:gap-8",
+                    "flex flex-col items-center justify-center gap-4 sm:gap-8",
                     "z-10"
                 )}
             >
@@ -38,8 +40,13 @@ const FindBox = () => {
                     onClick={() => {
                         setFindState && setFindState(false);
                         resetInput && resetInput();
+                        setFindError && setFindError(false);
+                        setFindErrorMessage && setFindErrorMessage('');
                     }}
                 />
+                <div className={cx("flex flex-col sm:flex-row justify-center items-center z-20 w-full h-6")}>
+                    {isFindError && <div className="w-3/4 text-center text-red-500 sm:text-2xl">{findErrorMessage}</div>}
+                </div>
                 <div className="flex flex-col sm:flex-row justify-center items-center z-20 w-full sm:text-2xl gap-2">
                     <div className="sm:w-1/4">ROOM ID</div>
                     <input type='text' value={roomId} onChange={(e) => setRoomId && setRoomId(e.target.value)}

@@ -1,15 +1,16 @@
-import { Room, Client } from "colyseus";
+import { Room, Client, ServerError } from "colyseus";
 import { LobbyRoomState } from "./schema/LobbyRoomState";
 
 export class LobbyRoom extends Room<LobbyRoomState> {
     maxClients: number = 4;
 
     onCreate(options: any) {
+        this.setState(new LobbyRoomState());
+
         if (options.password) {
             this.setPrivate();
+            this.state.password = options.password;
         }
-
-        this.setState(new LobbyRoomState());
 
         this.setMetadata({ name: options.name })
 
@@ -39,6 +40,16 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
     onDispose() {
         console.log("room", this.roomId, "disposing...");
+    }
+
+    async onAuth(client: Client, options: any, request) {
+        //TODO: set up more advance auth
+        if(!this.state.password) return true;
+
+        if(options.password !== this.state.password)
+            throw new ServerError(400, `Incorrect password`);
+
+        return true;
     }
 
 }

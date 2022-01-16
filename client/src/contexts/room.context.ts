@@ -19,6 +19,12 @@ interface Props {
     isFindState: boolean,
     setFindState: Dispatch<SetStateAction<boolean>>,
 
+    isFindError: boolean,
+    setFindError: Dispatch<SetStateAction<boolean>>,
+
+    findErrorMessage: string,
+    setFindErrorMessage: Dispatch<SetStateAction<string>>,
+
     roomId: string,
     setRoomId: Dispatch<SetStateAction<string>>,
 

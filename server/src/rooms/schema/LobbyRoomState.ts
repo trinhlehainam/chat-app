@@ -3,6 +3,7 @@ import ChatState from "./ChatState";
 
 export class LobbyRoomState extends Schema {
   @type(ChatState) chatState = new ChatState();
-  @type('string') name: string;
-  @type('string') hostClient: string;
+  @type('string') password: string = '';
+  @type('string') name: string = '';
+  @type('string') hostClient: string = '';
 }

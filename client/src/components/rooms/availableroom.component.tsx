@@ -13,7 +13,7 @@ const AvailableRoom: FC<Props> = ({ roomId, name, players }) => {
 
     return (
         <div className="flex flex-row w-full text-xs md:text-xl justify-center items-center text-center">
-            <div className="w-1/3 break-words select-none">{name ? name : roomId}</div>
+            <div className="w-1/3 break-words">{name ? name : roomId}</div>
             <div className="w-1/3 select-none">{players}</div>
             <div className="w-1/3 relative flex justify-center items-center my-auto">
                 <RoomButton
