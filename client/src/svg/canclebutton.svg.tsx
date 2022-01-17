@@ -24,9 +24,6 @@ const CancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
                     <stop offset="0%" stopColor="#CD113B" />
                     <stop offset="100%" stopColor="#FF7600" />
                 </radialGradient>
-                <clipPath id="cancel-clip">
-                    <circle className="w-full h-full" />
-                </clipPath>
             </defs>
             <g transform="translate(592.125 -323.404)">
                 <g transform="matrix(.03528 0 0 -.03528 -648.21 873.441)">

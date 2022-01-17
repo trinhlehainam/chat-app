@@ -42,13 +42,13 @@ const CreateBox = () => {
                         resetInput && resetInput();
                     }}
                 />
-                <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-2xl gap-2">
+                <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-xl lg:text-2xl gap-2">
                     <div className="md:w-1/4 select-none">ROOM NAME</div>
                     <input type='text' value={roomName} onChange={(e) => setRoomName && setRoomName(e.target.value)}
                         className="bg-gray-400/30 px-2 w-3/4 md:w-1/2 focus:outline-none"
                     />
                 </div>
-                <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-2xl gap-2">
+                <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-xl lg:text-2xl gap-2">
                     <div className="md:w-1/4 select-none">PASSWORD</div>
                     <input type='password' value={password} onChange={(e) => setPassword && setPassword(e.target.value)}
                         className="bg-gray-400/30 px-2 w-3/4 md:w-1/2 focus:outline-none"

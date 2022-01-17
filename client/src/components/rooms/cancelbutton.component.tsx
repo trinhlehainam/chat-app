@@ -6,9 +6,10 @@ import CancelButton from "../../svg/canclebutton.svg"
 interface Props {
     classname?: string,
     onClick?: Function
+    fillClass?: string,
 };
 
-const RoomCancelButton: FC<Props> = ({ classname, onClick }) => {
+const RoomCancelButton: FC<Props> = ({ classname, onClick, fillClass }) => {
     return (
         <div
             className={classname}
@@ -17,7 +18,7 @@ const RoomCancelButton: FC<Props> = ({ classname, onClick }) => {
             <div className='relative flex items-center justify-center w-full h-full btn-base'>
                 <CancelButton
                     classname="w-full h-auto"
-                    fillClass="fill-black"
+                    fillClass={fillClass ? fillClass : "fill-black"}
                 />
                 <CancelMark classname='absolute fill-yellow-custom w-1/3 pointer-events-none' />
             </div>

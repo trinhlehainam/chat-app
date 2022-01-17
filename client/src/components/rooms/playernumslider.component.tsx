@@ -37,7 +37,7 @@ const PlayerNumSlider: FC<Props> = ({ classname }) => {
 
     return (
         <div className={cx(
-            "flex flex-col md:flex-row justify-center items-center md:text-2xl gap-2",
+            "flex flex-col md:flex-row justify-center items-center md:text-xl lg:text-2xl gap-2",
             classname
         )}>
             <div className="md:w-1/4 select-none">MAX PLAYERS</div>

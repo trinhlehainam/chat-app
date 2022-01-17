@@ -1,4 +1,5 @@
 import { FC, useContext } from 'react'
+import cx from 'classnames'
 
 import RoomButton from '../../svg/room/roombutton.svg';
 import RoomContext from '../../contexts/room.context';
@@ -15,7 +16,10 @@ const NavButtons: FC<Props> = ({ classname }) => {
 
     return (
         <div
-            className={classname}
+            className={cx(
+                "relative flex justify-center items-center -space-x-1 md:gap-x-8",
+                classname
+            )}
         >
             <div
                 className="relative flex justify-center items-center cursor-pointer"

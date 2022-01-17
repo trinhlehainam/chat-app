@@ -18,6 +18,7 @@ import NavButtons from "../components/rooms/navbuttons.component";
 import CreateBox from "../components/rooms/createbox.component";
 import JoinMessageBox from "../components/rooms/joinerrorbox.component";
 import FindBox from "../components/rooms/findbox.component";
+import RoomCancelButton from "../components/rooms/cancelbutton.component";
 
 enum RoomType {
     LOBBY = 'Lobby',
@@ -47,7 +48,7 @@ const Rooms = () => {
     };
 
     const create = (roomName: string, password: string, playerNum: number) => {
-        client && client.create(RoomType.LOBBY, { name: roomName, password: password, maxClients: playerNum})
+        client && client.create(RoomType.LOBBY, { name: roomName, password: password, maxClients: playerNum })
             .then((room) => {
                 console.log(room.id);
                 setRoom && setRoom(room);
@@ -158,7 +159,6 @@ const Rooms = () => {
                     <div className="absolute flex flex-col items-center w-full h-full">
                         <RoomTitle
                             classname={cx(
-                                "flex flex-col items-center",
                                 "mt-16",
                                 "text-yellow-custom text-3xl",
                                 "md:text-5xl"
@@ -177,7 +177,7 @@ const Rooms = () => {
                         <RoomLine2 classname="w-[75%] h-auto max-h-4 mx-auto" />
                         <div
                             className={cx(
-                                "w-[75%] h-full max-h-[20%] md:max-h-[30.0%] overflow-hidden",
+                                "w-[75%] h-full max-h-[20%] md:max-h-[25%] lg:max-h-[30%] overflow-hidden",
                                 "flex flex-col items-center mx-auto mt-4",
                             )}
                         >
@@ -198,15 +198,15 @@ const Rooms = () => {
                         <RoomLine3 classname="w-[75%] h-auto max-h-12 mx-auto mb-4" />
                         <NavButtons
                             classname={cx(
-                                "flex justify-center items-center -space-x-1 md:gap-x-8",
                                 "w-3/4 mx-auto",
                             )}
                         />
-                        <CancelButton
+                        <RoomCancelButton
                             classname={cx(
-                                "w-[64px] h-auto lg:hidden mt-4"
+                                "w-[64px] h-auto mt-4",
+                                "lg:hidden"
                             )}
-                            fillClass=""
+                            onClick={() => navigate('/play', { replace: true })}
                         />
                     </div>
                 </div>
