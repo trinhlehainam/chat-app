@@ -16,6 +16,9 @@ interface Props {
     password: string,
     setPassword: Dispatch<SetStateAction<string>>,
 
+    playerNum: number,
+    setPlayerNum: Dispatch<SetStateAction<number>>,
+
     isFindState: boolean,
     setFindState: Dispatch<SetStateAction<boolean>>,
 

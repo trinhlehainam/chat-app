@@ -31,6 +31,7 @@ const Rooms = () => {
     const [isCreateState, setCreateState] = useState(false);
     const [roomName, setRoomName] = useState('');
     const [password, setPassword] = useState('');
+    const [playerNum, setPlayerNum] = useState(4);
     const [isFindState, setFindState] = useState(false);
     const [isFindError, setFindError] = useState(false);
     const [findErrorMessage, setFindErrorMessage] = useState('');
@@ -91,7 +92,6 @@ const Rooms = () => {
                 setFindError(true);
                 setFindErrorMessage(e.message);
             });
-
     };
 
     const cancelMessage = () => {
@@ -112,6 +112,7 @@ const Rooms = () => {
         isCreateState, setCreateState,
         roomName, setRoomName,
         password, setPassword,
+        playerNum, setPlayerNum,
         isFindState, setFindState,
         isFindError, setFindError,
         findErrorMessage, setFindErrorMessage,
@@ -138,7 +139,7 @@ const Rooms = () => {
         <RoomContext.Provider value={context}>
             <div
                 className={cx(
-                    "absolute inset-0 sm:inset-6 bg-black/10 backdrop-blur-xl",
+                    "absolute inset-0 md:inset-6 bg-black/10 backdrop-blur-xl",
                     "flex items-center justify-center",
                     "text-yellow-custom"
                 )}
@@ -166,7 +167,7 @@ const Rooms = () => {
                         <div className={cx(
                             "flex flex-row justify-center items-center",
                             "w-[75%] my-4 mx-auto",
-                            "text-lg sm:text-3xl text-center"
+                            "text-lg md:text-3xl text-center"
                         )}>
                             <div className="w-1/3 select-none">NAME</div>
                             <div className="w-1/3 select-none">PLAYERS</div>
@@ -175,7 +176,7 @@ const Rooms = () => {
                         <RoomLine2 classname="w-[75%] h-auto max-h-4 mx-auto" />
                         <div
                             className={cx(
-                                "w-[75%] h-full max-h-[20%] sm:max-h-[30.0%] overflow-hidden",
+                                "w-[75%] h-full max-h-[20%] md:max-h-[30.0%] overflow-hidden",
                                 "flex flex-col items-center mx-auto mt-4",
                             )}
                         >
@@ -196,7 +197,7 @@ const Rooms = () => {
                         <RoomLine3 classname="w-[75%] h-auto max-h-12 mx-auto mb-4" />
                         <NavButtons
                             classname={cx(
-                                "flex justify-center items-center -space-x-1 sm:gap-x-8",
+                                "flex justify-center items-center -space-x-1 md:gap-x-8",
                                 "w-3/4 mx-auto",
                             )}
                         />
