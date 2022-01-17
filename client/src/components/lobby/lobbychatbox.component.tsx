@@ -38,7 +38,7 @@ const LobbyChatBox = () => {
         <div
             className={cx(
                 'flex flex-col-reverse justify-start',
-                'absolute bottom-0 left-0 w-1/3 h-full text-yellow-custom',
+                'absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 h-full text-yellow-custom',
             )}
         >
             <input

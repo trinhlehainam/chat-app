@@ -11,7 +11,7 @@ const JoinMessageBox = () => {
             className={cx(
                 "absolute w-full h-full",
                 "flex items-center justify-center",
-                "z-30"
+                "z-30 text-red-500"
             )}
         >
             <div

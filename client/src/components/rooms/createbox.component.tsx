@@ -26,8 +26,8 @@ const CreateBox = () => {
         >
             <div
                 className={cx(
-                    "absolute w-[60%] h-[50%] max-w-[740px]",
-                    "flex flex-col items-center justify-center gap-6 md:gap-8",
+                    "w-[60%] h-[50%] max-w-[740px]",
+                    "relative flex flex-col items-center justify-center gap-6 md:gap-8",
                     "z-10"
                 )}
             >

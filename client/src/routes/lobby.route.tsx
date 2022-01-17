@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LobbyChatBox from '../components/lobby/lobbychatbox.component';
@@ -8,6 +8,8 @@ import GlobalContext from '../contexts/global.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
+    const [roomState, setRoomState] = useState<any>();
+
     const navigate = useNavigate();
 
     const {
@@ -24,7 +26,9 @@ const Lobby = () => {
 
     useEffect(() => {
         if (!room) return;
-    },[room])
+        setRoomState(room.state);
+        console.log(roomState);
+    },[room, setRoomState])
 
     return (
         <div

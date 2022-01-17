@@ -30,7 +30,7 @@ const PlayerNumSlider: FC<Props> = ({ classname }) => {
         setPlayerNum(newNum);
     }
 
-    const offset = (100 / MAX_PLAYER_NUM) * playerNum - (100 / MAX_PLAYER_NUM);
+    const offset = playerNum - 1;
 
     const isLeftEnable = playerNum > 1;
     const isRightEnable = playerNum < MAX_PLAYER_NUM;
@@ -58,7 +58,7 @@ const PlayerNumSlider: FC<Props> = ({ classname }) => {
                             'absolute flex justify-center items-center select-none',
                             'w-[400%]',
                             'transition-all ease-in-out duration-100',
-                            `translate-x-[-${offset}%]`
+                            `-translate-x-${offset}/4`
                         )}
                     >
                         <div className='w-1/4 text-center'>1</div>
