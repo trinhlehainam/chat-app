@@ -8,7 +8,9 @@ import GlobalContext from '../contexts/global.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
-    const [roomState, setRoomState] = useState<any>();
+    const [roomId, setRoomId] = useState('');
+    const [roomName, setRoomName] = useState('');
+    const [playerNum, setPlayerNum] = useState(1);
 
     const navigate = useNavigate();
 
@@ -26,9 +28,10 @@ const Lobby = () => {
 
     useEffect(() => {
         if (!room) return;
-        setRoomState(room.state);
-        console.log(roomState);
-    },[room, setRoomState])
+        setRoomId(room.state.roomId);
+        setRoomName(room.state.name);
+        setPlayerNum(room.state.clientNum);
+    },[room])
 
     return (
         <div

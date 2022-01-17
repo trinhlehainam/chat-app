@@ -7,7 +7,6 @@ import GlobalContext from "../contexts/global.context";
 import RoomContext from "../contexts/room.context";
 
 import RoomBorder from "../svg/room/roomborder.svg";
-import CancelButton from "../svg/canclebutton.svg";
 import RoomLine1 from "../svg/room/roomline-1.svg";
 import RoomLine2 from "../svg/room/roomline-2.svg";
 import RoomLine3 from "../svg/room/roomline-3.svg";
@@ -40,6 +39,7 @@ const Rooms = () => {
 
     const navigate = useNavigate();
 
+    // TODO: useCallback to reuse function
     const refresh = () => {
         client && client.getAvailableRooms("Lobby")
             .then((rooms) => {
@@ -50,7 +50,6 @@ const Rooms = () => {
     const create = (roomName: string, password: string, playerNum: number) => {
         client && client.create(RoomType.LOBBY, { name: roomName, password: password, maxClients: playerNum })
             .then((room) => {
-                console.log(room.id);
                 setRoom && setRoom(room);
 
                 navigate('/lobby');
