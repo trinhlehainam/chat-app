@@ -6,7 +6,7 @@ interface Props {
     onClick?: Function
 }
 
-const RoomCancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
+const CancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
 
     return (
         <svg
@@ -20,10 +20,13 @@ const RoomCancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
             onClick={() => onClick && onClick()}
         >
             <defs>
-                <radialGradient id="my-gradient">
-                    <stop offset="0%" stopColor="#e66465" />
-                    <stop offset="100%" stopColor="#9198e5" />
+                <radialGradient id="cancel-gradient">
+                    <stop offset="0%" stopColor="#CD113B" />
+                    <stop offset="100%" stopColor="#FF7600" />
                 </radialGradient>
+                <clipPath id="cancel-clip">
+                    <circle className="w-full h-full" />
+                </clipPath>
             </defs>
             <g transform="translate(592.125 -323.404)">
                 <g transform="matrix(.03528 0 0 -.03528 -648.21 873.441)">
@@ -35,11 +38,16 @@ const RoomCancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
                         strokeLinejoin="miter"
                         strokeMiterlimit="10"
                         strokeOpacity="1"
-                        className={fillClass}
                     >
                         <path
                             strokeWidth="40"
                             d="M3586 14583.5c0-545.7-442.38-988.1-988.09-988.1-545.7 0-988.09 442.4-988.09 988.1s442.39 988.1 988.09 988.1c545.71 0 988.09-442.4 988.09-988.1z"
+                            className={fillClass}
+                        ></path>
+                        <path
+                            strokeWidth="40"
+                            d="M3586 14583.5c0-545.7-442.38-988.1-988.09-988.1-545.7 0-988.09 442.4-988.09 988.1s442.39 988.1 988.09 988.1c545.71 0 988.09-442.4 988.09-988.1z"
+                            className='fill-circle'
                         ></path>
                         <path
                             strokeWidth="20"
@@ -92,4 +100,4 @@ const RoomCancelButton: FC<Props> = ({ classname, fillClass, onClick }) => {
     );
 }
 
-export default RoomCancelButton;
+export default CancelButton;

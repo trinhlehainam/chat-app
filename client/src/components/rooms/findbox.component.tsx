@@ -3,8 +3,8 @@ import cx from 'classnames'
 
 import RoomContext from "../../contexts/room.context"
 import RoomBorder from "../../svg/room/roomborder.svg";
-import RoomCancelButton from "../../svg/room/roomcanclebutton.svg";
 import RoomButton from "../../svg/room/roombutton.svg";
+import RoomCancelButton from "./cancelbutton.component";
 
 const FindBox = () => {
     const {
@@ -35,8 +35,7 @@ const FindBox = () => {
                     fillclass="fill-black/80 backdrop-blur-xl"
                 />
                 <RoomCancelButton
-                    classname="absolute right-0 top-0 w-[30%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30"
-                    fillClass="fill-black"
+                    classname="absolute right-0 top-0 w-[30%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30 cursor-pointer"
                     onClick={() => {
                         setFindState && setFindState(false);
                         resetInput && resetInput();

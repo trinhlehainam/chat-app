@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 import RoomContext from '../../contexts/room.context';
 import Arrow from "../../svg/arrow.svg"
@@ -17,6 +17,7 @@ const PlayerNumSlider: FC<Props> = ({ classname }) => {
         setPlayerNum && setPlayerNum(MAX_PLAYER_NUM);
     }, [setPlayerNum]);
 
+    // NOTE: disable undefine variables error
     if (!playerNum || !setPlayerNum) return (<div></div>);
 
     const nextNum = () => {

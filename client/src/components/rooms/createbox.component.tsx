@@ -3,9 +3,9 @@ import cx from 'classnames'
 
 import RoomContext from "../../contexts/room.context"
 import RoomBorder from "../../svg/room/roomborder.svg";
-import RoomCancelButton from "../../svg/room/roomcanclebutton.svg";
 import RoomButton from "../../svg/room/roombutton.svg";
 import PlayerNumSlider from "./playernumslider.component";
+import RoomCancelButton from "./cancelbutton.component";
 
 const CreateBox = () => {
     const {
@@ -36,8 +36,7 @@ const CreateBox = () => {
                     fillclass="fill-black/80 backdrop-blur-xl"
                 />
                 <RoomCancelButton
-                    classname="absolute right-0 top-0 w-[25%] md:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30"
-                    fillClass="fill-black"
+                    classname="absolute right-0 top-0 w-[25%] md:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30 cursor-pointer"
                     onClick={() => {
                         setCreateState && setCreateState(false);
                         resetInput && resetInput();

@@ -7,7 +7,7 @@ import GlobalContext from "../contexts/global.context";
 import RoomContext from "../contexts/room.context";
 
 import RoomBorder from "../svg/room/roomborder.svg";
-import RoomCancelButton from "../svg/room/roomcanclebutton.svg";
+import CancelButton from "../svg/canclebutton.svg";
 import RoomLine1 from "../svg/room/roomline-1.svg";
 import RoomLine2 from "../svg/room/roomline-2.svg";
 import RoomLine3 from "../svg/room/roomline-3.svg";
@@ -91,6 +91,7 @@ const Rooms = () => {
                 //NOTE: inline error message (message show in the same box)
                 setFindError(true);
                 setFindErrorMessage(e.message);
+                setPassword('');
             });
     };
 
@@ -201,7 +202,7 @@ const Rooms = () => {
                                 "w-3/4 mx-auto",
                             )}
                         />
-                        <RoomCancelButton
+                        <CancelButton
                             classname={cx(
                                 "w-[64px] h-auto lg:hidden mt-4"
                             )}

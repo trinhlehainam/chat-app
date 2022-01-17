@@ -22,6 +22,14 @@
     clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%);
 }
 
+.fill-circle {
+    transition: ease-in-out 0.5s;
+}
+
+.btn-base:hover .fill-circle {
+    fill: url(#cancel-gradient);
+}
+
 .path {
     stroke-dasharray: var(--array-length);
     stroke-dashoffset: var(--offset-length);

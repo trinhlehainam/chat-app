@@ -2,7 +2,7 @@ import cx from 'classnames'
 import { useContext } from 'react';
 import RoomContext from '../../contexts/room.context';
 import RoomBorder from '../../svg/room/roomborder.svg'
-import RoomCancelButton from '../../svg/room/roomcanclebutton.svg'
+import RoomCancelButton from './cancelbutton.component';
 
 const JoinMessageBox = () => {
     const { cancelMessage, joinErrorMessage } = useContext(RoomContext)
@@ -27,8 +27,7 @@ const JoinMessageBox = () => {
                 />
                 <div className="sm:text-6xl z-20 text-center w-3/4 sm:w-full">{joinErrorMessage}</div>
                 <RoomCancelButton
-                    classname="absolute right-0 top-0 w-[20%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30"
-                    fillClass="fill-black"
+                    classname="absolute right-0 top-0 w-[20%] sm:w-[15%] h-auto translate-x-1/4 -translate-y-1/4 z-30 cursor-pointer"
                     onClick={() => cancelMessage && cancelMessage()}
                 />
             </div>
