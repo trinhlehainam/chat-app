@@ -46,8 +46,8 @@ const Rooms = () => {
             });
     };
 
-    const create = (roomName: string, password: string) => {
-        client && client.create(RoomType.LOBBY, { name: roomName, password: password })
+    const create = (roomName: string, password: string, playerNum: number) => {
+        client && client.create(RoomType.LOBBY, { name: roomName, password: password, maxClients: playerNum})
             .then((room) => {
                 console.log(room.id);
                 setRoom && setRoom(room);

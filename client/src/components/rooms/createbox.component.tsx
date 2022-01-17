@@ -5,7 +5,6 @@ import RoomContext from "../../contexts/room.context"
 import RoomBorder from "../../svg/room/roomborder.svg";
 import RoomCancelButton from "../../svg/room/roomcanclebutton.svg";
 import RoomButton from "../../svg/room/roombutton.svg";
-import Arrow from "../../svg/arrow.svg";
 import PlayerNumSlider from "./playernumslider.component";
 
 const CreateBox = () => {
@@ -13,6 +12,7 @@ const CreateBox = () => {
         roomName, setRoomName,
         password, setPassword,
         setCreateState, create,
+        playerNum,
         resetInput
     } = useContext(RoomContext);
 
@@ -59,7 +59,7 @@ const CreateBox = () => {
                 <div className="relative flex items-center justify-center w-full md:mt-6">
                     <RoomButton
                         classname="w-1/2 md:w-[30%] h-auto btn-base cursor-pointer"
-                        onClick={() => create && create(roomName, password)}
+                        onClick={() => create && create(roomName, password, playerNum)}
                     />
                     <div className="absolute text-xl md:text-3xl pointer-events-none select-none">OK</div>
                 </div>

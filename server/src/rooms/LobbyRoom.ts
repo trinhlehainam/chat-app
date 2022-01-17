@@ -2,8 +2,6 @@ import { Room, Client, ServerError } from "colyseus";
 import { LobbyRoomState } from "./schema/LobbyRoomState";
 
 export class LobbyRoom extends Room<LobbyRoomState> {
-    maxClients: number = 4;
-
     onCreate(options: any) {
         this.setState(new LobbyRoomState());
 
@@ -11,6 +9,8 @@ export class LobbyRoom extends Room<LobbyRoomState> {
             this.setPrivate();
             this.state.password = options.password;
         }
+
+        this.maxClients = options.maxClients;
 
         this.setMetadata({ name: options.name })
 
