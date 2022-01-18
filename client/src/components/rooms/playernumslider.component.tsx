@@ -1,24 +1,21 @@
 import cx from 'classnames'
-import { FC, useContext, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 
 import RoomContext from '../../contexts/room.context';
 import Arrow from "../../svg/arrow.svg"
 
 interface Props {
     classname?: string,
+    playerNum: number,
+    setPlayerNum: Dispatch<SetStateAction<number>>,
 }
 
-const PlayerNumSlider: FC<Props> = ({ classname }) => {
+const PlayerNumSlider: FC<Props> = ({ classname, playerNum, setPlayerNum }) => {
     const MAX_PLAYER_NUM = 4;
 
-    const { playerNum, setPlayerNum } = useContext(RoomContext);
-
     useEffect(() => {
-        setPlayerNum && setPlayerNum(MAX_PLAYER_NUM);
+        setPlayerNum(MAX_PLAYER_NUM);
     }, [setPlayerNum]);
-
-    // NOTE: disable undefine variables error
-    if (!playerNum || !setPlayerNum) return (<div></div>);
 
     const nextNum = () => {
         const newNum = 1 + playerNum % MAX_PLAYER_NUM;

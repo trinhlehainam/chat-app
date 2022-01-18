@@ -1,5 +1,5 @@
 import { Client, Room } from "colyseus.js";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Routes as Switch, Route, useLocation } from "react-router-dom";
 
@@ -9,6 +9,12 @@ import Title from "./components/title.component";
 import Play from "./routes/play.route";
 import Rooms from "./routes/rooms.route";
 import Lobby from "./routes/lobby.route";
+
+const HomeMemo = memo(Home);
+const TitleMemo = memo(Title);
+const PlayMemo = memo(Play);
+const RoomsMemo = memo(Rooms);
+const LobbyMemo = memo(Lobby);
 
 const App = () => {
     const [client, setClient] = useState<Client>();
@@ -25,14 +31,14 @@ const App = () => {
 
     return (
         <>
-            <Title />
+            <TitleMemo />
             <GlobalContext.Provider value={roomContext}>
                 <AnimatePresence exitBeforeEnter>
                     <Switch location={location} key={location.key}>
-                        <Route path={"/"} element={<Home />} />
-                        <Route path={"/play"} element={<Play />} />
-                        <Route path={"/rooms"} element={<Rooms />}/>
-                        {room && <Route path={"/lobby"} element={<Lobby />} />}
+                        <Route path={"/"} element={<HomeMemo />} />
+                        <Route path={"/play"} element={<PlayMemo />} />
+                        <Route path={"/rooms"} element={<RoomsMemo />} />
+                        <Route path={"/lobby"} element={<LobbyMemo />} />
                     </Switch>
                 </AnimatePresence>
             </GlobalContext.Provider>

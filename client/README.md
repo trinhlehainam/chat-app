@@ -94,6 +94,14 @@
 - [Scale SVG](https://css-tricks.com/scale-svg/) - This help to how to SVG and fit to div box.
 - [Click through to underlying element](https://stackoverflow.com/questions/3680429/click-through-div-to-underlying-elements)
 - [Wraping and break new line words](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Text/Wrapping_Text)
+- [Understand React useEffect](https://medium.com/@dev_abhi/useeffect-what-when-and-how-95045bcf0f32)
+- [React Router](https://ui.dev/react-router-tutorial/)
+- [Protected route React Router](https://ui.dev/react-router-protected-routes-authentication/)
+- [React Router v6](https://ui.dev/react-router-tutorial/)
+- [React useCallback](https://dmitripavlutin.com/dont-overuse-react-usecallback/)
+- [React useEffect vs useCallback vs useMemo](https://stackoverflow.com/questions/56910036/when-to-use-usecallback-usememo-and-useeffect)
+- [React scroll to bottom in overflow box](https://stackoverflow.com/questions/45719909/scroll-to-bottom-of-an-overflowing-div-in-react)
+- [React rerendering](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/)
 
 ## Author
 

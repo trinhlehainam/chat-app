@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 interface Props {
-    classname: string
-    fillclass: string
+    classname?: string
+    fillclass?: string
 }
 
 const RoomBorder: FC<Props> = ({ classname, fillclass }) => {

@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 interface Props {
-    classname: string
+    classname?: string
 }
 
 const RoomLine3: FC<Props> = ({classname}) => {
