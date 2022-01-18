@@ -52,7 +52,7 @@ const Rooms = () => {
         client && client.joinById(roomId, { clientName: 'GlobalChecker' })
             .then((room) => {
                 setRoom && setRoom(room);
-                navigate('/lobby')
+                navigate('/lobby', {replace: true})
             })
             .catch((e) => {
                 setJoinErrorMessage(e.message);

@@ -44,18 +44,19 @@ const CreateBox = () => {
             roomName: roomName,
             password: password,
             maxClients: playerNum,
+            //TODO: add change username feature
             clientName: 'GlobalChecker'
         })
             .then((room) => {
                 setRoom && setRoom(room);
 
-                navigate('/lobby');
+                navigate('/lobby', {replace: true});
 
                 // Reset input state
                 setRoomName('');
                 setPassword('');
             });
-    }, [client, navigate, setPassword, setRoomName]);
+    }, [client, setRoom, navigate, setPassword, setRoomName]);
 
     return (
         <div

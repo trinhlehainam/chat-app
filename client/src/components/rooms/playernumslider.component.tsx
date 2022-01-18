@@ -1,7 +1,6 @@
 import cx from 'classnames'
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 
-import RoomContext from '../../contexts/room.context';
 import Arrow from "../../svg/arrow.svg"
 
 interface Props {

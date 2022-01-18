@@ -1,5 +1,7 @@
 import cx from 'classnames'
-import { FC } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
+
+import GlobalContext from '../../contexts/global.context';
 
 import BorderBottom from '../../svg/lobby/border-bottom.svg';
 import BorderTop from '../../svg/lobby/border-top.svg';
@@ -10,7 +12,18 @@ interface Props {
     classname?: string,
 };
 
-const PlayerCards: FC<Props> = ({classname}) => {
+const PlayerCards: FC<Props> = ({ classname }) => {
+    const { room } = useContext(GlobalContext);
+    const [playerNum, setPlayerNum] = useState(1);
+
+    useEffect(() => {
+        if (!room) {
+            return;
+        }
+
+        setPlayerNum(room.state.clientNum);
+    }, [room]);
+
     return (
         <div className={cx(
             'flex justify-center items-center',

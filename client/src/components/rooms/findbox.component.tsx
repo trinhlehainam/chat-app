@@ -39,7 +39,7 @@ const FindBox = () => {
         client && client.joinById(roomId, { password: password, clientName: 'GlobalChecker' })
             .then((room) => {
                 setRoom && setRoom(room);
-                navigate('/lobby')
+                navigate('/lobby', { replace: true })
 
                 setFindState && setFindState(false);
                 resetInput();

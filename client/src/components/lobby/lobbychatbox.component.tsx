@@ -18,21 +18,23 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
     const scrollToCheckpoint = () => { checkpointRef.current?.scrollIntoView({ behavior: 'smooth' }) };
 
     useEffect(() => {
-        scrollToCheckpoint();
-    }, []);
-
-    useEffect(() => {
         if (!room) return;
+
+        let isMounted = true;
 
         room.send('requreChatMessages');
 
         room.onMessage('initState', (messages) => {
-            setChat(messages);
+            isMounted && setChat(messages);
         });
 
         room.onMessage('syncChat', (messages) => {
-            setChat(messages);
+            isMounted && setChat(messages);
         });
+
+        return () => {
+            isMounted = false
+        };
 
     }, [room])
 
@@ -74,7 +76,7 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
                     'overflow-auto scrollbar-hide'
                 )}
             >
-                {chat.map((mess, idx) => <div key={idx} className='mx-4'>{mess}</div>)}
+                {chat.map((mess, idx) => <div key={idx} className='mx-2'>{mess}</div>)}
                 <div ref={checkpointRef} />
             </div>
         </div>

@@ -10,10 +10,7 @@ import LobbyContext from '../contexts/lobby.context';
 import Button from '../svg/lobby/button.svg';
 
 const Lobby = () => {
-    const [roomId, setRoomId] = useState('');
     const [roomName, setRoomName] = useState('');
-    const [playerNum, setPlayerNum] = useState(1);
-    console.log(roomId);
 
     const navigate = useNavigate();
 
@@ -22,7 +19,6 @@ const Lobby = () => {
     } = useContext(GlobalContext);
 
     const context = {
-        roomId, setRoomId,
         roomName, setRoomName,
     };
 
@@ -31,20 +27,17 @@ const Lobby = () => {
             .then(() => {
                 setRoom && setRoom(undefined);
             });
-        navigate('/rooms')
+        navigate('/rooms', { replace: true })
     };
 
     useEffect(() => {
         if (!room) {
-            navigate('/rooms');
+            navigate('/rooms', { replace: true })
             return;
         }
 
-        console.log(room.state);
-        setRoomId(room.state.roomId);
         setRoomName(room.state.roomName);
-        setPlayerNum(room.state.clientNum);
-    }, [room]);
+    }, [room, setRoomName, navigate]);
 
     return (
         <LobbyContext.Provider value={context}>
