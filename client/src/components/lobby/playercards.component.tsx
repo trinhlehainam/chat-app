@@ -1,16 +1,21 @@
 import cx from 'classnames'
+import { FC } from 'react';
 
 import BorderBottom from '../../svg/lobby/border-bottom.svg';
 import BorderTop from '../../svg/lobby/border-top.svg';
 import IconBorder from '../../svg/lobby/iconborder.svg';
 import PlayerBorder from '../../svg/lobby/playerborder.svg';
 
-const PlayerCards = () => {
+interface Props {
+    classname?: string,
+};
+
+const PlayerCards: FC<Props> = ({classname}) => {
     return (
         <div className={cx(
             'flex justify-center items-center',
-            'mt-10 w-4/5 top-[12%] max-w-[1105px]',
             'text-yellow-custom',
+            classname,
         )}
         >
             <div className='relative flex flex-col items-center w-1/4'>

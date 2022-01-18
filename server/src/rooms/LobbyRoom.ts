@@ -16,29 +16,32 @@ export class LobbyRoom extends Room<LobbyRoomState> {
             this.state.name = options.name;
         }
 
+
         this.maxClients = options.maxClients;
 
         this.state.roomId = this.roomId;
 
         this.setMetadata({ name: options.name })
 
+        this.onMessage('requreChatMessages', (client) => {
+            client.send('initState', this.state.chatState.messages);
+        });
+
         this.onMessage("newMessage", (client, message) => {
             this.state.chatState.messages.push(message);
             this.broadcast('syncChat', this.state.chatState.messages);
         });
-
     }
 
     onJoin(client: Client, options: any) {
         console.log(client.sessionId, "joined!");
-        
+
         this.state.clientNum = this.clients.length;
+
         // NOTE:Asign host to first client
         if (this.clients.length === 1) {
-            this.state.hostClient = client.id;
+            this.state.hostClient = client.sessionId;
         }
-
-        client.send('initState', this.state.chatState.messages);
     }
 
     onLeave(client: Client, consented: boolean) {

@@ -4,7 +4,7 @@ interface Props {
     classname: string
 }
 
-const RoomTitleBorderTop: FC<Props> = ({classname}) => {
+const  TitleBorderTop: FC<Props> = ({classname}) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,4 +77,4 @@ const RoomTitleBorderTop: FC<Props> = ({classname}) => {
     );
 }
 
-export default RoomTitleBorderTop;
+export default TitleBorderTop;

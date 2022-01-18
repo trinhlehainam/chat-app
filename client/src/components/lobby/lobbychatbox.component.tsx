@@ -1,9 +1,13 @@
-import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent, useRef } from 'react';
+import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent, useRef, FC } from 'react';
 import cx from 'classnames'
 
 import GlobalContext from '../../contexts/global.context';
 
-const LobbyChatBox = () => {
+interface Props {
+    classname?: string,
+};
+
+const LobbyChatBox: FC<Props> = ({ classname }) => {
     const { room } = useContext(GlobalContext);
 
     const [message, setMessage] = useState('');
@@ -19,6 +23,8 @@ const LobbyChatBox = () => {
 
     useEffect(() => {
         if (!room) return;
+
+        room.send('requreChatMessages');
 
         room.onMessage('initState', (messages) => {
             setChat(messages);
@@ -46,7 +52,7 @@ const LobbyChatBox = () => {
         <div
             className={cx(
                 'flex flex-col-reverse justify-start',
-                'absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 h-full text-yellow-custom group',
+                classname
             )}
         >
             <input

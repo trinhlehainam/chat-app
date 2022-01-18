@@ -5,10 +5,11 @@ import TitleBorderBottom from "../../svg/room/roomtitleborder-bottom.svg";
 import TitleBorderTop from "../../svg/room/roomtitleborder-top.svg";
 
 interface Props {
-    classname: string
+    classname?: string,
+    roomName: string,
 };
 
-const RoomTitle: FC<Props> = ({ classname }) => {
+const LobbyTitle: FC<Props> = ({ classname, roomName }) => {
     return (
         <div
             className={cx(
@@ -17,10 +18,10 @@ const RoomTitle: FC<Props> = ({ classname }) => {
             )}
         >
             <TitleBorderTop classname="w-[80%] sm:w-fit h-auto" />
-            <div className="my-2 select-none">ROOMS</div>
+            <div className="my-4">{roomName}</div>
             <TitleBorderBottom classname="w-[80%] sm:w-fit h-auto" />
         </div>
     );
 };
 
-export default RoomTitle; 
+export default LobbyTitle; 
