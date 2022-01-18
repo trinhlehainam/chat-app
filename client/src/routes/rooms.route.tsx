@@ -48,7 +48,12 @@ const Rooms = () => {
     };
 
     const create = (roomName: string, password: string, playerNum: number) => {
-        client && client.create(RoomType.LOBBY, { name: roomName, password: password, maxClients: playerNum })
+        client && client.create(RoomType.LOBBY, {
+            roomName: roomName,
+            password: password,
+            maxClients: playerNum,
+            clientName: 'GlobalChecker'
+        })
             .then((room) => {
                 setRoom && setRoom(room);
 
@@ -65,7 +70,7 @@ const Rooms = () => {
     };
 
     const join = (roomId: string) => {
-        client && client.joinById(roomId)
+        client && client.joinById(roomId, { clientName: 'GlobalChecker' })
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby')
@@ -77,7 +82,7 @@ const Rooms = () => {
     };
 
     const joinWithFind = (roomId: string, password: string) => {
-        client && client.joinById(roomId, { password: password })
+        client && client.joinById(roomId, { password: password, clientName: 'GlobalChecker' })
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby')
@@ -187,7 +192,7 @@ const Rooms = () => {
                                             <AvailableRoom
                                                 key={`${roomId}-${idx}`}
                                                 roomId={roomId}
-                                                name={metadata.name}
+                                                name={metadata.roomName}
                                                 players={`${clients}/${maxClients}`}
                                             />
                                         );

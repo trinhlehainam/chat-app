@@ -1,5 +1,6 @@
 import { Room, Client, ServerError } from "colyseus";
 import { LobbyRoomState } from "./schema/LobbyRoomState";
+import { LobbyClient } from "./schema/LobbyClient";
 
 export class LobbyRoom extends Room<LobbyRoomState> {
     private password: string = '';
@@ -12,16 +13,12 @@ export class LobbyRoom extends Room<LobbyRoomState> {
             this.password = options.password;
         }
 
-        if (options.name) {
-            this.state.name = options.name;
-        }
-
-
         this.maxClients = options.maxClients;
 
+        this.state.roomName = options.roomName ? options.roomName : this.roomId;
         this.state.roomId = this.roomId;
 
-        this.setMetadata({ name: options.name })
+        this.setMetadata({ roomName: options.roomName })
 
         this.onMessage('requreChatMessages', (client) => {
             client.send('initState', this.state.chatState.messages);
@@ -38,10 +35,16 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
         this.state.clientNum = this.clients.length;
 
+        const clientName = options.clientName ? options.clientName : client.sessionId;
+        const isHost = client.sessionId === this.state.hostClient;
+
+        this.state.clients.push(new LobbyClient(clientName, isHost));
+
         // NOTE:Asign host to first client
         if (this.clients.length === 1) {
             this.state.hostClient = client.sessionId;
         }
+
     }
 
     onLeave(client: Client, consented: boolean) {

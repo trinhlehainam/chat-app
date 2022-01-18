@@ -30,9 +30,9 @@ const Lobby = () => {
     useEffect(() => {
         if (!room) return;
         setRoomId(room.state.roomId);
-        setRoomName(room.state.name);
+        setRoomName(room.state.roomName);
         setPlayerNum(room.state.clientNum);
-    }, [room])
+    }, [room]);
 
     return (
         <div
@@ -47,7 +47,7 @@ const Lobby = () => {
                     "relative flex flex-col items-center"
                 )}
             >
-                <LobbyTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName ? roomName : roomId} />
+                <LobbyTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName} />
                 <PlayerCards classname='w-4/5 max-w-[1105px] my-auto' />
                 <div className='flex translate-x-1/4 w-1/2 my-auto'>
                     <div
