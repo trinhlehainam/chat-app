@@ -82,6 +82,24 @@
 }
 ```
 
+- Avoid component's state from being used when it's destroyed (component's unmounted)
+
+```jsx
+useEffec(() => {
+    let isMounted = true;
+
+    promiseFunc()
+    .then((res) => {
+        // Only use this component's state when it's mounted
+        if (isMounted) {
+            setState(...);
+        }
+    })
+
+    return () => { isMounted = false };
+},[setState]);
+```
+
 ### Continued development
 
 ### Useful resources
@@ -102,6 +120,7 @@
 - [React useEffect vs useCallback vs useMemo](https://stackoverflow.com/questions/56910036/when-to-use-usecallback-usememo-and-useeffect)
 - [React scroll to bottom in overflow box](https://stackoverflow.com/questions/45719909/scroll-to-bottom-of-an-overflowing-div-in-react)
 - [React rerendering](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/)
+- [Avoid use component's state when it's unmounted](https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component)
 
 ## Author
 

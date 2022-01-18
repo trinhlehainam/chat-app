@@ -46,7 +46,7 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
         if (e.key === 'Enter') {
             room && room.send('newMessage', message);
             setMessage('');
-            setTimeout(() => scrollToCheckpoint(), 100);
+            setTimeout(() => scrollToCheckpoint(), 50);
         }
     }
 
