@@ -14,6 +14,8 @@ const MemoBorder = memo(RoomBorder);
 const MemoCancelButton = memo(RoomCancelButton);
 
 const CreateBox = () => {
+    const MAX_INPUT_LENGTH = 9;
+
     const { client, setRoom } = useContext(GlobalContext);
     const [password, setPassword] = useState('');
     const [roomName, setRoomName] = useState('');
@@ -83,13 +85,13 @@ const CreateBox = () => {
                 />
                 <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-xl lg:text-2xl gap-2">
                     <div className="md:w-1/4 select-none">ROOM NAME</div>
-                    <input type='text' value={roomName} onChange={(e) => setRoomName(e.target.value)}
+                    <input type='text' value={roomName} onChange={(e) => setRoomName(e.target.value)} maxLength={MAX_INPUT_LENGTH}
                         className="bg-gray-400/30 px-2 w-3/4 md:w-1/2 focus:outline-none"
                     />
                 </div>
                 <div className="flex flex-col md:flex-row justify-center items-center z-20 w-full md:text-xl lg:text-2xl gap-2">
                     <div className="md:w-1/4 select-none">PASSWORD</div>
-                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)}
+                    <input type='password' value={password} onChange={(e) => setPassword(e.target.value)} maxLength={MAX_INPUT_LENGTH}
                         className="bg-gray-400/30 px-2 w-3/4 md:w-1/2 focus:outline-none"
                     />
                 </div>

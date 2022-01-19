@@ -53,13 +53,14 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
     onLeave(client: Client, consented: boolean) {
         console.log(client.sessionId, "left!");
+        this.state.clients.delete(client.sessionId);
     }
 
     onDispose() {
         console.log("room", this.roomId, "disposing...");
     }
 
-    async onAuth(client: Client, options: any, request) {
+    async onAuth(client: Client, options: any, request: any) {
         //TODO: set up more advance auth
         if (!this.password) return true;
 

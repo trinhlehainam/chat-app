@@ -15,10 +15,16 @@ const MemoTitle = memo(LobbyTitle);
 const MemoNavButtons = memo(NavButtons);
 const MemoCards = memo(PlayerCards);
 
+interface PlayerInfo {
+    playerName: string,
+    isReady: boolean,
+};
+
 const Lobby = () => {
     const [roomName, setRoomName] = useState('');
     const [roomId, setRoomId] = useState('');
     const [infoState, setInfoState] = useState(false);
+    const [playerInfos, setPlayerInfos] = useState<Array<PlayerInfo>>([]);
 
     const navigate = useNavigate();
 
@@ -39,10 +45,18 @@ const Lobby = () => {
         room.onMessage('initState', (state) => {
             setRoomName(state.roomName);
             setRoomId(room.id);
-            console.log(room.id);
+
+            const clients = Object.values(state.clients);
+
+            const infos = clients.map((client: any) => ({
+                    playerName: client.name,
+                    isReady: client.isReady
+                }))
+
+            setPlayerInfos(infos);
         });
 
-    }, [room, setRoomName, setRoomId, navigate]);
+    }, [room, setRoomName, setRoomId, navigate, setPlayerInfos]);
 
     return (
         <LobbyContext.Provider value={context}>
@@ -60,7 +74,7 @@ const Lobby = () => {
                 >
                     {infoState && <InfoBox />}
                     <MemoTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName} />
-                    <MemoCards classname='w-4/5 max-w-[1105px] my-auto' />
+                    <MemoCards classname='w-4/5 max-w-[1105px] my-auto' playerInfos={playerInfos} />
                     <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState} />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'

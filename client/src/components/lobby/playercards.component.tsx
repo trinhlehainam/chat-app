@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 import GlobalContext from '../../contexts/global.context';
 
@@ -7,20 +7,20 @@ import PlayerCard from './playercard.component';
 
 interface Props {
     classname?: string,
+    playerInfos: Array<{ playerName: string, isReady: boolean }>,
 };
 
-const PlayerCards: FC<Props> = ({ classname }) => {
-    console.log('player')
+const PlayerCards: FC<Props> = ({ classname, playerInfos }) => {
     const { room } = useContext(GlobalContext);
 
-    const [playerNum, setPlayerNum] = useState(1);
+    // WARN:
+    console.log('card');
 
     useEffect(() => {
         if (!room) {
             return;
         }
 
-        setPlayerNum(room.state.clientNum);
     }, [room]);
 
     return (
@@ -30,7 +30,9 @@ const PlayerCards: FC<Props> = ({ classname }) => {
             classname,
         )}
         >
-            <PlayerCard classname='w-1/4' playerName='GLOBAL' isReady={false} />
+            {playerInfos.map(({ playerName, isReady }, idx) => (
+                <PlayerCard key={idx} classname='w-1/4' playerName={playerName} isReady={isReady} />
+            ))}
         </div>
     )
 };
