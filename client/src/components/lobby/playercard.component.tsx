@@ -9,7 +9,8 @@ import PlayerBorder from "../../svg/lobby/playerborder.svg"
 interface Props {
     classname?: string,
     playerName: string,
-    isReady: boolean
+    isReady: boolean,
+    isHost: boolean
 }
 
 const MemoPlayerBorder = memo(PlayerBorder);
@@ -17,7 +18,7 @@ const MemoIconBorder = memo(IconBorder);
 const MemoBorderTop = memo(BorderTop);
 const MemoBorderBottom = memo(BorderBottom);
 
-const PlayerCard: FC<Props> = ({ classname, playerName, isReady }) => {
+const PlayerCard: FC<Props> = ({ classname, playerName, isReady, isHost }) => {
     return (
         <div className={cx(
             'relative flex flex-col items-center',
@@ -41,8 +42,13 @@ const PlayerCard: FC<Props> = ({ classname, playerName, isReady }) => {
                         <MemoBorderBottom classname='w-[45%] h-auto' />
                     </div>
                 </div>
-                <div className='top-[62%] text-center text-4xl'>
-                    {isReady ? 'READY' : 'MADA'}
+                <div className={cx(
+                    'top-[62%] text-center text-4xl',
+                    { 'text-green-500 text-glow-green': isReady && !isHost },
+                    { 'text-red-500': !isReady && !isHost },
+                    { 'text-glow-yellow': isHost }
+                )}>
+                    {isHost ? 'HOST' : (isReady ? 'READY' : 'MADA')}
                 </div>
             </div>
         </div>

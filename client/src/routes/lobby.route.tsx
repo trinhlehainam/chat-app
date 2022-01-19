@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { memo, useContext, useEffect, useState } from 'react';
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import GlobalContext from '../contexts/global.context';
@@ -18,6 +18,7 @@ const MemoCards = memo(PlayerCards);
 interface PlayerInfo {
     playerName: string,
     isReady: boolean,
+    isHost: boolean,
 };
 
 const Lobby = () => {
@@ -25,6 +26,9 @@ const Lobby = () => {
     const [roomId, setRoomId] = useState('');
     const [infoState, setInfoState] = useState(false);
     const [playerInfos, setPlayerInfos] = useState<Array<PlayerInfo>>([]);
+    const [myId, setMyId] = useState('');
+    const [hostId, setHostId] = useState('');
+    const [isHost, checkHost] = useState(false);
 
     const navigate = useNavigate();
 
@@ -35,28 +39,56 @@ const Lobby = () => {
         infoState, setInfoState
     };
 
+    const extractClientInfo = useCallback((state: any) => {
+        // NOTE: extract server MapSchema
+        const clients = Object.entries(state.clients);
+
+        const infos = clients.map(([id, client]: [string, any]) => ({
+            playerName: client.name,
+            isReady: client.isReady,
+            isHost: state.hostClient === id
+        }))
+
+        setPlayerInfos(infos);
+
+    }, [setPlayerInfos]);
+
     useEffect(() => {
         if (!room) {
             navigate('/rooms', { replace: true })
             return;
         }
 
+        let isMounted = true;
+
         room.send('requireInit');
-        room.onMessage('initState', (state) => {
+        room.onMessage('initState', ({ state, id }) => {
+            if (!isMounted) return;
             setRoomName(state.roomName);
             setRoomId(room.id);
+            setMyId(id);
+            setHostId(state.hostClient);
 
-            const clients = Object.values(state.clients);
-
-            const infos = clients.map((client: any) => ({
-                    playerName: client.name,
-                    isReady: client.isReady
-                }))
-
-            setPlayerInfos(infos);
+            extractClientInfo(state);
         });
 
-    }, [room, setRoomName, setRoomId, navigate, setPlayerInfos]);
+        room.onMessage('newComer', (state) => {
+            if (!isMounted) return;
+            extractClientInfo(state);
+        });
+
+        room.onMessage('playerLeave', (state) => {
+            if (!isMounted) return;
+            extractClientInfo(state);
+        });
+
+        return () => { isMounted = false };
+
+    }, [room, setRoomName, setRoomId, navigate, extractClientInfo]);
+
+    useEffect(() => {
+        checkHost(myId === hostId);
+    },[checkHost, myId, hostId]);
 
     return (
         <LobbyContext.Provider value={context}>
@@ -75,7 +107,7 @@ const Lobby = () => {
                     {infoState && <InfoBox />}
                     <MemoTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName} />
                     <MemoCards classname='w-4/5 max-w-[1105px] my-auto' playerInfos={playerInfos} />
-                    <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState} />
+                    <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState} isHost={isHost} />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'
                     />

@@ -150,10 +150,10 @@ const Rooms = () => {
                                     })}
                             </div>
                         </div>
-                        <MemoLine3 classname="w-[75%] h-auto max-h-12 mx-auto mb-4" />
+                        <MemoLine3 classname="w-[75%] h-auto max-h-12 mx-auto" />
                         <MemoNavButtons
                             classname={cx(
-                                "w-3/4 mx-auto",
+                                "w-3/4 mx-auto mt-4",
                             )}
                         />
                         <MemoCancelButton

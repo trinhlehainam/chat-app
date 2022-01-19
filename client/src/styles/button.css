@@ -49,3 +49,11 @@
     fill-opacity: 1;
 }
 
+.text-glow-green {
+    text-shadow: 0 0 20px #46CB18,  0 0 25px #88D969;
+}
+
+.text-glow-yellow {
+    text-shadow: 0 0 20px #ffd58c,  0 0 25px #ffd58c;
+}
+

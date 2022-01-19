@@ -100,6 +100,23 @@ useEffec(() => {
 },[setState]);
 ```
 
+- Use state as function in react by return a closure function in below.
+
+```jsx
+    // Init empty arrow function to func
+    const [func, setFunc] = useState(() => () => { ... });
+
+    useEffect(() => {
+
+        setFunc(() => 
+        // Update new function definition like below
+        () => {
+            ...
+        } 
+
+    },[setFunc]);
+```
+
 ### Continued development
 
 ### Useful resources
@@ -121,6 +138,7 @@ useEffec(() => {
 - [React scroll to bottom in overflow box](https://stackoverflow.com/questions/45719909/scroll-to-bottom-of-an-overflowing-div-in-react)
 - [React rerendering](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/)
 - [Avoid use component's state when it's unmounted](https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component)
+- [Use state as function is react](https://stackoverflow.com/questions/55621212/is-it-possible-to-react-usestate-in-react)
 
 ## Author
 

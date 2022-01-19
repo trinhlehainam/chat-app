@@ -7,14 +7,11 @@ import PlayerCard from './playercard.component';
 
 interface Props {
     classname?: string,
-    playerInfos: Array<{ playerName: string, isReady: boolean }>,
+    playerInfos: Array<{ playerName: string, isReady: boolean, isHost: boolean }>,
 };
 
 const PlayerCards: FC<Props> = ({ classname, playerInfos }) => {
     const { room } = useContext(GlobalContext);
-
-    // WARN:
-    console.log('card');
 
     useEffect(() => {
         if (!room) {
@@ -30,8 +27,8 @@ const PlayerCards: FC<Props> = ({ classname, playerInfos }) => {
             classname,
         )}
         >
-            {playerInfos.map(({ playerName, isReady }, idx) => (
-                <PlayerCard key={idx} classname='w-1/4' playerName={playerName} isReady={isReady} />
+            {playerInfos.map(({ playerName, isReady, isHost }, idx) => (
+                <PlayerCard key={idx} classname='w-1/4' playerName={playerName} isReady={isReady} isHost={isHost} />
             ))}
         </div>
     )

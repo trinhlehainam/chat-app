@@ -22,7 +22,10 @@ export class LobbyRoom extends Room<LobbyRoomState> {
         this.setMetadata({ roomName: options.roomName })
 
         this.onMessage('requireInit', (client) => {
-            client.send('initState', this.state);
+            client.send('initState', {state: this.state, id: client.sessionId});
+
+            if (this.clients.length > 1)
+                this.broadcast('newComer', this.state);
         });
 
         this.onMessage('requireMessages', (client) => {
@@ -54,6 +57,8 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     onLeave(client: Client, consented: boolean) {
         console.log(client.sessionId, "left!");
         this.state.clients.delete(client.sessionId);
+
+        this.broadcast('playerLeave', this.state);
     }
 
     onDispose() {
