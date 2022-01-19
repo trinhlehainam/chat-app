@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent, useRef, FC } from 'react';
+import { useState, ChangeEvent, useContext, useEffect, KeyboardEvent, useRef, FC, useCallback } from 'react';
 import cx from 'classnames'
 
 import GlobalContext from '../../contexts/global.context';
@@ -20,14 +20,16 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
 
     const checkpointRef = useRef<HTMLDivElement>(null);
 
-    const scrollToCheckpoint = () => { checkpointRef.current?.scrollIntoView({ behavior: 'smooth' }) };
+    const scrollToCheckpoint = useCallback(() => {
+        checkpointRef.current?.scrollIntoView({ behavior: 'smooth' })
+    },[checkpointRef]);
 
     useEffect(() => {
         if (!room) return;
 
         let isMounted = true;
 
-        room.send('requreMessages');
+        room.send('requireMessages');
 
         room.onMessage('initMessages', (messages) => {
             const convertedMessage = messages.map((messages: any) => {
@@ -36,11 +38,8 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
                     message: messages.message
                 }
             });
-            console.log(messages);
             isMounted && setChat(convertedMessage);
         });
-        
-        console.log('init');
 
         room.onMessage('syncChat', (messages) => {
             const convertedMessage = messages.map((messages: any) => {
@@ -56,24 +55,24 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
             isMounted = false
         };
 
-    }, [room])
+    }, [room, setChat])
 
-    const changeMessage = (e: ChangeEvent<HTMLInputElement>) => {
+    const changeMessage = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value);
-    }
+    }, [setMessage]);
 
-    const sendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
+    const sendMessage = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            room && room.send('newMessage', message);
+            message && room && room.send('newMessage', message);
             setMessage('');
-            setTimeout(() => scrollToCheckpoint(), 50);
+            scrollToCheckpoint();
         }
-    }
+    }, [room, setMessage]);
 
     return (
         <div
             className={cx(
-                'flex flex-col-reverse justify-start',
+                'flex flex-col-reverse justify-start pointer-events-auto',
                 classname
             )}
         >

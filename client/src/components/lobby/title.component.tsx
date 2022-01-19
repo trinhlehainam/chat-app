@@ -1,18 +1,15 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import cx from 'classnames'
-
-import LobbyContext from "../../contexts/lobby.context";
 
 import TitleBorderBottom from "../../svg/room/roomtitleborder-bottom.svg";
 import TitleBorderTop from "../../svg/room/roomtitleborder-top.svg";
 
 interface Props {
     classname?: string,
+    roomName?: string
 };
 
-const LobbyTitle: FC<Props> = ({ classname }) => {
-    const { roomName } = useContext(LobbyContext);
-
+const LobbyTitle: FC<Props> = ({ classname, roomName }) => {
     return (
         <div
             className={cx(
