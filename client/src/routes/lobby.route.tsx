@@ -13,6 +13,7 @@ import LobbyTitle from '../components/lobby/title.component';
 
 const MemoTitle = memo(LobbyTitle);
 const MemoNavButtons = memo(NavButtons);
+const MemoCards = memo(PlayerCards);
 
 const Lobby = () => {
     const [roomName, setRoomName] = useState('');
@@ -58,9 +59,9 @@ const Lobby = () => {
                     )}
                 >
                     {infoState && <InfoBox />}
-                    <MemoTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName}/>
-                    <PlayerCards classname='w-4/5 max-w-[1105px] my-auto' />
-                    <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState}/>
+                    <MemoTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName} />
+                    <MemoCards classname='w-4/5 max-w-[1105px] my-auto' />
+                    <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState} />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'
                     />

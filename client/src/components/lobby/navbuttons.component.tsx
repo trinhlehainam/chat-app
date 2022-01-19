@@ -4,6 +4,7 @@ import cx from 'classnames'
 
 import GlobalContext from "../../contexts/global.context";
 import LobbyButton from "./button.component";
+import { Room } from "colyseus.js";
 
 const MemoButton = memo(LobbyButton);
 
@@ -23,7 +24,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState }) => {
                 setRoom && setRoom(undefined);
             });
         navigate('/rooms', { replace: true })
-    }, [setRoom, navigate]);
+    }, [setRoom, navigate, room]);
 
     const play = useCallback(() => {
         navigate('/game', { replace: true })

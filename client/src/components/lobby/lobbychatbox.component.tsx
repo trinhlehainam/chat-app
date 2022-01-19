@@ -61,13 +61,13 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
         setMessage(e.target.value);
     }, [setMessage]);
 
-    const sendMessage = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    const sendMessage = useCallback((e: KeyboardEvent<HTMLInputElement>, message: string) => {
         if (e.key === 'Enter') {
             message && room && room.send('newMessage', message);
             setMessage('');
             scrollToCheckpoint();
         }
-    }, [room, setMessage]);
+    }, [room, setMessage, scrollToCheckpoint]);
 
     return (
         <div
@@ -81,7 +81,7 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
                 className='peer outline-none border-2 border-yellow-custom bg-gray-700/90 w-full text-lg px-2'
                 value={message}
                 onChange={changeMessage}
-                onKeyPress={sendMessage}
+                onKeyPress={(e) => sendMessage(e, message)}
                 onClick={() => scrollToCheckpoint()}
             />
             <div
