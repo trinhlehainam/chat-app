@@ -45,12 +45,12 @@ const CreateBox = () => {
             password: password,
             maxClients: playerNum,
             //TODO: add change username feature
-            clientName: 'GlobalChecker'
+            // clientName: 'GlobalChecker'
         })
             .then((room) => {
                 setRoom && setRoom(room);
 
-                navigate('/lobby', {replace: true});
+                navigate('/lobby', { replace: true });
 
                 // Reset input state
                 setRoomName('');

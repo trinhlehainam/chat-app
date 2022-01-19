@@ -32,8 +32,8 @@ class App {
 
     init(): App {
         this.server
-        .define("Lobby", LobbyRoom)
-        .filterBy(['password']);
+            .define("Lobby", LobbyRoom)
+            .filterBy(['password']);
 
         return this;
     }
@@ -41,6 +41,12 @@ class App {
     run(): App {
         this.server.listen(this.port);
         console.log(`Listening on port ${this.port}`)
+
+        if (process.env.NODE_ENV !== "production") {
+
+            // simulate 200ms latency between server and client.
+            this.server.simulateLatency(200);
+        }
 
         return this;
     }

@@ -7,11 +7,16 @@ interface Props {
     classname?: string,
 };
 
+interface Message {
+    playerName: string,
+    message: string
+}
+
 const LobbyChatBox: FC<Props> = ({ classname }) => {
     const { room } = useContext(GlobalContext);
 
     const [message, setMessage] = useState('');
-    const [chat, setChat] = useState<Array<string>>([]);
+    const [chat, setChat] = useState<Array<Message>>([]);
 
     const checkpointRef = useRef<HTMLDivElement>(null);
 
@@ -22,14 +27,29 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
 
         let isMounted = true;
 
-        room.send('requreChatMessages');
+        room.send('requreMessages');
 
-        room.onMessage('initState', (messages) => {
-            isMounted && setChat(messages);
+        room.onMessage('initMessages', (messages) => {
+            const convertedMessage = messages.map((messages: any) => {
+                return {
+                    playerName: messages.clientName,
+                    message: messages.message
+                }
+            });
+            console.log(messages);
+            isMounted && setChat(convertedMessage);
         });
+        
+        console.log('init');
 
         room.onMessage('syncChat', (messages) => {
-            isMounted && setChat(messages);
+            const convertedMessage = messages.map((messages: any) => {
+                return {
+                    playerName: messages.clientName,
+                    message: messages.message
+                }
+            });
+            isMounted && setChat(convertedMessage);
         });
 
         return () => {
@@ -76,7 +96,7 @@ const LobbyChatBox: FC<Props> = ({ classname }) => {
                     'overflow-auto scrollbar-hide'
                 )}
             >
-                {chat.map((mess, idx) => <div key={idx} className='mx-2'>{mess}</div>)}
+                {chat.map(({ playerName, message }, idx) => <div key={idx} className='mx-2 break-all'>{`[ ${playerName} ] : ${message}`}</div>)}
                 <div ref={checkpointRef} />
             </div>
         </div>

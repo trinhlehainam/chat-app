@@ -1,8 +1,9 @@
 import { FC, useContext } from "react";
 import cx from 'classnames'
 
-import TitleBorderBottom from "../../svg/room/roomtitleborder-bottom.svg";
 import LobbyContext from "../../contexts/lobby.context";
+
+import TitleBorderBottom from "../../svg/room/roomtitleborder-bottom.svg";
 import TitleBorderTop from "../../svg/room/roomtitleborder-top.svg";
 
 interface Props {
@@ -20,7 +21,7 @@ const LobbyTitle: FC<Props> = ({ classname }) => {
             )}
         >
             <TitleBorderTop classname="w-[80%] sm:w-fit h-auto" />
-            <div className="my-4">{roomName}</div>
+            <div className="my-4">{roomName? roomName: '...'}</div>
             <TitleBorderBottom classname="w-[80%] sm:w-fit h-auto" />
         </div>
     );

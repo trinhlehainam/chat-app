@@ -1,6 +1,7 @@
 import { Room, Client, ServerError } from "colyseus";
 import { LobbyRoomState } from "./schema/LobbyRoomState";
 import { LobbyClient } from "./schema/LobbyClient";
+import MessageState from "./schema/MessageState";
 
 export class LobbyRoom extends Room<LobbyRoomState> {
     private password: string = '';
@@ -20,13 +21,17 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
         this.setMetadata({ roomName: options.roomName })
 
-        this.onMessage('requreChatMessages', (client) => {
-            client.send('initState', this.state.chatState.messages);
+        this.onMessage('requireInit', (client) => {
+            client.send('initState', this.state);
         });
 
+        this.onMessage('requireMessages', (client) => {
+            client.send('initMessages', this.state.messsages);
+        })
+
         this.onMessage("newMessage", (client, message) => {
-            this.state.chatState.messages.push(message);
-            this.broadcast('syncChat', this.state.chatState.messages);
+            this.state.messsages.push(new MessageState(this.state.clients.get(client.sessionId).name, message));
+            this.broadcast('syncChat', this.state.messsages);
         });
     }
 
@@ -35,16 +40,15 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
         this.state.clientNum = this.clients.length;
 
-        const clientName = options.clientName ? options.clientName : client.sessionId;
-        const isHost = client.sessionId === this.state.hostClient;
-
-        this.state.clients.push(new LobbyClient(clientName, isHost));
-
         // NOTE:Asign host to first client
         if (this.clients.length === 1) {
             this.state.hostClient = client.sessionId;
         }
 
+        const clientName = options.clientName ? options.clientName : client.sessionId;
+        const isHost = client.sessionId === this.state.hostClient;
+
+        this.state.clients.set(client.sessionId, new LobbyClient(clientName, isHost));
     }
 
     onLeave(client: Client, consented: boolean) {

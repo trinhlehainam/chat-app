@@ -36,7 +36,7 @@ const FindBox = () => {
     }, [setError, setErrorMessage]);
 
     const joinWithFind = useCallback((roomId: string, password: string) => {
-        client && client.joinById(roomId, { password: password, clientName: 'GlobalChecker' })
+        client && client.joinById(roomId, { password: password })
             .then((room) => {
                 setRoom && setRoom(room);
                 navigate('/lobby', { replace: true })

@@ -36,7 +36,11 @@ const Lobby = () => {
             return;
         }
 
-        setRoomName(room.state.roomName);
+        room.send('requireInit');
+        room.onMessage('initState', (state) => {
+            setRoomName(state.roomName);
+        });
+
     }, [room, setRoomName, navigate]);
 
     return (
@@ -58,7 +62,7 @@ const Lobby = () => {
                     <div className='flex translate-x-1/4 w-1/2 my-auto'>
                         <div
                             className='relative flex justify-center items-center w-1/2 cursor-pointer'
-                            onClick={() => navigate('/game')}
+                            onClick={() => navigate('/game', { replace: true })}
                         >
                             <Button classname='h-auto btn-base peer' />
                             <div

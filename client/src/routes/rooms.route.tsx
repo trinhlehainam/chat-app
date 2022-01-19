@@ -49,10 +49,10 @@ const Rooms = () => {
     }, [client, setAvaiRooms]);
 
     const join = useCallback((roomId: string) => {
-        client && client.joinById(roomId, { clientName: 'GlobalChecker' })
+        client && client.joinById(roomId)
             .then((room) => {
                 setRoom && setRoom(room);
-                navigate('/lobby', {replace: true})
+                navigate('/lobby', { replace: true })
             })
             .catch((e) => {
                 setJoinErrorMessage(e.message);
@@ -87,7 +87,7 @@ const Rooms = () => {
     }, [client, setRoom, refresh]);
 
     const navigateBack = useCallback(() => {
-        navigate('/play', {replace:true});
+        navigate('/play', { replace: true });
     }, [navigate]);
 
     // TODO: layout close button
