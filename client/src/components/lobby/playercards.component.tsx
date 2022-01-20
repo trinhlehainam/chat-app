@@ -1,5 +1,5 @@
 import cx from 'classnames'
-import { FC, useContext, useEffect, useMemo } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 import GlobalContext from '../../contexts/global.context';
 
@@ -16,10 +16,10 @@ export type PlayerInfoMap = Map<string, PlayerInfo>;
 interface Props {
     classname?: string,
     playerInfoMap: PlayerInfoMap,
-    cardNum: number,
+    updatePlayerState: number,
 };
 
-const PlayerCards: FC<Props> = ({ classname, playerInfoMap, cardNum }) => {
+const PlayerCards: FC<Props> = ({ classname, playerInfoMap, updatePlayerState }) => {
     const { room } = useContext(GlobalContext);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const PlayerCards: FC<Props> = ({ classname, playerInfoMap, cardNum }) => {
 
     }, [room]);
 
-    const memoInfos = useMemo(() => Array.from(playerInfoMap.values()), [playerInfoMap, cardNum]);
+    const memoInfos = Array.from(playerInfoMap.values());
 
     return (
         <div className={cx(

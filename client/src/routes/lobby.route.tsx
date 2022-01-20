@@ -20,11 +20,11 @@ const Lobby = () => {
     const [roomId, setRoomId] = useState('');
     const [infoState, setInfoState] = useState(false);
     const [playerInfoMap, setPlayerInfoMap] = useState<PlayerInfoMap>(new Map<string, PlayerInfo>());
-    // NOTE: help MemoCards to recognize state change
-    const [cardNum, setCardNum] = useState(1);
     const [myId, setMyId] = useState('');
     const [hostId, setHostId] = useState('');
     const [isHost, checkHost] = useState(false);
+    // NOTE: help Memo Component to recognize state change
+    const [updatePlayerState, setUpdatePlayerState] = useState(0);
 
     const navigate = useNavigate();
 
@@ -44,14 +44,13 @@ const Lobby = () => {
                 infoMap.set(id, {
                     playerName: client.name,
                     isReady: client.isReady,
-                    isHost: state.hostClient === id
+                    isHost: state.hostId === id
                 })
             });
-            setCardNum(infoMap.size + 1);
             return infoMap;
         });
 
-    }, [setPlayerInfoMap, setCardNum]);
+    }, [setPlayerInfoMap]);
 
     const updatePlayerInfo = useCallback((state: any) => {
         // NOTE: extract server MapSchema
@@ -63,29 +62,35 @@ const Lobby = () => {
                 if (playerInfo) {
                     playerInfo.playerName = client.name;
                     playerInfo.isReady = client.isReady;
-                    playerInfo.isHost = state.hostClient === id;
+                    playerInfo.isHost = state.hostId === id;
                 }
                 else {
                     infoMap.set(id, {
                         playerName: client.name,
                         isReady: client.isReady,
-                        isHost: state.hostClient === id
+                        isHost: state.hostId === id
                     })
                 };
             });
-            setCardNum(infoMap.size + 1);
             return infoMap;
         });
+    }, [setPlayerInfoMap]);
 
-    }, [setPlayerInfoMap, setCardNum]);
-
-    const removePlayerInfo = useCallback((clientId: any) => {
+    const removePlayerInfo = useCallback((currentHostId: any, leftPlayerId: any, newHostId: any) => {
         setPlayerInfoMap(infoMap => {
-            infoMap.delete(clientId);
-            setCardNum(infoMap.size + 1);
+            infoMap.delete(leftPlayerId);
+
+            if (currentHostId !== newHostId) {
+                const newHost = infoMap.get(newHostId);
+                if (newHost) {
+                    newHost.isHost = true;
+                    newHost.isReady = false;
+                }
+                setHostId(newHostId);
+            }
             return infoMap;
         });
-    }, [setPlayerInfoMap, setCardNum]);
+    }, [setPlayerInfoMap, setHostId]);
 
     useEffect(() => {
         if (!room) {
@@ -101,27 +106,34 @@ const Lobby = () => {
             setRoomName(state.roomName);
             setRoomId(room.id);
             setMyId(id);
-            setHostId(state.hostClient);
+            setHostId(state.hostId);
 
             extractClientInfo(state);
+            setUpdatePlayerState(state => state + 1);
         });
 
         room.onMessage('newComer', (state) => {
             if (!isMounted) return;
             updatePlayerInfo(state);
+            setUpdatePlayerState(state => state + 1);
         });
 
-        room.onMessage('playerLeave', (clientId) => {
+        room.onMessage('playerLeave', ({ id, newHostId }) => {
             if (!isMounted) return;
-            removePlayerInfo(clientId);
+            removePlayerInfo(hostId, id, newHostId);
+            setUpdatePlayerState(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, setRoomName, setRoomId, navigate, extractClientInfo, updatePlayerInfo, removePlayerInfo]);
+    }, [
+        room, setRoomName, setRoomId, navigate,
+        extractClientInfo, updatePlayerInfo, removePlayerInfo, setUpdatePlayerState
+    ]);
 
     useEffect(() => {
         checkHost(myId === hostId);
+        console.log(hostId);
     }, [checkHost, myId, hostId]);
 
     return (
@@ -143,8 +155,14 @@ const Lobby = () => {
                     <MemoCards
                         classname='w-4/5 max-w-[1105px] my-auto'
                         playerInfoMap={playerInfoMap}
-                        cardNum={cardNum} />
-                    <MemoNavButtons classname='w-1/2 my-auto' setInfoState={setInfoState} isHost={isHost} />
+                        updatePlayerState={updatePlayerState} />
+                    <MemoNavButtons
+                        classname='w-1/2 my-auto'
+                        setInfoState={setInfoState}
+                        isHost={isHost}
+                        setPlayerInfoMap={setPlayerInfoMap}
+                        setUpdatePlayerState={setUpdatePlayerState}
+                    />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'
                     />

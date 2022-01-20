@@ -32,10 +32,19 @@ export class LobbyRoom extends Room<LobbyRoomState> {
             client.send('initMessages', this.state.messsages);
         })
 
+        this.onMessage('requireToggleReady', (client) => {
+            const clientState = this.state.clients.get(client.sessionId);
+            clientState.isReady = !clientState.isReady;
+            this.broadcast('updateClientReadyState', {
+                id: client.sessionId, isReady: clientState.isReady
+            });
+        })
+
         this.onMessage("newMessage", (client, message) => {
             this.state.messsages.push(new MessageState(this.state.clients.get(client.sessionId).name, message));
             this.broadcast('syncChat', this.state.messsages);
         });
+
     }
 
     onJoin(client: Client, options: any) {
@@ -45,11 +54,11 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
         // NOTE:Asign host to first client
         if (this.clients.length === 1) {
-            this.state.hostClient = client.sessionId;
+            this.state.hostId = client.sessionId;
         }
 
         const clientName = options.clientName ? options.clientName : client.sessionId;
-        const isHost = client.sessionId === this.state.hostClient;
+        const isHost = client.sessionId === this.state.hostId;
 
         this.state.clients.set(client.sessionId, new LobbyClient(clientName, isHost));
     }
@@ -57,8 +66,16 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     onLeave(client: Client, consented: boolean) {
         console.log(client.sessionId, "left!");
         this.state.clients.delete(client.sessionId);
+        
+        // NOTE: pick new client to become host when current host left
+        if (this.state.hostId === client.sessionId) {
+            const clientIds = Array.from(this.state.clients.keys());
+            const randomId = Math.random() * clientIds.length;
+            const pickRandomId = Math.floor(randomId);
+            this.state.hostId = clientIds[pickRandomId];
+        }
 
-        this.broadcast('playerLeave', client.sessionId);
+        this.broadcast('playerLeave', {id: client.sessionId, newHostId: this.state.hostId});
     }
 
     onDispose() {

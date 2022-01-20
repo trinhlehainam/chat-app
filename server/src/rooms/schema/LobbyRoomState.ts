@@ -7,6 +7,6 @@ export class LobbyRoomState extends Schema {
     @type({ map: LobbyClient }) clients = new MapSchema<LobbyClient>();
     @type('string') roomName: string = '';
     @type('string') roomId: string = '';
-    @type('string') hostClient: string = '';
+    @type('string') hostId: string = '';
     @type('number') clientNum: number = 1;
 }

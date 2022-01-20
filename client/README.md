@@ -117,6 +117,12 @@ useEffec(() => {
     },[setFunc]);
 ```
 
+- Extract iterable values to array
+```js
+    // iterable can be [values(), entries(), keys()]
+    const extracted_value = Array.from(value.iterable());
+```
+
 ### Continued development
 
 ### Useful resources
