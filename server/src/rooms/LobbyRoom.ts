@@ -58,7 +58,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
         console.log(client.sessionId, "left!");
         this.state.clients.delete(client.sessionId);
 
-        this.broadcast('playerLeave', this.state);
+        this.broadcast('playerLeave', client.sessionId);
     }
 
     onDispose() {
