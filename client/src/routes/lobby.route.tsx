@@ -21,16 +21,13 @@ const Lobby = () => {
     const [infoState, setInfoState] = useState(false);
     const [playerInfoMap, setPlayerInfoMap] = useState<PlayerInfoMap>(new Map<string, PlayerInfo>());
 
-
     const [myId, setMyId] = useState('');
     const [maxPlayers, setMaxPlayers] = useState(4);
     const [playerName, setPlayerName] = useState('');
     const [hostId, setHostId] = useState('');
-    const [isHost, checkHost] = useState(false);
 
-
-    // NOTE: help Memo Component to recognize state change
-    const [updatePlayerState, setUpdatePlayerState] = useState(0);
+    // NOTE: help Child Component recognize playerInfoMap state updated
+    const [playerInfoUpdated, setPlayerInfoUpdated] = useState(0);
 
     const navigate = useNavigate();
 
@@ -62,8 +59,9 @@ const Lobby = () => {
             });
             return infoMap;
         });
+        setPlayerInfoUpdated(state => state + 1);
 
-    }, [setPlayerInfoMap]);
+    }, [setPlayerInfoMap, setPlayerInfoUpdated]);
 
     const updatePlayerInfo = useCallback((state: any) => {
         // NOTE: extract server MapSchema
@@ -103,7 +101,8 @@ const Lobby = () => {
             }
             return infoMap;
         });
-    }, [setPlayerInfoMap, setHostId]);
+        setPlayerInfoUpdated(state => state + 1);
+    }, [setPlayerInfoMap, setHostId, setPlayerInfoUpdated]);
 
     useEffect(() => {
         if (!room) {
@@ -123,14 +122,14 @@ const Lobby = () => {
             setPlayerName(playerName);
 
             extractClientInfo(state);
-            setUpdatePlayerState(state => state + 1);
+            setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
     }, [
         room, setRoomName, setRoomId, setMyId, setHostId, setMaxPlayers, setPlayerName,
-        extractClientInfo, setUpdatePlayerState
+        extractClientInfo, setPlayerInfoUpdated
     ]);
 
     useEffect(() => {
@@ -143,12 +142,12 @@ const Lobby = () => {
         room.onMessage('newComer', (state) => {
             if (!isMounted) return;
             updatePlayerInfo(state);
-            setUpdatePlayerState(state => state + 1);
+            setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, updatePlayerInfo, setUpdatePlayerState]);
+    }, [room, updatePlayerInfo, setPlayerInfoUpdated]);
 
     useEffect(() => {
         if (!room) {
@@ -160,12 +159,12 @@ const Lobby = () => {
         room.onMessage('playerLeave', ({ id, newHostId }) => {
             if (!isMounted) return;
             removePlayerInfo(hostId, id, newHostId);
-            setUpdatePlayerState(state => state + 1);
+            setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, removePlayerInfo, setUpdatePlayerState, hostId]);
+    }, [room, removePlayerInfo, setPlayerInfoUpdated, hostId]);
 
     useEffect(() => {
         if (!room) {
@@ -184,12 +183,12 @@ const Lobby = () => {
                 }
                 return infoMap;
             });
-            setUpdatePlayerState(state => state + 1);
+            setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, setPlayerInfoMap, setUpdatePlayerState]);
+    }, [room, setPlayerInfoMap, setPlayerInfoUpdated]);
 
     useEffect(() => {
         if (!room) {
@@ -210,15 +209,11 @@ const Lobby = () => {
                 }
                 return infoMap;
             });
-            setUpdatePlayerState(state => state + 1);
+            setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
-    }, [room, setPlayerInfoMap, setPlayerName, setUpdatePlayerState, myId]);
-
-    useEffect(() => {
-        checkHost(myId === hostId);
-    }, [checkHost, myId, hostId]);
+    }, [room, setPlayerInfoMap, setPlayerName, setPlayerInfoUpdated, myId]);
 
     return (
         <LobbyContext.Provider value={context}>
@@ -245,11 +240,13 @@ const Lobby = () => {
                     <MemoCards
                         classname='w-4/5 max-w-[1105px] my-auto'
                         playerInfoMap={playerInfoMap}
-                        updatePlayerState={updatePlayerState} />
+                        updated={playerInfoUpdated} />
                     <MemoNavButtons
                         classname='w-1/2 my-auto'
                         setInfoState={setInfoState}
-                        isHost={isHost}
+                        myId={myId}
+                        playerInfoMap={playerInfoMap}
+                        updated={playerInfoUpdated}
                     />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'

@@ -4,25 +4,35 @@ import cx from 'classnames'
 
 import GlobalContext from "../../contexts/global.context";
 import LobbyButton from "./button.component";
+import { PlayerInfoMap } from "./playercards.component";
 
 const MemoButton = memo(LobbyButton);
 
 interface Props {
     classname?: string,
     setInfoState: Function,
-    isHost: boolean,
+    myId: string,
+    playerInfoMap: PlayerInfoMap,
+    updated: number,
 };
 
 type ArrowFunction<T> = () => T
 
-const NavButtons: FC<Props> = ({ classname, setInfoState, isHost }) => {
+const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, updated }) => {
     const { room, setRoom } = useContext(GlobalContext);
 
     const navigate = useNavigate();
 
+    const [isHost, setIsHost] = useState(false);
     const [text, setText] = useState('');
+    const [func, setFunc] = useState<ArrowFunction<void>>(() => () => { });
 
-    const [func, setFunc] = useState<ArrowFunction<void>>(() => () => {});
+    useEffect(() => {
+        const myInfo = playerInfoMap.get(myId);
+        if (myInfo) {
+            setIsHost(myInfo.isHost);
+        }
+    }, [myId, updated, playerInfoMap, setIsHost]);
 
     const leave = useCallback(() => {
         room && room.leave()
@@ -48,7 +58,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, isHost }) => {
     useEffect(() => {
         setFunc(() => isHost ? start : ready);
         setText(isHost ? 'START' : 'READY');
-    }, [isHost, setText, setFunc, start, ready])
+    }, [setText, setFunc, start, ready, isHost])
 
     return (
         <div className={cx(

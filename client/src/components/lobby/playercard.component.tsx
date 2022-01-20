@@ -43,7 +43,7 @@ const PlayerCard: FC<Props> = ({ classname, playerName, isReady, isHost }) => {
                     </div>
                 </div>
                 <div className={cx(
-                    'top-[62%] text-center text-4xl',
+                    'top-[62%] text-center text-4xl select-none',
                     { 'text-green-500 text-glow-green': isReady && !isHost },
                     { 'text-red-500': !isReady && !isHost },
                     { 'text-glow-yellow': isHost }

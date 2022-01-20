@@ -15,7 +15,7 @@ const LobbyButton: FC<Props> = ({ classname, onClick, text }) => {
     return (
         <div
             className={cx(
-                'relative flex justify-center items-center cursor-pointer',
+                'relative flex justify-center items-center cursor-pointer select-none',
                 classname
             )}
             onClick={onClick}
