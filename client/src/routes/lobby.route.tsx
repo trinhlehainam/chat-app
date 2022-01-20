@@ -45,7 +45,7 @@ const Lobby = () => {
         }
     }, [room, navigate]);
 
-    const extractClientInfo = useCallback((state: any) => {
+    const extractPlayerInfoFromServer = useCallback((state: any) => {
         // NOTE: extract server MapSchema
         const clients = Object.entries(state.clients);
 
@@ -63,7 +63,7 @@ const Lobby = () => {
 
     }, [setPlayerInfoMap, setPlayerInfoUpdated]);
 
-    const updatePlayerInfo = useCallback((state: any) => {
+    const updatePlayerInfoFromServer = useCallback((state: any) => {
         // NOTE: extract server MapSchema
         const clients = Object.entries(state.clients);
 
@@ -87,7 +87,7 @@ const Lobby = () => {
         });
     }, [setPlayerInfoMap]);
 
-    const removePlayerInfo = useCallback((currentHostId: any, leftPlayerId: any, newHostId: any) => {
+    const removePlayerInfoFromServer = useCallback((currentHostId: any, leftPlayerId: any, newHostId: any) => {
         setPlayerInfoMap(infoMap => {
             infoMap.delete(leftPlayerId);
 
@@ -104,6 +104,7 @@ const Lobby = () => {
         setPlayerInfoUpdated(state => state + 1);
     }, [setPlayerInfoMap, setHostId, setPlayerInfoUpdated]);
 
+    // NOTE: process request initailize state
     useEffect(() => {
         if (!room) {
             return;
@@ -121,7 +122,7 @@ const Lobby = () => {
             setMaxPlayers(maxClients);
             setPlayerName(playerName);
 
-            extractClientInfo(state);
+            extractPlayerInfoFromServer(state);
             setPlayerInfoUpdated(state => state + 1);
         });
 
@@ -129,9 +130,10 @@ const Lobby = () => {
 
     }, [
         room, setRoomName, setRoomId, setMyId, setHostId, setMaxPlayers, setPlayerName,
-        extractClientInfo, setPlayerInfoUpdated
+        extractPlayerInfoFromServer, setPlayerInfoUpdated
     ]);
 
+    // NOTE: process new player join room messages from server
     useEffect(() => {
         if (!room) {
             return;
@@ -141,14 +143,15 @@ const Lobby = () => {
 
         room.onMessage('newComer', (state) => {
             if (!isMounted) return;
-            updatePlayerInfo(state);
+            updatePlayerInfoFromServer(state);
             setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, updatePlayerInfo, setPlayerInfoUpdated]);
+    }, [room, updatePlayerInfoFromServer, setPlayerInfoUpdated]);
 
+    // NOTE: process message from server when has player left
     useEffect(() => {
         if (!room) {
             return;
@@ -158,14 +161,15 @@ const Lobby = () => {
 
         room.onMessage('playerLeave', ({ id, newHostId }) => {
             if (!isMounted) return;
-            removePlayerInfo(hostId, id, newHostId);
+            removePlayerInfoFromServer(hostId, id, newHostId);
             setPlayerInfoUpdated(state => state + 1);
         });
 
         return () => { isMounted = false };
 
-    }, [room, removePlayerInfo, setPlayerInfoUpdated, hostId]);
+    }, [room, removePlayerInfoFromServer, setPlayerInfoUpdated, hostId]);
 
+    // NOTE: process message from server when has player toggled ready button
     useEffect(() => {
         if (!room) {
             return;
@@ -190,6 +194,7 @@ const Lobby = () => {
 
     }, [room, setPlayerInfoMap, setPlayerInfoUpdated]);
 
+    // NOTE: process message from server when have players changed their name
     useEffect(() => {
         if (!room) {
             return;
