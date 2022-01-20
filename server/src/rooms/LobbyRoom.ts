@@ -22,7 +22,11 @@ export class LobbyRoom extends Room<LobbyRoomState> {
         this.setMetadata({ roomName: options.roomName })
 
         this.onMessage('requireInit', (client) => {
-            client.send('initState', {state: this.state, id: client.sessionId});
+            client.send('initState', {
+                state: this.state,
+                id: client.sessionId,
+                playerName: this.state.clients.get(client.sessionId).name,
+                maxClients: this.maxClients});
 
             if (this.clients.length > 1)
                 this.broadcast('newComer', this.state);
@@ -30,7 +34,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
         this.onMessage('requireMessages', (client) => {
             client.send('initMessages', this.state.messsages);
-        })
+        });
 
         this.onMessage('requireToggleReady', (client) => {
             const clientState = this.state.clients.get(client.sessionId);
@@ -38,7 +42,13 @@ export class LobbyRoom extends Room<LobbyRoomState> {
             this.broadcast('updateClientReadyState', {
                 id: client.sessionId, isReady: clientState.isReady
             });
-        })
+        });
+
+        this.onMessage('requestChangePlayerName', (client, newPlayerName) => {
+            const clientState = this.state.clients.get(client.sessionId);
+            clientState.name = newPlayerName;
+            this.broadcast('updateClientName', {id: client.sessionId, newPlayerName});
+        });
 
         this.onMessage("newMessage", (client, message) => {
             this.state.messsages.push(new MessageState(this.state.clients.get(client.sessionId).name, message));

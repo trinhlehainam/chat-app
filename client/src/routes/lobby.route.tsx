@@ -20,9 +20,15 @@ const Lobby = () => {
     const [roomId, setRoomId] = useState('');
     const [infoState, setInfoState] = useState(false);
     const [playerInfoMap, setPlayerInfoMap] = useState<PlayerInfoMap>(new Map<string, PlayerInfo>());
+
+
     const [myId, setMyId] = useState('');
+    const [maxPlayers, setMaxPlayers] = useState(4);
+    const [playerName, setPlayerName] = useState('');
     const [hostId, setHostId] = useState('');
     const [isHost, checkHost] = useState(false);
+
+
     // NOTE: help Memo Component to recognize state change
     const [updatePlayerState, setUpdatePlayerState] = useState(0);
 
@@ -34,6 +40,13 @@ const Lobby = () => {
         roomName, setRoomName,
         infoState, setInfoState
     };
+
+    useEffect(() => {
+        if (!room) {
+            navigate('/rooms', { replace: true })
+            return;
+        }
+    }, [room, navigate]);
 
     const extractClientInfo = useCallback((state: any) => {
         // NOTE: extract server MapSchema
@@ -94,23 +107,38 @@ const Lobby = () => {
 
     useEffect(() => {
         if (!room) {
-            navigate('/rooms', { replace: true })
             return;
         }
 
         let isMounted = true;
 
         room.send('requireInit');
-        room.onMessage('initState', ({ state, id }) => {
+        room.onMessage('initState', ({ state, id, playerName, maxClients }) => {
             if (!isMounted) return;
             setRoomName(state.roomName);
             setRoomId(room.id);
             setMyId(id);
             setHostId(state.hostId);
+            setMaxPlayers(maxClients);
+            setPlayerName(playerName);
 
             extractClientInfo(state);
             setUpdatePlayerState(state => state + 1);
         });
+
+        return () => { isMounted = false };
+
+    }, [
+        room, setRoomName, setRoomId, setMyId, setHostId, setMaxPlayers, setPlayerName,
+        extractClientInfo, setUpdatePlayerState
+    ]);
+
+    useEffect(() => {
+        if (!room) {
+            return;
+        }
+
+        let isMounted = true;
 
         room.onMessage('newComer', (state) => {
             if (!isMounted) return;
@@ -118,11 +146,33 @@ const Lobby = () => {
             setUpdatePlayerState(state => state + 1);
         });
 
+        return () => { isMounted = false };
+
+    }, [room, updatePlayerInfo, setUpdatePlayerState]);
+
+    useEffect(() => {
+        if (!room) {
+            return;
+        }
+
+        let isMounted = true;
+
         room.onMessage('playerLeave', ({ id, newHostId }) => {
             if (!isMounted) return;
             removePlayerInfo(hostId, id, newHostId);
             setUpdatePlayerState(state => state + 1);
         });
+
+        return () => { isMounted = false };
+
+    }, [room, removePlayerInfo, setUpdatePlayerState, hostId]);
+
+    useEffect(() => {
+        if (!room) {
+            return;
+        }
+
+        let isMounted = true;
 
         room.onMessage('updateClientReadyState', ({ id, isReady }) => {
             if (!isMounted) return;
@@ -139,14 +189,35 @@ const Lobby = () => {
 
         return () => { isMounted = false };
 
-    }, [
-        room, setRoomName, setRoomId, navigate, hostId,
-        extractClientInfo, updatePlayerInfo, removePlayerInfo, setUpdatePlayerState
-    ]);
+    }, [room, setPlayerInfoMap, setUpdatePlayerState]);
+
+    useEffect(() => {
+        if (!room) {
+            return;
+        }
+
+        let isMounted = true;
+        room.onMessage('updateClientName', ({ id, newPlayerName }) => {
+            if (!isMounted) return;
+
+            setPlayerInfoMap(infoMap => {
+                const client = infoMap.get(id);
+                if (client) {
+                    client.playerName = newPlayerName;
+                    // NOTE: only update local playerName of sender
+                    if (myId === id)
+                        setPlayerName(newPlayerName);
+                }
+                return infoMap;
+            });
+            setUpdatePlayerState(state => state + 1);
+        });
+
+        return () => { isMounted = false };
+    }, [room, setPlayerInfoMap, setPlayerName, setUpdatePlayerState, myId]);
 
     useEffect(() => {
         checkHost(myId === hostId);
-        console.log(hostId);
     }, [checkHost, myId, hostId]);
 
     return (
@@ -163,8 +234,14 @@ const Lobby = () => {
                         "relative flex flex-col items-center"
                     )}
                 >
-                    {infoState && <InfoBox />}
-                    <MemoTitle classname='text-yellow-custom lg:text-5xl' roomName={roomName} />
+                    {infoState &&
+                        <InfoBox
+                            roomId={roomId}
+                            maxPlayers={maxPlayers}
+                            playerName={playerName}
+                        />
+                    }
+                    <MemoTitle classname='text-yellow-custom lg:text-5xl select-none' roomName={roomName} />
                     <MemoCards
                         classname='w-4/5 max-w-[1105px] my-auto'
                         playerInfoMap={playerInfoMap}
