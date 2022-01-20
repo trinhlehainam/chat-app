@@ -95,7 +95,7 @@ const Lobby = () => {
                 const newHost = infoMap.get(newHostId);
                 if (newHost) {
                     newHost.isHost = true;
-                    newHost.isReady = false;
+                    newHost.isReady = true;
                 }
                 setHostId(newHostId);
             }

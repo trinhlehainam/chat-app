@@ -41,7 +41,8 @@ const InfoBox: FC<Props> = ({ roomId, maxPlayers, playerName }) => {
     const isNameChange = name !== playerName;
 
     const rename = () => {
-        room && room.send('requestChangePlayerName', name);
+        if(isNameChange)
+            room && room.send('requestChangePlayerName', name);
     }
 
     return (
@@ -101,8 +102,10 @@ const InfoBox: FC<Props> = ({ roomId, maxPlayers, playerName }) => {
                 <MemoButton
                     classname={cx(
                         "w-1/3",
-                        {"pointer-events-none opacity-30": !isNameChange}
+                        {"opacity-30 cursor-not-allowed": !isNameChange}
                     )}
+                    childClassName={cx({'btn-base peer': isNameChange})}
+                    fillClass={cx({'fill': isNameChange})}
                     onClick={rename}
                     text='RENAME' />
             </div>

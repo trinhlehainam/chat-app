@@ -5,13 +5,15 @@ import Button from "../../svg/lobby/button.svg";
 
 interface Props {
     classname?: string,
+    childClassName?: string,
+    fillClass?: string,
     onClick?: MouseEventHandler<HTMLDivElement>
     text: string,
 };
 
 const MemoButton = memo(Button);
 
-const LobbyButton: FC<Props> = ({ classname, onClick, text }) => {
+const LobbyButton: FC<Props> = ({ classname, childClassName, fillClass, onClick, text }) => {
     return (
         <div
             className={cx(
@@ -20,7 +22,12 @@ const LobbyButton: FC<Props> = ({ classname, onClick, text }) => {
             )}
             onClick={onClick}
         >
-            <MemoButton classname='h-auto btn-base peer' />
+            <MemoButton
+                classname={cx(
+                    'h-auto', childClassName
+                )}
+                fillClass={fillClass}
+            />
             <div
                 className='absolute text-yellow-custom text-4xl pointer-events-none peer-hover:scale-[1.2]'>
                 {text}

@@ -1,10 +1,11 @@
 import { FC } from "react";
 
 interface Props {
-    classname: string
+    classname?: string,
+    fillClass?: string, 
 };
 
-const Button: FC<Props> = ({ classname }) => {
+const Button: FC<Props> = ({ classname, fillClass }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +48,7 @@ const Button: FC<Props> = ({ classname }) => {
                                 strokeWidth="23.888"
                                 d="M9503.15 16214.8V15787h-691.08l-85.28-85.2-85.21 85.2h-691.14v427.8h691.14l85.21 85.2 85.28-85.2z"
 
-                                className="fill"
+                                className={fillClass}
                             ></path>
                         </g>
                         <g transform="scale(1.67094)">

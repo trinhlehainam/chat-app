@@ -24,6 +24,8 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
     const navigate = useNavigate();
 
     const [isHost, setIsHost] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [allReady, setAllReady] = useState(false);
     const [text, setText] = useState('');
     const [func, setFunc] = useState<ArrowFunction<void>>(() => () => { });
 
@@ -31,8 +33,14 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
         const myInfo = playerInfoMap.get(myId);
         if (myInfo) {
             setIsHost(myInfo.isHost);
+            setIsReady(myInfo.isReady);
         }
-    }, [myId, updated, playerInfoMap, setIsHost]);
+    }, [myId, updated, playerInfoMap, setIsHost, setIsReady]);
+
+    useEffect(() => {
+        const infos = Array.from(playerInfoMap.values());
+        setAllReady(infos.every((info) => info.isReady === true));
+    }, [updated, playerInfoMap, setAllReady]);
 
     const leave = useCallback(() => {
         room && room.leave()
@@ -56,18 +64,36 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
     }, [setInfoState]);
 
     useEffect(() => {
-        setFunc(() => isHost ? start : ready);
         setText(isHost ? 'START' : 'READY');
-    }, [setText, setFunc, start, ready, isHost])
+    }, [setText, isHost])
+
+    useEffect(() => {
+        setFunc(() => isHost ? (allReady ? start : () => {}) : ready);
+    }, [setFunc, start, ready, isHost, allReady]);
 
     return (
         <div className={cx(
             'flex justify-center items-center',
             classname
         )}>
-            <MemoButton classname="w-1/2 scale-75" onClick={popInfo} text="INFO" />
-            <MemoButton classname="w-1/2" onClick={func} text={text} />
-            <MemoButton classname="w-1/2 scale-75" onClick={leave} text="LEAVE" />
+            <MemoButton classname="w-1/2 scale-75" childClassName="btn-base peer" fillClass="fill" onClick={popInfo} text="INFO" />
+            <MemoButton
+                classname={cx(
+                    "w-1/2",
+                    { "cursor-not-allowed opacity-30": isHost && !allReady }
+                )}
+                childClassName={cx(
+                    { "btn-base peer": !isHost && !isReady },
+                    { "btn-base peer": isHost && allReady },
+                )}
+                fillClass={cx(
+                    { "fill": !isHost && !isReady },
+                    { "fill-ready": !isHost && isReady },
+                    { "fill": isHost && allReady },
+                )}
+                onClick={func} text={text}
+            />
+            <MemoButton classname="w-1/2 scale-75" childClassName="btn-base peer" fillClass="fill" onClick={leave} text="LEAVE" />
         </div>
     );
 }
