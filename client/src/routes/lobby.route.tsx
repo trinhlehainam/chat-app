@@ -124,10 +124,23 @@ const Lobby = () => {
             setUpdatePlayerState(state => state + 1);
         });
 
+        room.onMessage('updateClientReadyState', ({ id, isReady }) => {
+            if (!isMounted) return;
+
+            setPlayerInfoMap(infoMap => {
+                const client = infoMap.get(id);
+                if (client) {
+                    client.isReady = isReady;
+                }
+                return infoMap;
+            });
+            setUpdatePlayerState(state => state + 1);
+        });
+
         return () => { isMounted = false };
 
     }, [
-        room, setRoomName, setRoomId, navigate,
+        room, setRoomName, setRoomId, navigate, hostId,
         extractClientInfo, updatePlayerInfo, removePlayerInfo, setUpdatePlayerState
     ]);
 
@@ -160,8 +173,6 @@ const Lobby = () => {
                         classname='w-1/2 my-auto'
                         setInfoState={setInfoState}
                         isHost={isHost}
-                        setPlayerInfoMap={setPlayerInfoMap}
-                        setUpdatePlayerState={setUpdatePlayerState}
                     />
                     <LobbyChatBox
                         classname='absolute bottom-0 left-0 w-full md:w-1/2 lg:w-1/3 text-yellow-custom group'
