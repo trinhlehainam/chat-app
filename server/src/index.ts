@@ -1,5 +1,5 @@
 import express from 'express'
-import path from 'path'
+// import path from 'path'
 import { createServer } from 'http'
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
@@ -12,10 +12,15 @@ class App {
 
     constructor(port: number) {
         const app = express();
+        // const public_path = path.resolve(__dirname, '../build/');
+
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
-        // app.use(express.static(path.resolve(__dirname, '../../client/build/')))
+        // app.use(express.static(public_path))
         app.use('/colyseus', monitor());
+        /* app.get('/', (req, res) => {
+            res.sendFile(path.join(public_path, 'index.html'));
+        }); */
 
         this.port = port;
         this.server = new Server({

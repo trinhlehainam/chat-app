@@ -75,9 +75,12 @@ const Rooms = () => {
     };
 
     useEffect(() => {
-        // TODO: change SERVER_ENPOINT to proper domain on deployment
-        const SERVER_ENDPOINT = "ws://localhost:3030";
-        setClient && setClient(new Colyseus.Client(SERVER_ENDPOINT));
+        const HOST = window.document.location.host.replace(/:.*/, '');
+        const PORT = process.env.NODE_ENV !== 'production' ? 3030 : window.document.location.port;
+        const SERVER_LOCATION = window.document.location.protocol.replace("http", "ws") + "//"  + HOST + (PORT ? ':' + PORT : '');
+        // FIXME:
+        console.log(SERVER_LOCATION);
+        setClient && setClient(new Colyseus.Client(SERVER_LOCATION));
     }, [setClient]);
 
     useEffect(() => {
