@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import Menu from '../components/menu.component';
 
-const Home = () => {
+const HomeMenu = () => {
     const homeMenu = [
         { text: 'Play', path: '/play' },
         { text: 'Login', path: '/login' },
@@ -20,4 +20,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default HomeMenu;

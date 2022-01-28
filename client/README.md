@@ -82,7 +82,7 @@
 }
 ```
 
-- Avoid component's state from being used when it's destroyed (component's unmounted)
+- Avoid component's state from being used when component's destroyed (component's unmounted)
 
 ```jsx
 useEffec(() => {
@@ -118,6 +118,7 @@ useEffec(() => {
 ```
 
 - Extract iterable values to array
+
 ```js
     // iterable can be [values(), entries(), keys()]
     const extracted_value = Array.from(value.iterable());
