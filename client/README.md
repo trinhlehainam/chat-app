@@ -124,6 +124,21 @@ useEffec(() => {
     const extracted_value = Array.from(value.iterable());
 ```
 
+- React render object need to be and valid HTML or JSX Element object
+
+```jsx
+// Invalid
+<Suspense fallback={ {} } >
+...
+</Suspense>
+
+// Valid
+<Suspense fallback={ <div>HTML or JSX Elememt</div> } >
+...
+</Suspense>
+
+```
+
 ### Continued development
 
 ### Useful resources

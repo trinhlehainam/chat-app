@@ -1,14 +1,15 @@
 import { Client, Room } from "colyseus.js";
-import { memo, useState } from "react";
+import { lazy, memo, Suspense, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import GlobalContext from "./contexts/global.context";
-import HomeMenu from "./routes/homemenu.route";
 import Title from "./components/title.component";
-import PlayMenu from "./routes/playmenu.route";
-import Rooms from "./routes/rooms.route";
-import Lobby from "./routes/lobby.route";
+
+const HomeMenu = lazy(() => import('./routes/homemenu.route'));
+const PlayMenu = lazy(() => import('./routes/playmenu.route'));
+const Rooms = lazy(() => import('./routes/rooms.route'));
+const Lobby = lazy(() => import('./routes/lobby.route'));
 
 const TitleMemo = memo(Title);
 const HomeMenuMemo = memo(HomeMenu);
@@ -31,18 +32,20 @@ const App = () => {
 
     return (
         <>
-            <TitleMemo />
-            <GlobalContext.Provider value={roomContext}>
-                <AnimatePresence exitBeforeEnter>
-                    <Routes location={location} key={location.key}>
-                        <Route path={"/"} element={<HomeMenuMemo />} />
-                        <Route path={"/play"} element={<PlayMenuMemo />} />
-                        <Route path={"/rooms"} element={<RoomsMemo />} />
-                        <Route path={"/lobby"} element={<LobbyMemo />} />
-                        <Route path='*' element={<Navigate to='/' />} />
-                    </Routes>
-                </AnimatePresence>
-            </GlobalContext.Provider>
+            <Suspense fallback={<div>Loading</div>} >
+                <TitleMemo />
+                <GlobalContext.Provider value={roomContext}>
+                    <AnimatePresence exitBeforeEnter>
+                        <Routes location={location} key={location.key}>
+                            <Route path={"/"} element={<HomeMenuMemo />} />
+                            <Route path={"/play"} element={<PlayMenuMemo />} />
+                            <Route path={"/rooms"} element={<RoomsMemo />} />
+                            <Route path={"/lobby"} element={<LobbyMemo />} />
+                            <Route path='*' element={<Navigate to='/' />} />
+                        </Routes>
+                    </AnimatePresence>
+                </GlobalContext.Provider>
+            </Suspense>
         </>
     );
 };
