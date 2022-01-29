@@ -178,7 +178,7 @@ useEffec(() => {
 
 - Fetch data with React Suspense and useState
 
-```tsx
+```ts
     // fetchData.ts
     export interface FetchResource_t {
         read(): Data_t | undefine;
@@ -218,7 +218,9 @@ useEffec(() => {
     }
 
     export default fetchData;
+```
 
+```tsx
     // child.tsx
     import { FC } from 'react'
     import { Resource_t } from './fetchData'
@@ -234,7 +236,9 @@ useEffec(() => {
     }
 
     export default Child;
+```
 
+```tsx
     // parent.tsx
     import { Suspense } from 'react'
     import fetchData, { Resoucre_t } from './fetchData'
