@@ -176,6 +176,92 @@ useEffec(() => {
     </AnimatePresence>
 ```
 
+- Fetch data with React Suspense and useState
+
+```tsx
+    // fetchData.ts
+    export interface FetchResource_t {
+        read(): Data_t | undefine;
+    }
+    
+    function wrapPromise(promise) {
+        let status = 'pending';
+        let result: Data | undefine;
+        let error: any;
+
+        const suspense = promise.then(
+            r => {
+                status = 'success';
+                kresult = r;
+            },
+            e => {
+                status = 'error';
+                error = e;
+            }
+        );
+
+        return {
+            read() {
+                if (status === 'pending')
+                    throw suspense;
+                else if (status === 'error')
+                    throw error;
+                else if (status === 'success')
+                    return result;
+            }
+        }
+    }
+
+    function fetchData(args) {
+        const promise = fetchAPI(args);
+        return wrapPromise(promise);
+    }
+
+    export default fetchData;
+
+    // child.tsx
+    import { FC } from 'react'
+    import { Resource_t } from './fetchData'
+
+    interface Props {
+        resource: Resource_t,
+    }; 
+
+    const Child: FC<Props> = ({resource}) => {
+        const data = resource.read();
+
+        return <div>{data}<div>
+    }
+
+    export default Child;
+
+    // parent.tsx
+    import { Suspense } from 'react'
+    import fetchData, { Resoucre_t } from './fetchData'
+
+    import Child from './child'
+
+    const Parent = () => {
+        const [resource, setResource] = useState<Resource_t>();
+
+        useEffect(() => {
+            setResource(fetchData(args));
+        },[setResource]);
+
+        return (
+            <div>
+                <Suspense fallback={<div>Loading</div>} >
+                    {resource && <Child resource={resource} />}
+                </Suspense>
+
+                <button onClick={() => setResource(fetchData(newArgs))}>
+                    button
+                </button
+            </div>
+        )
+    }
+```
+
 ### Continued development
 
 ### Useful resources

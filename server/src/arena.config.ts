@@ -23,13 +23,6 @@ export default Arena({
 
     initializeExpress: (app) => {
         /**
-         * Bind your custom express routes here:
-         */
-        app.get("/", (req, res) => {
-            res.send("It's time to kick ass and chew bubblegum!");
-        });
-
-        /**
          * Bind @colyseus/monitor
          * It is recommended to protect this route with a password.
          * Read more: https://docs.colyseus.io/tools/monitor/
@@ -45,6 +38,13 @@ export default Arena({
         app.get('/', (req, res) => {
             res.sendFile(path.join(public_path, 'index.html'));
         }); */
+
+        /**
+         * Bind your custom express routes here:
+         */
+        app.get("/", (req, res) => {
+            res.send("It's time to kick ass and chew bubblegum!");
+        });
     },
 
 

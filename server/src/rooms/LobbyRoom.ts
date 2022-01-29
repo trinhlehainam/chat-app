@@ -93,7 +93,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     }
 
     async onAuth(client: Client, options: any, request: any) {
-        //TODO: set up more advance auth
+        // TODO: set up more advance auth
         if (!this.password) return true;
 
         if (options.password !== this.password)

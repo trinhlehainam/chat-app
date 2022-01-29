@@ -1,7 +1,9 @@
 import cx from "classnames";
-import { memo, useCallback, useContext, useEffect, useState } from "react";
+import { memo, Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Colyseus from "colyseus.js";
+
+import fetchAvailableRooms, { AvailableRoomsResource_t } from "../utils/fetchAvailableRooms";
 
 import GlobalContext from "../contexts/global.context";
 import RoomContext from "../contexts/room.context";
@@ -11,13 +13,13 @@ import RoomLine1 from "../svg/room/roomline-1.svg";
 import RoomLine2 from "../svg/room/roomline-2.svg";
 import RoomLine3 from "../svg/room/roomline-3.svg";
 
-import AvailableRoom from "../components/rooms/availableroom.component";
 import RoomTitle from "../components/rooms/title.component";
 import NavButtons from "../components/rooms/navbuttons.component";
 import CreateBox from "../components/rooms/createbox.component";
 import JoinMessageBox from "../components/rooms/joinerrorbox.component";
 import FindBox from "../components/rooms/findbox.component";
 import RoomCancelButton from "../components/rooms/cancelbutton.component";
+import AvailableRooms from "../components/rooms/availablerooms.component";
 
 const MemoBorder = memo(RoomBorder);
 const MemoTitle = memo(RoomTitle);
@@ -31,7 +33,8 @@ const MemoCancelButton = memo(RoomCancelButton);
 const Rooms = () => {
     const { client, setClient, setRoom } = useContext(GlobalContext);
 
-    const [avaiRooms, setAvaiRooms] = useState<Array<Colyseus.RoomAvailable>>([]);
+    // NOTE: available rooms fetch resource
+    const [avaiRoomsResource, setAvaiRoomsResource] = useState<AvailableRoomsResource_t>();
     const [isJoinError, setJoinError] = useState(true);
     const [joinErrorMessage, setJoinErrorMessage] = useState('');
     const [isCreateState, setCreateState] = useState(false);
@@ -41,11 +44,8 @@ const Rooms = () => {
     const navigate = useNavigate();
 
     const refresh = useCallback(() => {
-        client && client.getAvailableRooms("Lobby")
-            .then((rooms) => {
-                setAvaiRooms(rooms);
-            });
-    }, [client, setAvaiRooms]);
+        client && setAvaiRoomsResource(fetchAvailableRooms(client));
+    }, [client, setAvaiRoomsResource]);
 
     const join = useCallback((roomId: string) => {
         client && client.joinById(roomId)
@@ -76,7 +76,7 @@ const Rooms = () => {
     useEffect(() => {
         const HOST = window.document.location.host.replace(/:.*/, '');
         const PORT = process.env.NODE_ENV !== 'production' ? 2567 : window.document.location.port;
-        const SERVER_LOCATION = window.document.location.protocol.replace("http", "ws") + "//"  + HOST + (PORT ? ':' + PORT : '');
+        const SERVER_LOCATION = window.document.location.protocol.replace("http", "ws") + "//" + HOST + (PORT ? ':' + PORT : '');
         setClient && setClient(new Colyseus.Client(SERVER_LOCATION));
     }, [setClient]);
 
@@ -136,19 +136,9 @@ const Rooms = () => {
                                 "flex flex-col items-center mx-auto mt-4",
                             )}
                         >
-                            <div className="flex flex-col h-full w-full overflow-y-auto scrollbar-hide gap-[5px]">
-                                {avaiRooms &&
-                                    avaiRooms.map(({ roomId, clients, maxClients, metadata }) => {
-                                        return (
-                                            <AvailableRoom
-                                                key={roomId}
-                                                roomId={roomId}
-                                                roomName={metadata.roomName}
-                                                players={`${clients}/${maxClients}`}
-                                            />
-                                        );
-                                    })}
-                            </div>
+                            <Suspense fallback={<div>Loading</div>} >
+                                {avaiRoomsResource && <AvailableRooms resource={avaiRoomsResource} />}
+                            </Suspense>
                         </div>
                         <MemoLine3 classname="w-[75%] h-auto max-h-12 mx-auto" />
                         <MemoNavButtons
