@@ -4,8 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 import GlobalContext from "./contexts/global.context";
-import Title from "./components/title.component";
 
+const Title = lazy(() => import('./components/title.component'))
 const HomeMenu = lazy(() => import('./routes/homemenu.route'));
 const PlayMenu = lazy(() => import('./routes/playmenu.route'));
 const Rooms = lazy(() => import('./routes/rooms.route'));
@@ -32,8 +32,10 @@ const App = () => {
 
     return (
         <>
-            <Suspense fallback={<div>Loading</div>} >
+            <Suspense fallback={<div></div>} >
                 <TitleMemo />
+            </Suspense>
+            <Suspense fallback={<div></div>} >
                 <GlobalContext.Provider value={roomContext}>
                     <AnimatePresence exitBeforeEnter>
                         <Routes location={location} key={location.key}>
