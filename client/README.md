@@ -127,16 +127,44 @@ useEffec(() => {
 - React render object need to be and valid HTML or JSX Element object
 
 ```jsx
-// Invalid
-<Suspense fallback={ {} } >
-...
-</Suspense>
+    // Invalid
+    <Suspense fallback={ {} } >
+    ...
+    </Suspense>
 
-// Valid
-<Suspense fallback={ <div>HTML or JSX Elememt</div> } >
-...
-</Suspense>
+    // Valid
+    <Suspense fallback={ <div>HTML or JSX Elememt</div> } >
+    ...
+    </Suspense>
+```
 
+- Combine React memo with React lazy load
+
+```jsx
+    const Home = React.lazy(() => import(./Home));
+    const MemoHome = React.memo(Home);
+
+    <Suspense fallback={ <Loading /> } >
+        <MemoHome />
+    </Suspense>
+```
+
+- Replace React Router Routes to useMatch
+
+```jsx
+    // from
+    <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/menu' element={<Menu />} />
+    </Routes>
+
+    // to
+    const isHome = useMatch('/');
+    const isMenu = useMatch('/menu');
+    
+    ...
+    {isHome && <Home />}
+    {isMenu && <Menu />}
 ```
 
 ### Continued development

@@ -1,6 +1,5 @@
 import { Client, Room } from "colyseus.js";
 import { memo, Suspense, useState } from "react";
-import { useLocation } from "react-router-dom";
 
 import GlobalContext from "./contexts/global.context";
 import Home from "./routes/home.route";
@@ -17,8 +16,6 @@ const App = () => {
         room,
         setRoom,
     };
-
-    const location = useLocation();
 
     return (
         <>
