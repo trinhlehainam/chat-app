@@ -2,6 +2,8 @@ import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense } from "react";
 import { useMatch } from "react-router-dom";
 
+import PATH from "../common/enum/path";
+
 const Title = lazy(() => import('../components/title.component'))
 const HomeMenu = lazy(() => import('../routes/homemenu.route'));
 const PlayMenu = lazy(() => import('../routes/playmenu.route'));
@@ -13,13 +15,6 @@ const MemoHomeMenu = memo(HomeMenu);
 const MemoPlayMenu = memo(PlayMenu);
 const MemoRooms = memo(Rooms);
 const MemoLobby = memo(Lobby);
-
-enum PATH {
-    HOME_MENU = '/',
-    PLAY_MEMU = '/play',
-    ROOMS = '/rooms',
-    LOBBY = '/lobby'
-}
 
 const Home = () => {
     const isMenu = useMatch(PATH.HOME_MENU);

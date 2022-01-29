@@ -51,7 +51,6 @@ const CreateBox = () => {
         })
             .then((room) => {
                 setRoom && setRoom(room);
-
                 navigate('/lobby', { replace: true });
 
                 // Reset input state

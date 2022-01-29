@@ -40,7 +40,6 @@ const Rooms = () => {
 
     const navigate = useNavigate();
 
-    // TODO: useCallback to reuse function
     const refresh = useCallback(() => {
         client && client.getAvailableRooms("Lobby")
             .then((rooms) => {

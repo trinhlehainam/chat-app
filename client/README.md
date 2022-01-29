@@ -1,4 +1,4 @@
-# Learn svg css
+# Client chat room
 
 ## Table of contents
 
@@ -165,6 +165,15 @@ useEffec(() => {
     ...
     {isHome && <Home />}
     {isMenu && <Menu />}
+```
+
+- Define component's key to help AnimatePresence handle component mount state
+
+```jsx
+    <AnimatePresence exitBeforeEnter>
+        {isOn && <Component key={...} />}
+        ...
+    </AnimatePresence>
 ```
 
 ### Continued development
