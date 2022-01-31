@@ -18,13 +18,11 @@ const App = () => {
     };
 
     return (
-        <>
-            <Suspense fallback={<div></div>} >
-                <GlobalContext.Provider value={roomContext}>
-                    <MemoHome />
-                </GlobalContext.Provider>
-            </Suspense>
-        </>
+        <Suspense fallback={<div></div>} >
+            <GlobalContext.Provider value={roomContext}>
+                <MemoHome />
+            </GlobalContext.Provider>
+        </Suspense>
     );
 };
 

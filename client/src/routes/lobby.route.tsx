@@ -38,9 +38,10 @@ const Lobby = () => {
         infoState, setInfoState
     };
 
+    // NOTE: return to rooms page if client hasn't connected to any room
     useEffect(() => {
         if (!room) {
-            navigate('/rooms', { replace: true })
+            navigate('/rooms', { replace: true });
             return;
         }
     }, [room, navigate]);

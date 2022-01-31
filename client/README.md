@@ -117,7 +117,7 @@ useEffec(() => {
     },[setFunc]);
 ```
 
-- Extract iterable values to Array (for Javascript version older than ES6)
+- Extract iterable values to Array (for Javascript version older than ES6) or enable downlevelIteration flag in tsconfig.json file to help Typescript compile to version older than ES6.
 
 ```js
     // iterable can be [values(), entries(), keys()]
@@ -127,6 +127,16 @@ useEffec(() => {
     for (const value of map.values()) {
         ...
     }
+```
+
+```json
+{
+    "compilerOptions": {
+        ...
+        "downlevelIteration": true
+    },
+    ...
+}
 ```
 
 - React render object need to be and valid HTML or JSX Element object

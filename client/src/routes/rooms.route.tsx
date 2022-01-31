@@ -1,7 +1,7 @@
 import cx from "classnames";
 import { memo, Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as Colyseus from "colyseus.js";
+import { Client } from "colyseus.js";
 
 import fetchAvailableRooms, { AvailableRoomsResource_t } from "../utils/fetchAvailableRooms";
 
@@ -77,7 +77,8 @@ const Rooms = () => {
         const HOST = window.document.location.host.replace(/:.*/, '');
         const PORT = process.env.NODE_ENV !== 'production' ? 2567 : window.document.location.port;
         const SERVER_LOCATION = window.document.location.protocol.replace("http", "ws") + "//" + HOST + (PORT ? ':' + PORT : '');
-        setClient && setClient(new Colyseus.Client(SERVER_LOCATION));
+
+        setClient && setClient(new Client(SERVER_LOCATION));
     }, [setClient]);
 
     useEffect(() => {
