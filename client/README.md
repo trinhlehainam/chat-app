@@ -117,11 +117,16 @@ useEffec(() => {
     },[setFunc]);
 ```
 
-- Extract iterable values to array
+- Extract iterable values to Array (for Javascript version older than ES6)
 
 ```js
     // iterable can be [values(), entries(), keys()]
-    const extracted_value = Array.from(value.iterable());
+    const extracted_value = Array.from(map.iterable());
+
+    // ES6
+    for (const value of map.values()) {
+        ...
+    }
 ```
 
 - React render object need to be and valid HTML or JSX Element object
