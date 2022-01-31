@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense } from "react";
 import { useMatch } from "react-router-dom";
 
-import PATH from "../common/enum/path";
+import { PATH } from "../common/enum/path";
 
 const Title = lazy(() => import('../components/title.component'))
 const HomeMenu = lazy(() => import('../routes/homemenu.route'));

@@ -82,7 +82,7 @@
 }
 ```
 
-- Avoid component's state from being used when component's destroyed (component's unmounted)
+- Avoid component's state from being used when component's destroyed (component's unmounted).
 
 ```jsx
 useEffec(() => {
@@ -139,7 +139,7 @@ useEffec(() => {
 }
 ```
 
-- React render object need to be and valid HTML or JSX Element object
+- React render object need to be and valid HTML or JSX Element object.
 
 ```jsx
     // Invalid
@@ -153,7 +153,7 @@ useEffec(() => {
     </Suspense>
 ```
 
-- Combine React memo with React lazy load
+- Combine React memo with React lazy load.
 
 ```jsx
     const Home = React.lazy(() => import(./Home));
@@ -164,7 +164,7 @@ useEffec(() => {
     </Suspense>
 ```
 
-- Replace React Router Routes to useMatch
+- Replace React Router Routes to useMatch.
 
 ```jsx
     // from
@@ -182,7 +182,7 @@ useEffec(() => {
     {isMenu && <Menu />}
 ```
 
-- Define component's key to help AnimatePresence handle component mount state
+- Define component's key to help AnimatePresence handle component mount state.
 
 ```jsx
     <AnimatePresence exitBeforeEnter>
@@ -191,7 +191,7 @@ useEffec(() => {
     </AnimatePresence>
 ```
 
-- Fetch data with React Suspense and useState
+- Fetch data with React Suspense and useState.
 
 ```ts
     // fetchData.ts
@@ -281,6 +281,19 @@ useEffec(() => {
     }
 ```
 
+- Check value exists in enum Typescript.
+
+```ts
+    enum MY_ENUM {
+        VALUE_1 = 'value1',
+        VALUE_2 = 'value2',
+    };
+
+    const value = 'something';
+    // Check value in enum
+    Object.values(MY_ENUM).includes(value as MY_ENUM);
+```
+
 ### Continued development
 
 ### Useful resources
@@ -303,6 +316,8 @@ useEffec(() => {
 - [React rerendering](https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/)
 - [Avoid use component's state when it's unmounted](https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component)
 - [Use state as function is react](https://stackoverflow.com/questions/55621212/is-it-possible-to-react-usestate-in-react)
+- [Check value exists in enum Typescript](https://stackoverflow.com/questions/43804805/check-if-value-exists-in-enum-in-typescript)
+- [Merge enums](https://stackoverflow.com/questions/48478361/how-to-merge-two-enums-in-typescript)
 
 ## Author
 

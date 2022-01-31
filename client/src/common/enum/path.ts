@@ -1,8 +1,22 @@
+enum HOME_PATH {
+    HOME_MENU = '/',
+    PLAY_MEMU = '/play',
+    ROOMS = '/rooms',
+    LOBBY = '/lobby',
+}
+
+enum UNSUPPORTED_PATH {
+    LOGGIN = '/login',
+    SETTING = '/setting',
+    GAME = '/game'
+}
+
 enum PATH {
     HOME_MENU = '/',
     PLAY_MEMU = '/play',
     ROOMS = '/rooms',
-    LOBBY = '/lobby'
+    LOBBY = '/lobby',
+    // GAME = '/game'
 }
 
-export default PATH;
+export { PATH, HOME_PATH, UNSUPPORTED_PATH };
