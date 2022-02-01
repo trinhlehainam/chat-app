@@ -34,7 +34,7 @@ export default class ModelDataMng {
     }
 
     static Destroy(): void {
-        if (this.instance)
+        if (this.instance) 
             this.instance = undefined;
     }
 

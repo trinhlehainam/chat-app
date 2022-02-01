@@ -1,19 +1,18 @@
-import {WebGLRenderer, Color, Clock, PerspectiveCamera, sRGBEncoding} from 'three'
+import { WebGLRenderer, Color, Clock, PerspectiveCamera, sRGBEncoding } from 'three'
 
-import {LoadMng, ModelDataMng} from '../Systems/LoadMng'
+import { LoadMng, ModelDataMng } from '../Systems/LoadMng'
 
 import IScene from '../Scenes/IScene'
 import GameScene from '../Scenes/GameScene'
-import EventController from '../../EventController'
 
 export default class SceneMng {
     private renderer: WebGLRenderer
     private scene: IScene
     private clock: Clock
-    private container?: HTMLElement;
-    
+    private container?: HTMLDivElement;
+
     constructor() {
-        this.renderer = new WebGLRenderer({antialias: true, alpha: true});
+        this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setClearColor(new Color(0x000000));
@@ -26,17 +25,13 @@ export default class SceneMng {
 
         this.scene = new GameScene(this);
 
-        EventController.on('init', async (container: HTMLDivElement) => {
-            this.container = container;
-            this.container.appendChild(this.renderer.domElement);
-            await this.Init();
-            this.Run();
-        });
-
-        EventController.on('release', () => this.Release());
     }
 
-    async Init(): Promise<boolean> {
+    async Init(container: HTMLDivElement): Promise<boolean> {
+        this.container = container;
+        this.container.appendChild(this.renderer.domElement);
+        window.addEventListener('resize', this.onResizeWindow.bind(this));
+
         ModelDataMng.LoadAsync('./assets/factory/eve.glb', 'eve');
         ModelDataMng.LoadAsync('./assets/factory/eve2.glb', 'eve2');
         ModelDataMng.LoadAsync('./assets/factory/swat-guy.glb', 'swat-guy');
@@ -45,8 +40,16 @@ export default class SceneMng {
         await this.scene.Init();
         LoadMng.EnableLoadingScene(false);
 
-        window.addEventListener('resize', this.onResizeWindow.bind(this));
+        this.Run();
+
         return true;
+    }
+
+    Release(): void {
+        if (!this.container) return;
+        this.Stop();
+        window.removeEventListener('resize', this.onResizeWindow.bind(this));
+        this.container.removeChild(this.renderer.domElement);
     }
 
     Run(): void {
@@ -59,13 +62,6 @@ export default class SceneMng {
 
     GetRenderer(): WebGLRenderer { return this.renderer; }
 
-    private Release(): void {
-        if (!this.container) return;
-        this.Stop();
-        window.removeEventListener('resize', this.onResizeWindow.bind(this));
-        this.container.removeChild(this.renderer.domElement);
-    }
-
     private Loop(): void {
         const deltaTime_s = this.clock.getDelta();
 
@@ -73,13 +69,13 @@ export default class SceneMng {
             this.scene.ChangeScene(this.scene).then(
                 // Wait until change scene set up complele
                 // Then start loop again
-                scene =>  {
+                scene => {
                     this.scene = scene;
                     this.Run();
                     LoadMng.EnableLoadingScene(false);
                 }
             );
-            
+
             // Stop loop and wait until change scene set up is done
             this.Stop();
             LoadMng.EnableLoadingScene(true);
@@ -87,12 +83,12 @@ export default class SceneMng {
         }
 
         this.scene.ProcessInput();
-        this.scene.Update(deltaTime_s); 
+        this.scene.Update(deltaTime_s);
         this.scene.Render();
 
         this.Render();
     }
-    
+
     private Render(): void {
         this.renderer.render(this.scene.GetThreeScene(), this.scene.GetThreeCamera());
     }

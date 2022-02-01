@@ -9,12 +9,13 @@ const Game = () => {
     useEffect(() => {
         if (!ref.current) return;
         EventController.Create();
-        const gameApp = new GameApp();
+        GameApp.Create();
+
         EventController.emit('init', ref.current);
-        console.log('hello');
 
         return () => {
-            EventController.emit('release');
+            GameApp.Destroy();
+            EventController.Destroy();
         }
     }, [ref]);
 

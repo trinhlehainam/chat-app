@@ -33,16 +33,20 @@ const App = () => {
     };
 
     return (
-        <Suspense fallback={<div>Loading page</div>} >
+        <>
             <GlobalContext.Provider value={roomContext}>
-                <AnimatePresence exitBeforeEnter>
-                    {isHome && <MemoHome key={'home'} />}
+                <Suspense fallback={<div>Loading page</div>} >
+                    <AnimatePresence exitBeforeEnter>
+                        {isHome && <MemoHome key={'home'} />}
+                    </AnimatePresence>
+                </Suspense>
+                <Suspense fallback={<div>Loading page</div>} >
                     {isGame && <MemoGame key={'game'} />}
-                </AnimatePresence>
+                </Suspense>
             </GlobalContext.Provider>
             {isUnsupportedPath && <UnsupportedPrompt />}
             {!isPathValid && <Navigate to='/' />}
-        </Suspense>
+        </>
     );
 };
 
