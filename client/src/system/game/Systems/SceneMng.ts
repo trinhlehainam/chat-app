@@ -3,12 +3,14 @@ import {WebGLRenderer, Color, Clock, PerspectiveCamera, sRGBEncoding} from 'thre
 import {LoadMng, ModelDataMng} from '../Systems/LoadMng'
 
 import IScene from '../Scenes/IScene'
-import TitleScene from '../Scenes/TitleScene'
+import GameScene from '../Scenes/GameScene'
+import EventController from '../../EventController'
 
 export default class SceneMng {
     private renderer: WebGLRenderer
     private scene: IScene
     private clock: Clock
+    private container?: HTMLElement;
     
     constructor() {
         this.renderer = new WebGLRenderer({antialias: true, alpha: true});
@@ -17,14 +19,21 @@ export default class SceneMng {
         this.renderer.setClearColor(new Color(0x000000));
         this.renderer.outputEncoding = sRGBEncoding;
         this.renderer.shadowMap.enabled = true;
-        document.body.appendChild(this.renderer.domElement);
 
         LoadMng.Create();
 
         this.clock = new Clock();
 
-        this.scene = new TitleScene(this);
-        this.Render();
+        this.scene = new GameScene(this);
+
+        EventController.on('init', async (container: HTMLDivElement) => {
+            this.container = container;
+            this.container.appendChild(this.renderer.domElement);
+            await this.Init();
+            this.Run();
+        });
+
+        EventController.on('release', () => this.Release());
     }
 
     async Init(): Promise<boolean> {
@@ -49,6 +58,13 @@ export default class SceneMng {
     }
 
     GetRenderer(): WebGLRenderer { return this.renderer; }
+
+    private Release(): void {
+        if (!this.container) return;
+        this.Stop();
+        window.removeEventListener('resize', this.onResizeWindow.bind(this));
+        this.container.removeChild(this.renderer.domElement);
+    }
 
     private Loop(): void {
         const deltaTime_s = this.clock.getDelta();

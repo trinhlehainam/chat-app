@@ -6,7 +6,6 @@ import {ModelDataMng} from '../Systems/LoadMng'
 
 import IScene from './IScene'
 import SceneMng from '../Systems/SceneMng'
-import TitleScene from './TitleScene'
 
 import GameMng  from '../Scripts/GameMng'
 import Player from '../Scripts/Player'
@@ -77,8 +76,6 @@ export default class GameScene extends IScene {
         return new Promise(
             async (resolve, reject) => {
                 scene.Destroy();
-                scene = new TitleScene(this.sceneMng);
-                await scene.Init();
                 resolve(scene);
                 reject('ERROR : Fail to change scene !!!');
             }

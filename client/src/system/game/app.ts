@@ -1,6 +1,6 @@
 import SceneMng from './Systems/SceneMng'
 
-export default class App {
+export default class GameApp {
     private sceneMng: SceneMng
 
     constructor(){

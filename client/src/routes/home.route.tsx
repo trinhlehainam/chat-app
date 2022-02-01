@@ -1,6 +1,7 @@
 import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense } from "react";
 import { useMatch } from "react-router-dom";
+import { motion } from 'framer-motion'
 
 import { PATH } from "../common/enum/path";
 
@@ -21,9 +22,16 @@ const Home = () => {
     const isPlay = useMatch(PATH.PLAY_MEMU);
     const isRooms = useMatch(PATH.ROOMS);
     const isLobby = useMatch(PATH.LOBBY);
+    const isGame = useMatch(PATH.GAME);
 
     return (
-        <div>
+        <motion.div
+            exit={{opacity: 0}}
+            transition={{
+                delay: 1.5,
+                duration: 0
+            }}
+        >
             <Suspense fallback={<div></div>} >
                 <MemoTitle />
             </Suspense>
@@ -33,9 +41,10 @@ const Home = () => {
                     {isPlay && <MemoPlayMenu key={PATH.PLAY_MEMU} />}
                     {isRooms && <MemoRooms key={PATH.ROOMS} />}
                     {isLobby && <MemoLobby key={PATH.LOBBY} />}
+                    {isGame && <motion.div key={PATH.GAME} />}
                 </AnimatePresence>
             </Suspense>
-        </div>
+        </motion.div >
     )
 }
 

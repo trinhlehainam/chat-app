@@ -1,7 +1,7 @@
-import App from './app'
+import GameApp from './app'
 
 async function main(){
-    const app = new App();
+    const app = new GameApp();
     await app.init();
     app.run();
 }

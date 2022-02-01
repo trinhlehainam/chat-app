@@ -8,7 +8,6 @@ enum HOME_PATH {
 enum UNSUPPORTED_PATH {
     LOGGIN = '/login',
     SETTING = '/setting',
-    GAME = '/game'
 }
 
 enum PATH {
@@ -16,7 +15,7 @@ enum PATH {
     PLAY_MEMU = '/play',
     ROOMS = '/rooms',
     LOBBY = '/lobby',
-    // GAME = '/game'
+    GAME = '/game'
 }
 
 export { PATH, HOME_PATH, UNSUPPORTED_PATH };
