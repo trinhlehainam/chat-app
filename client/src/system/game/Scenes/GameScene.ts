@@ -9,7 +9,7 @@ import SceneMng from '../Systems/SceneMng'
 
 import GameMng  from '../Scripts/GameMng'
 import Player from '../Scripts/Player'
-import Enemy from '../Scripts/Enemy'
+// import Enemy from '../Scripts/Enemy'
 
 export default class GameScene extends IScene {
     private player?: Player
@@ -35,7 +35,7 @@ export default class GameScene extends IScene {
 
     }
 
-    Destroy(): void {
+    Release(): void {
         document.body.removeChild(this.stats.domElement);
         this.player?.destroy();
     }
@@ -75,7 +75,7 @@ export default class GameScene extends IScene {
     ChangeScene(scene: IScene): Promise<IScene> {
         return new Promise(
             async (resolve, reject) => {
-                scene.Destroy();
+                scene.Release();
                 resolve(scene);
                 reject('ERROR : Fail to change scene !!!');
             }

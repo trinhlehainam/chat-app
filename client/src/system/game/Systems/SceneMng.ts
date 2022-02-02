@@ -48,6 +48,7 @@ export default class SceneMng {
     Release(): void {
         if (!this.container) return;
         this.Stop();
+        this.scene.Release();
         window.removeEventListener('resize', this.onResizeWindow.bind(this));
         this.container.removeChild(this.renderer.domElement);
     }

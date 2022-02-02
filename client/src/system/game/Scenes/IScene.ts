@@ -24,7 +24,7 @@ export default abstract class IScene {
     }
 
     abstract Init(): Promise<boolean>;
-    abstract Destroy(): void;
+    abstract Release(): void;
     abstract ProcessInput(): void;
     abstract Update(deltaTime_s: number): void;
     abstract Render(): void;

@@ -1,9 +1,10 @@
 import { AnimatePresence } from "framer-motion";
-import { lazy, memo, Suspense } from "react";
-import { useMatch } from "react-router-dom";
+import { lazy, memo, Suspense, useContext, useEffect } from "react";
+import { useLocation, useMatch } from "react-router-dom";
 import { motion } from 'framer-motion'
 
-import { PATH } from "../common/enum/path";
+import { HOME_PATH } from "../common/enum/path";
+import GlobalContext from "../contexts/global.context";
 
 const Title = lazy(() => import('../components/title.component'))
 const HomeMenu = lazy(() => import('../routes/homemenu.route'));
@@ -18,15 +19,27 @@ const MemoRooms = memo(Rooms);
 const MemoLobby = memo(Lobby);
 
 const Home = () => {
-    const isMenu = useMatch(PATH.HOME_MENU);
-    const isPlay = useMatch(PATH.PLAY_MEMU);
-    const isRooms = useMatch(PATH.ROOMS);
-    const isLobby = useMatch(PATH.LOBBY);
-    const isGame = useMatch(PATH.GAME);
+    const isRoot = useMatch(HOME_PATH.ROOT);
+    const isPlay = useMatch(HOME_PATH.PLAY_MEMU);
+    const isLogin = useMatch(HOME_PATH.LOGIN);
+    const isSetting = useMatch(HOME_PATH.SETTING);
+    const isRooms = useMatch(HOME_PATH.ROOMS);
+    const isLobby = useMatch(HOME_PATH.LOBBY);
+
+    const path = useLocation().pathname;
+    const isHome = Object.values(HOME_PATH).includes(path as HOME_PATH);
+
+    const isHomeMenu = isSetting || isLogin || isRoot;
+    
+    const {setChangeToNotHome} = useContext(GlobalContext);
+
+    useEffect(() => {
+        setChangeToNotHome && setChangeToNotHome(false);
+    }, [setChangeToNotHome]);
 
     return (
         <motion.div
-            exit={{opacity: 0}}
+            exit={{ opacity: 0 }}
             transition={{
                 delay: 1.5,
                 duration: 0
@@ -37,11 +50,11 @@ const Home = () => {
             </Suspense>
             <Suspense fallback={<div></div>} >
                 <AnimatePresence exitBeforeEnter>
-                    {isMenu && <MemoHomeMenu key={PATH.HOME_MENU} />}
-                    {isPlay && <MemoPlayMenu key={PATH.PLAY_MEMU} />}
-                    {isRooms && <MemoRooms key={PATH.ROOMS} />}
-                    {isLobby && <MemoLobby key={PATH.LOBBY} />}
-                    {isGame && <motion.div key={PATH.GAME} />}
+                    {isHomeMenu && <MemoHomeMenu key={HOME_PATH.ROOT} />}
+                    {isPlay && <MemoPlayMenu key={HOME_PATH.PLAY_MEMU} />}
+                    {isRooms && <MemoRooms key={HOME_PATH.ROOMS} />}
+                    {isLobby && <MemoLobby key={HOME_PATH.LOBBY} />}
+                    {!isHome && <motion.div key={'not-home'} />}
                 </AnimatePresence>
             </Suspense>
         </motion.div >
