@@ -8,7 +8,7 @@ interface Props {
     room?: Room,
     setRoom: Dispatch<SetStateAction<Room | undefined>>,
 
-    setChangeToNotHome: Dispatch<SetStateAction<boolean>>,
+    setInGameAuth: Dispatch<SetStateAction<boolean>>,
 };
 
 const GlobalContext = createContext<Partial<Props>>({});

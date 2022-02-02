@@ -294,6 +294,38 @@ useEffec(() => {
     Object.values(MY_ENUM).includes(value as MY_ENUM);
 ```
 
+- Use usePresence hook to manipulate rendering component from different AnimatePresence when change Route (path)
+
+```jsx
+    // App.tsx
+    const [toRoute3, setToRoute3] = useState(false);
+
+    <AnimatePresence exitBeforeEnter>
+        {isRoute1 && <Route1 />}
+        {isRoute2 && <Route2 setChangeToRoute3={ setToRoute3 } />}
+    <AnimatePresence />
+
+    {toRoute3 && <Route3 />}
+```
+
+```jsx
+    // Route2.tsx
+    const [isPresent, safeToRemove] = usePresence();
+
+    // check current path is navigated to route-3
+    const isRoute3 = useMatch('/route-3')
+
+    useEffect(() => {
+        if (!isRoute3) return;
+        if (isPresent) return;
+
+        safeToRemove && setTimeOut(() => {
+            setToRoute3(true);
+            safeToRemove();
+        }, ...);
+    },[isRoute3, isPresent, safeToRemove]);
+```
+
 ### Continued development
 
 ### Useful resources

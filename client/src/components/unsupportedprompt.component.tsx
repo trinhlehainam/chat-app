@@ -18,7 +18,7 @@ const UnsupportedPrompt: FC<Props> = ({ path, message }) => {
     return (
         <div
             className={cx(
-                "absolute w-screen h-screen",
+                "absolute w-screen h-screen top-0",
                 "flex items-center justify-center",
                 "z-30 text-red-500"
             )}

@@ -20,7 +20,7 @@ const HomeMenu = () => {
     return (
         <div
             className={cx(
-                "relative flex justify-center items-center",
+                "flex justify-center",
                 "text-3xl",
                 "sm:text-5xl"
             )}

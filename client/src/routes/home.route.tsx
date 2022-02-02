@@ -31,11 +31,11 @@ const Home = () => {
 
     const isHomeMenu = isSetting || isLogin || isRoot;
     
-    const {setChangeToNotHome} = useContext(GlobalContext);
+    const {setInGameAuth} = useContext(GlobalContext);
 
     useEffect(() => {
-        setChangeToNotHome && setChangeToNotHome(false);
-    }, [setChangeToNotHome]);
+        setInGameAuth && setInGameAuth(false);
+    }, [setInGameAuth]);
 
     return (
         <motion.div

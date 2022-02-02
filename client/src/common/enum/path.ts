@@ -7,17 +7,14 @@ enum HOME_PATH {
     LOBBY = '/lobby',
 }
 
-enum UNSUPPORTED_PATH {
-    LOGGIN = '/login',
-    SETTING = '/setting',
-}
-
 enum PATH {
-    HOME_MENU = '/',
+    ROOT = '/',
     PLAY_MEMU = '/play',
+    LOGIN = '/login',
+    SETTING = '/setting',
     ROOMS = '/rooms',
     LOBBY = '/lobby',
-    GAME = '/game'
+    GAME = '/game',
 }
 
-export { PATH, HOME_PATH, UNSUPPORTED_PATH };
+export { PATH, HOME_PATH };
