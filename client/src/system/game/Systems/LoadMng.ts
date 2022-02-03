@@ -38,7 +38,7 @@ class LoadMng {
     static EnableLoadingScene(flag: boolean): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
-        console.log('toggle');
+
         instance.setIsLoadingScene!(flag);
     }
     

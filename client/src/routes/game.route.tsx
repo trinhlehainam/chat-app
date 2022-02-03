@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { InitMessage } from "../common/ui_messages/messages";
+
+import { InitMessage } from "../common/message/messages";
+
 import LoadingResource from "../components/game/loadingresource.component";
 
 import EventController from "../system/EventController";

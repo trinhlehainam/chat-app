@@ -1,7 +1,8 @@
-import { InitMessage } from '../../common/ui_messages/messages';
-import EventController from '../EventController';
-import { LoadMng } from './Systems/LoadMng';
 import SceneMng from './Systems/SceneMng'
+import { LoadMng } from './Systems/LoadMng';
+
+import EventController from '../EventController';
+import { InitMessage } from '../../common/message/messages';
 
 export default class GameApp {
     private static instance?: GameApp
