@@ -5,7 +5,9 @@ import ModelDataMng from './ModelDataMng'
 
 class LoadMng {
     private static instance?: LoadMng
+
     private loader: LoadingManager
+    private setIsLoadingScene?: Function
 
     private constructor() {
         this.loader = new LoadingManager();
@@ -28,9 +30,16 @@ class LoadMng {
         }
     }
 
+    static SetLoadingSceneFunc(func: Function): void {
+        if (!this.instance) return;
+        this.instance.setIsLoadingScene = func;
+    }
+
     static EnableLoadingScene(flag: boolean): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
+        console.log('toggle');
+        instance.setIsLoadingScene!(flag);
     }
     
     private static IsCreated(): boolean {

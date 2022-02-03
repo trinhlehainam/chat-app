@@ -1,9 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { InitMessage } from "../common/ui_messages/messages";
+import LoadingResource from "../components/game/loadingresource.component";
 
 import EventController from "../system/EventController";
 import GameApp from "../system/game/app";
 
 const Game = () => {
+    const [isLoadingResource, setIsLoadingResource] = useState(true);
+
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -11,7 +15,8 @@ const Game = () => {
         EventController.Create();
         GameApp.Create();
 
-        EventController.emit('init', ref.current);
+        const message: InitMessage = { container: ref.current, setIsLoadingResource: setIsLoadingResource };
+        EventController.emit('init', message);
 
         return () => {
             GameApp.Destroy();
@@ -22,8 +27,9 @@ const Game = () => {
     return (
         <div
             ref={ref}
-            className="flex justify-center items-center min-h-screen"
+            className="relative flex justify-center items-center min-h-screen"
         >
+            {isLoadingResource && <LoadingResource />}
         </div>
     )
 }

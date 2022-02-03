@@ -19,8 +19,6 @@ export default class SceneMng {
         this.renderer.outputEncoding = sRGBEncoding;
         this.renderer.shadowMap.enabled = true;
 
-        LoadMng.Create();
-
         this.clock = new Clock();
 
         this.scene = new GameScene(this);
