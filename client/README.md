@@ -326,6 +326,31 @@ useEffec(() => {
     },[isRoute3, isPresent, safeToRemove]);
 ```
 
+- Preload font resource with html preload.
+
+```html
+    ...
+    <link rel="preload" href="%PUBLIC_URL%/assets/fonts/DalekPinpointBold.ttf" as="font" type="font/ttf" crossorigin="anonymous"/>
+
+    <!-- Font resource is already in cached so font-face doesn't download resource again -->
+    <style>
+        @font-face {
+            font-family: "Dalek";
+            src: url("%PUBLIC_URL%/assets/fonts/DalekPinpointBold.ttf") format('truetype');
+            font-weight: bold;
+        }
+    </style>
+    ...
+```
+
+- Preload image resource with React. Because React handle fetch resource on its way so above solution won't work.
+```tsx
+    // App.tsx
+    useEffect(() => {
+        new Image().src = 'image-resource-path';
+    },[]);
+```
+
 ### Continued development
 
 ### Useful resources

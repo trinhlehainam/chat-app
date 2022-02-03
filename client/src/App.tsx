@@ -64,6 +64,7 @@ const App = () => {
         }
     }, [isGameRoute, inGameAuth, setActiveGame, navigate, navPathCounter]);
 
+    // NOTE: preload image resource
     useEffect(() => {
         new Image().src = `${process.env.PUBLIC_URL}/images/gem.png`;
     },[]);
