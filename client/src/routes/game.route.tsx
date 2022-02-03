@@ -22,7 +22,8 @@ const Game = () => {
     return (
         <div
             ref={ref}
-            className="flex justify-center items-center min-h-screen">
+            className="flex justify-center items-center min-h-screen"
+        >
         </div>
     )
 }

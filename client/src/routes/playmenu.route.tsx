@@ -27,8 +27,6 @@ const PlayMenu = () => {
 
         setInGameAuth && setInGameAuth(true);
 
-        console.log('play');
-
     }, [isPresent, isGame, setInGameAuth, navigate])
 
     return (

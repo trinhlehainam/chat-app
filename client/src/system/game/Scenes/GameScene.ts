@@ -73,8 +73,7 @@ export default class GameScene extends IScene {
     }
 
     ChangeScene(scene: IScene): Promise<IScene> {
-        return new Promise(
-            async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
                 scene.Release();
                 resolve(scene);
                 reject('ERROR : Fail to change scene !!!');

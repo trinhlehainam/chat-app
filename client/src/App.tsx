@@ -1,15 +1,15 @@
 import { Client, Room } from "colyseus.js";
-import { on } from "events";
 import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { HOME_PATH, PATH } from "./common/enum/path";
 
 import GlobalContext from "./contexts/global.context";
-import InGameAuth from "./routes/ingameauth.route";
+import Game from "./routes/game.route";
 
 const Home = lazy(() => import('./routes/home.route'));
 
+const MemoGame = memo(Game);
 const MemoHome = memo(Home);
 
 const App = () => {
@@ -57,7 +57,7 @@ const App = () => {
             setActiveGame(false);
 
             if (navPathCounter <= 1)
-                navigate(PATH.ROOT, {replace : true});
+                navigate(PATH.ROOT, { replace: true });
         }
     }, [isGameRoute, inGameAuth, setActiveGame, navigate, navPathCounter])
 
@@ -69,7 +69,9 @@ const App = () => {
                         {isHomeRoute && <MemoHome key={'home'} />}
                     </AnimatePresence>
                 </Suspense>
-                {activeGame && <InGameAuth inGameAuth={inGameAuth} />}
+                {activeGame &&
+                        <MemoGame />
+                }
                 {(!isPathValid) && <Navigate to='/' replace />}
             </GlobalContext.Provider>
         </>

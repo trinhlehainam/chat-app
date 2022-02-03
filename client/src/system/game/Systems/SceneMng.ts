@@ -24,10 +24,10 @@ export default class SceneMng {
         this.clock = new Clock();
 
         this.scene = new GameScene(this);
-
     }
 
     async Init(container: HTMLDivElement): Promise<boolean> {
+        LoadMng.EnableLoadingScene(true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
         window.addEventListener('resize', this.onResizeWindow.bind(this));
@@ -38,9 +38,8 @@ export default class SceneMng {
         ModelDataMng.LoadAsync('./assets/factory/swat-guy2.glb', 'swat-guy2');
 
         await this.scene.Init();
-        LoadMng.EnableLoadingScene(false);
-
         this.Run();
+        LoadMng.EnableLoadingScene(false);
 
         return true;
     }
