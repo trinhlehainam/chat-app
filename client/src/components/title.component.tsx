@@ -14,7 +14,7 @@ const Title = () => {
             }
         },
     };
-
+    
     return (
         <motion.div
             className={cx(

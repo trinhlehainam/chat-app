@@ -10,8 +10,7 @@ module.exports = {
                 }
             },
             fontFamily: {
-                Odinson: 'Odinson',
-                Dalek: 'Dalek'
+                Dalek: 'Dalek',
             },
             animation: {
 

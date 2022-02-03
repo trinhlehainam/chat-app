@@ -2,10 +2,13 @@ import { Client, Room } from "colyseus.js";
 import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+
 import { HOME_PATH, PATH } from "./common/enum/path";
 
 import GlobalContext from "./contexts/global.context";
+
 import Game from "./routes/game.route";
+import LoadingPage from "./routes/loadingpage.route";
 
 const Home = lazy(() => import('./routes/home.route'));
 
@@ -59,19 +62,21 @@ const App = () => {
             if (navPathCounter <= 1)
                 navigate(PATH.ROOT, { replace: true });
         }
-    }, [isGameRoute, inGameAuth, setActiveGame, navigate, navPathCounter])
+    }, [isGameRoute, inGameAuth, setActiveGame, navigate, navPathCounter]);
+
+    useEffect(() => {
+        new Image().src = `${process.env.PUBLIC_URL}/images/gem.png`;
+    },[]);
 
     return (
         <>
             <GlobalContext.Provider value={roomContext}>
-                <Suspense fallback={<div>Loading page</div>} >
+                <Suspense fallback={<LoadingPage />} >
                     <AnimatePresence>
                         {isHomeRoute && <MemoHome key={'home'} />}
                     </AnimatePresence>
                 </Suspense>
-                {activeGame &&
-                        <MemoGame />
-                }
+                {activeGame && <MemoGame />}
                 {(!isPathValid) && <Navigate to='/' replace />}
             </GlobalContext.Provider>
         </>

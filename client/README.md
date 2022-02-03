@@ -350,6 +350,8 @@ useEffec(() => {
 - [Use state as function is react](https://stackoverflow.com/questions/55621212/is-it-possible-to-react-usestate-in-react)
 - [Check value exists in enum Typescript](https://stackoverflow.com/questions/43804805/check-if-value-exists-in-enum-in-typescript)
 - [Merge enums](https://stackoverflow.com/questions/48478361/how-to-merge-two-enums-in-typescript)
+- [Wait for fonts to load before rendering web page](https://stackoverflow.com/questions/4712242/wait-for-fonts-to-load-before-rendering-web-page)
+- [Preload font-face css](https://stackoverflow.com/questions/1330825/preloading-font-face-fonts)
 
 ## Author
 
