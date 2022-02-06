@@ -7,6 +7,7 @@ import express from 'express'
  * Import your Room files
  */
 import { LobbyRoom } from './rooms/LobbyRoom';
+import { GameRoom } from "./rooms/GameRoom";
 
 export default Arena({
     getId: () => "Your Colyseus App",
@@ -18,7 +19,10 @@ export default Arena({
         gameServer
             .define("Lobby", LobbyRoom)
             .filterBy(['password']);
-
+        
+        gameServer
+            .define('Game', GameRoom)
+            .filterBy(['password']);
     },
 
     initializeExpress: (app) => {

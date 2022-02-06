@@ -10,10 +10,11 @@ import LobbyChatBox from '../components/lobby/lobbychatbox.component';
 import NavButtons from '../components/lobby/navbuttons.component';
 import PlayerCards, { PlayerInfo, PlayerInfoMap } from '../components/lobby/playercards.component';
 import LobbyTitle from '../components/lobby/title.component';
+import { Room } from 'colyseus.js';
 
 const MemoTitle = memo(LobbyTitle);
 const MemoNavButtons = memo(NavButtons);
-const MemoCards = memo(PlayerCards);
+const MemoPlayerCards = memo(PlayerCards);
 
 const Lobby = () => {
     const [roomName, setRoomName] = useState('');
@@ -31,17 +32,17 @@ const Lobby = () => {
 
     const navigate = useNavigate();
 
-    const { room } = useContext(GlobalContext);
+    const { client, room, setRoom, setInGameAuth } = useContext(GlobalContext);
 
     const context = {
         roomName, setRoomName,
         infoState, setInfoState
     };
 
-    // NOTE: return to rooms page if client hasn't connected to any room
+    // NOTE: return to home page if client hasn't connected to any room
     useEffect(() => {
         if (!room) {
-            navigate('/rooms', { replace: true });
+            navigate('/', { replace: true });
             return;
         }
     }, [room, navigate]);
@@ -221,6 +222,53 @@ const Lobby = () => {
         return () => { isMounted = false };
     }, [room, setPlayerInfoMap, setPlayerName, setPlayerInfoUpdated, myId]);
 
+    const [gameRoom, setGameRoom] = useState<Room>();
+
+    // NOTE: process server messages when host pressed start button
+    useEffect(() => {
+        if (!client || !room) return;
+        let isMounted = true;
+
+        room.onMessage('createGame', () => {
+            client.create('Game')
+                .then((gameRoom) => {
+                    if (isMounted)
+                        setGameRoom(gameRoom);
+
+                    room.send('requestJoinGame', gameRoom.id);
+                })
+        });
+
+        room.onMessage('joinGame', (gameRoomId) => {
+            client.joinById(gameRoomId)
+                .then((gameRoom) => {
+                    if (isMounted)
+                        setGameRoom(gameRoom);
+                })
+        });
+
+        return () => { isMounted = false; };
+    }, [client, room, setGameRoom]);
+
+    // NOTE: move to game room when it's created
+    useEffect(() => {
+        if (!gameRoom || !room) return;
+        if (room.id === gameRoom.id) return;
+
+        let isMounted = true;
+
+        room.leave()
+            .then(() => {
+                if (!isMounted) return;
+
+                setRoom && setRoom(gameRoom);
+                setInGameAuth && setInGameAuth(true);
+                navigate('/game', { replace: true });
+            });
+
+        return () => { isMounted = false; };
+    }, [gameRoom, room, setRoom, navigate, setInGameAuth]);
+
     return (
         <LobbyContext.Provider value={context}>
             <div
@@ -243,7 +291,7 @@ const Lobby = () => {
                         />
                     }
                     <MemoTitle classname='text-yellow-custom lg:text-5xl select-none' roomName={roomName} />
-                    <MemoCards
+                    <MemoPlayerCards
                         classname='w-4/5 max-w-[1105px] my-auto'
                         playerInfoMap={playerInfoMap}
                         updated={playerInfoUpdated} />

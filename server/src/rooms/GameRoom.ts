@@ -3,11 +3,13 @@ import { LobbyRoomState } from "./schema/LobbyRoomState";
 import { LobbyClient } from "./schema/LobbyClient";
 import MessageState from "./schema/MessageState";
 
-export class LobbyRoom extends Room<LobbyRoomState> {
+export class GameRoom extends Room<LobbyRoomState> {
     private password: string = '';
 
     onCreate(options: any) {
         this.setState(new LobbyRoomState());
+
+        console.log('game room');
 
         if (options.password) {
             this.setPrivate();
@@ -61,10 +63,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
                 client.send('createGame');
             });
         });
-        
-        this.onMessage("requestJoinGame", (client, gameRoomId) => {
-            this.broadcast('joinGame', gameRoomId, {except: client});
-        })
+
     }
 
     onJoin(client: Client, options: any) {

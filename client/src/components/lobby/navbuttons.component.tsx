@@ -29,6 +29,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
     const [text, setText] = useState('');
     const [func, setFunc] = useState<ArrowFunction<void>>(() => () => { });
 
+    // NOTE: update host and ready state of all players
     useEffect(() => {
         const myInfo = playerInfoMap.get(myId);
         if (myInfo) {
@@ -37,6 +38,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
         }
     }, [myId, updated, playerInfoMap, setIsHost, setIsReady]);
 
+    // NOTE: check all players are ready
     useEffect(() => {
         const infos = Array.from(playerInfoMap.values());
         setAllReady(infos.every((info) => info.isReady === true));
@@ -51,12 +53,11 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
     }, [setRoom, navigate, room]);
 
     const start = useCallback(() => {
-        navigate('/game', { replace: true })
-    }, [navigate]);
+        room && room.send('requestPlay');
+    }, [room, navigate]);
 
     const ready = useCallback(() => {
-        if (!room) return;
-        room.send('requireToggleReady');
+        room && room.send('requireToggleReady');
     }, [room]);
 
     const popInfo = useCallback(() => {
@@ -68,7 +69,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
     }, [setText, isHost])
 
     useEffect(() => {
-        setFunc(() => isHost ? (allReady ? start : () => {}) : ready);
+        setFunc(() => isHost ? (allReady ? start : () => { }) : ready);
     }, [setFunc, start, ready, isHost, allReady]);
 
     return (
