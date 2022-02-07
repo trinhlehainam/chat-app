@@ -224,7 +224,7 @@ const Lobby = () => {
 
     const [gameRoom, setGameRoom] = useState<Room>();
 
-    // NOTE: process server messages when host pressed start button
+    // NOTE: process server messages when host pressed start button (send 'requestPlay' message)
     useEffect(() => {
         if (!client || !room) return;
         let isMounted = true;

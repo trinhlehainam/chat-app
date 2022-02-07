@@ -57,13 +57,16 @@ export default class GameMng {
         dirLight.shadow.camera.far = 200;
         this.scene.add(dirLight);
 
-        this.scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
+        // DEBUG:
+        /* this.scene.add(new THREE.CameraHelper(dirLight.shadow.camera));
         
+        const axis = new THREE.AxesHelper(this.map.tileSize.x * 1.5);
+        this.scene.add(axis); */
+        //
+
         const ambient = new THREE.AmbientLight(0x666666);
         this.scene.add(ambient);
 
-        const axis = new THREE.AxesHelper(this.map.tileSize.x * 1.5);
-        this.scene.add(axis);
 
         const grid = new THREE.GridHelper(this.map.tileNum.x * this.map.tileSize.x, this.map.tileNum.x);
         this.scene.add(grid);
