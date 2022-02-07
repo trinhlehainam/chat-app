@@ -23,6 +23,7 @@ export default class Player {
 
     private gameMng: GameMng
     private mapPos: THREE.Vector2
+    private ground: THREE.Mesh
 
     // Test Rotation
     private pointer: THREE.Vector2
@@ -34,6 +35,7 @@ export default class Player {
         this.scene = scene;
         this.gameMng = stage;
         this.mapPos = new THREE.Vector2();
+        this.ground = this.gameMng.GetRound();
 
         this.enitty = new Entity('player');
         this.actions = {};
@@ -72,9 +74,14 @@ export default class Player {
         transform.scale.multiplyScalar(3);
 
         this.scene.add(this.model);
+
+        document.addEventListener('pointermove', this.onPointerMove.bind(this));
+        document.addEventListener('pointerdown', this.onPointerDown.bind(this));
     }
 
-    destroy(): void {
+    release(): void {
+        document.removeEventListener('pointermove', this.onPointerMove.bind(this));
+        document.removeEventListener('pointerdown', this.onPointerDown.bind(this));
     }
 
     processInput(): void {
@@ -122,20 +129,14 @@ export default class Player {
         let cursor: boolean = false;
         if (this.constroller.IsPressed(INPUT_ID.SHIFT)) {
             cursor = true;
-            this.gameMng.SetCursorPos(transform.position);
-            this.gameMng.CheckTile();
         }
 
-        if (this.constroller.IsJustPressed(INPUT_ID.ADD)) {
-            this.gameMng.SetCursorPos(transform.position);
-            this.gameMng.AddObject();
-            this.gameMng.CheckTile();
+        if (this.constroller.IsPressed(INPUT_ID.ADD)) {
+            cursor = true;
         }
 
-        if (this.constroller.IsJustPressed(INPUT_ID.DELETE)) {
-            this.gameMng.SetCursorPos(transform.position);
-            this.gameMng.RemoveObject();
-            this.gameMng.CheckTile();
+        if (this.constroller.IsPressed(INPUT_ID.DELETE)) {
+            cursor = true;
         }
 
         if (this.constroller.IsJustPressed(INPUT_ID.SPACE)) {
@@ -172,4 +173,52 @@ export default class Player {
     waitActionFinished() {
     }
 
+    private onPointerMove(event: MouseEvent): void {
+        const isAdd = this.constroller.IsPressed(INPUT_ID.ADD);
+        const isDelete = this.constroller.IsPressed(INPUT_ID.DELETE);
+        if (!isAdd && !isDelete) return;
+
+        this.pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+
+        const intersects = this.raycaster.intersectObject(this.ground, false);
+
+        if (intersects.length > 0) {
+            const intersect = intersects[0];
+            const intersect_point = intersect.point.clone();
+            intersect_point.add(intersect.face!.normal);
+            this.gameMng.SetCursorPos(intersect_point);
+            this.gameMng.CheckTile();
+        }
+    }
+
+    private onPointerDown(event: MouseEvent): void {
+        const isAdd = this.constroller.IsPressed(INPUT_ID.ADD);
+        const isDelete = this.constroller.IsPressed(INPUT_ID.DELETE);
+        if (!isAdd && !isDelete) return;
+
+        this.pointer.set((event.clientX / window.innerWidth) * 2 - 1, - (event.clientY / window.innerHeight) * 2 + 1);
+
+        this.raycaster.setFromCamera(this.pointer, this.camera);
+
+        const intersects = this.raycaster.intersectObject(this.ground, false);
+
+        if (intersects.length > 0) {
+            const intersect = intersects[0];
+            const intersect_point = intersect.point.clone();
+            intersect_point.add(intersect.face!.normal);
+
+            if (isAdd) {
+                this.gameMng.SetCursorPos(intersect_point);
+                this.gameMng.AddObject();
+            }
+            else if (isDelete) {
+                this.gameMng.SetCursorPos(intersect_point);
+                this.gameMng.RemoveObject();
+            }
+
+            this.gameMng.CheckTile();
+        }
+    }
 }

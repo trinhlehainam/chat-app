@@ -11,11 +11,12 @@ export default class GameMng {
     // map
     private map: TileMap2
     private objects: Array<THREE.Mesh>
-    private pathfinder: TileMap2Pathfinding 
+    private pathfinder: TileMap2Pathfinding
 
     private scene: THREE.Scene
     private cursor: THREE.Mesh
     private camera: THREE.Camera
+    private ground: THREE.Mesh
 
     private box: THREE.Mesh
 
@@ -34,19 +35,19 @@ export default class GameMng {
             this.map.tileNum.x * this.map.tileSize.x, this.map.tileNum.y * this.map.tileSize.y,
             this.map.tileNum.x, this.map.tileNum.y
         );
-        const groundMat = new THREE.MeshPhongMaterial({color: 0xaaaaaa});
-        const ground = new THREE.Mesh(groundGeo, groundMat);
-        ground.name = 'ground';
-        ground.receiveShadow = true;
+        const groundMat = new THREE.MeshPhongMaterial({ color: 0xaaaaaa });
+        this.ground = new THREE.Mesh(groundGeo, groundMat);
+        this.ground.name = 'ground';
+        this.ground.receiveShadow = true;
         // NOTE: rotate vertices of Object3D for pathfinding work correctly
-        ground.geometry.rotateX(-Math.PI/2);
-        ground.quaternion.identity();
+        this.ground.geometry.rotateX(-Math.PI / 2);
+        this.ground.quaternion.identity();
         //
-        this.scene.add(ground);
+        this.scene.add(this.ground);
 
         const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight.position.set(20,80,80);
-        dirLight.target.lookAt(0,0,0);
+        dirLight.position.set(20, 80, 80);
+        dirLight.target.lookAt(0, 0, 0);
         dirLight.castShadow = true;
         dirLight.shadow.mapSize.set(4096, 4096);
         dirLight.shadow.camera.top = 100;
@@ -72,12 +73,12 @@ export default class GameMng {
         this.scene.add(grid);
 
         const cursorGeo = new THREE.BoxGeometry(this.map.tileSize.x, this.map.tileSize.x, this.map.tileSize.x);
-        const cursorMat = new THREE.MeshBasicMaterial({color: 0x00ff00, opacity: 0.5, transparent: true, visible: false});
+        const cursorMat = new THREE.MeshBasicMaterial({ color: 0x00ff00, opacity: 0.5, transparent: true, visible: false });
         this.cursor = new THREE.Mesh(cursorGeo, cursorMat);
         this.scene.add(this.cursor);
 
         this.pathfinder = new TileMap2Pathfinding(this.map);
-        
+
         this.pathfinder.goals = new Array<THREE.Vector2>(6);
         this.pathfinder.starts = new Array<THREE.Vector2>(6);
         this.pathfinder.goals[0] = new THREE.Vector2(4, 18);
@@ -87,20 +88,20 @@ export default class GameMng {
         this.pathfinder.goals[4] = new THREE.Vector2(18, 32);
         this.pathfinder.goals[5] = new THREE.Vector2(32, 32);
 
-        for (const i of this.pathfinder.goals.keys()){
-            if (i === 0){
+        for (const i of this.pathfinder.goals.keys()) {
+            if (i === 0) {
                 this.pathfinder.starts[i] = new THREE.Vector2(4, 4);
                 continue;
             }
-            this.pathfinder.starts[i] = this.pathfinder.goals[i-1]
+            this.pathfinder.starts[i] = this.pathfinder.goals[i - 1]
         }
 
-        const debugSphere = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshBasicMaterial({color: 0xff0000}));
+        const debugSphere = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
         debugSphere.position.copy(this.map.getWorldPosFromTileIndex(this.pathfinder.starts[0]));
         this.scene.add(debugSphere);
         this.pathfinder.goals.forEach(
             goal => {
-                const debugSphere = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshBasicMaterial({color: 0xff0000}));
+                const debugSphere = new THREE.Mesh(new THREE.SphereGeometry(2), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
                 debugSphere.position.copy(this.map.getWorldPosFromTileIndex(goal));
                 this.scene.add(debugSphere);
             }
@@ -108,15 +109,16 @@ export default class GameMng {
 
         const box = new THREE.Mesh(new THREE.BoxGeometry(this.map.tileSize.x, this.map.tileSize.x * 2, this.map.tileSize.y), new THREE.MeshNormalMaterial());
         this.box = box.clone();
-        
+
         this.enemies = [];
         this.isStart = false;
 
         this.pathfinder.generatePaths();
-        
+
     }
 
     GetMap(): TileMap2 { return this.map; }
+    GetRound(): THREE.Mesh { return this.ground; }
 
     Start(): void {
         if (this.isStart) return;
@@ -129,7 +131,7 @@ export default class GameMng {
                 path => new THREE.Vector3(path.x, 0, path.y)));
         console.log(enemyPaths);
         enemy.setPaths(enemyPaths);
-        
+
         this.enemies.push(enemy);
         this.isStart = true;
     }
@@ -175,17 +177,17 @@ export default class GameMng {
         const tilePos = this.map.getTileIndexFromVec3(pos);
         return tilePos;
     }
-    
+
     SetCursorPos(pos: THREE.Vector3): void {
         this.cursor.position.copy(pos)
-        .divideScalar(this.map.tileSize.x).floor().multiplyScalar(this.map.tileSize.x)
-        .addScalar(this.map.tileSize.x/2);
+            .divideScalar(this.map.tileSize.x).floor().multiplyScalar(this.map.tileSize.x)
+            .addScalar(this.map.tileSize.x / 2);
     }
 
     CheckTile(): void {
         (this.cursor.material as THREE.MeshBasicMaterial).color = new THREE.Color(0x00ff00);
         let isEmpty = this.IsTileEmpty();
-        if (!isEmpty){
+        if (!isEmpty) {
             this.SetCursorColor();
             return;
         }
@@ -194,7 +196,7 @@ export default class GameMng {
             this.SetCursorColor();
     }
 
-    SetCursorColor(): void{
+    SetCursorColor(): void {
         (this.cursor.material as THREE.MeshBasicMaterial).color = new THREE.Color(0xff0000);
     }
 
@@ -206,12 +208,12 @@ export default class GameMng {
         if (!this.isStart) return;
         for (const enemy of this.enemies)
             enemy.update(delta_s);
-        
+
         const remove: Array<number> = [];
         for (const [idx, enemy] of this.enemies.entries())
             if (enemy.isReachGoal())
                 remove.push(idx);
-        
+
         remove.forEach(idx => {
             this.enemies[idx].destroy();
             this.enemies.splice(idx, 1)

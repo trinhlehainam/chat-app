@@ -17,7 +17,7 @@ export default class GameScene extends IScene {
     private controls: OrbitControls
 
     // DEBUG:
-    private stats: Stats
+    // private stats: Stats
 
     constructor(sceneMng: SceneMng) {
         super(sceneMng);
@@ -31,7 +31,15 @@ export default class GameScene extends IScene {
         this.camera.lookAt(0, 0, 0);
 
         // Canmera controls settings
-        this.controls = new MapControls(this.camera, this.sceneMng.GetRenderer().domElement);
+        this.controls = new OrbitControls(this.camera, this.sceneMng.GetRenderer().domElement);
+        this.controls.mouseButtons = {
+            RIGHT: THREE.MOUSE.PAN,
+            MIDDLE: THREE.MOUSE.DOLLY,
+            LEFT: THREE.MOUSE.ROTATE
+        }
+
+        this.controls.screenSpacePanning = false;
+
         this.controls.enableRotate = false;
 
         this.controls.enableDamping = true;
@@ -48,14 +56,14 @@ export default class GameScene extends IScene {
         this.controls.minAzimuthAngle = 0;
         //
 
-        this.stats = Stats();
-        document.body.appendChild(this.stats.domElement);
+        /* this.stats = Stats();
+        document.body.appendChild(this.stats.domElement); */
 
     }
 
     Release(): void {
-        document.body.removeChild(this.stats.domElement);
-        this.player?.destroy();
+        // document.body.removeChild(this.stats.domElement);
+        this.player?.release();
     }
 
     ProcessInput(): void {
@@ -88,7 +96,7 @@ export default class GameScene extends IScene {
     Render(): void {
         this.gameMng?.Render();
         this.player?.render();
-        this.stats.update();
+        // this.stats.update();
     }
 
     ChangeScene(scene: IScene): Promise<IScene> {
