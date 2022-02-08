@@ -7,7 +7,6 @@ class LoadMng {
     private static instance?: LoadMng
 
     private loader: LoadingManager
-    private setIsLoadingScene?: Function
 
     private constructor() {
         this.loader = new LoadingManager();
@@ -28,26 +27,6 @@ class LoadMng {
             delete this.instance;
             this.instance = undefined;
         }
-    }
-
-    static SetLoadingSceneFunc(func: Function): void {
-        if (!this.instance) return;
-        this.instance.setIsLoadingScene = func;
-    }
-
-    static EnableLoadingScene(flag: boolean): void {
-        if (!this.IsCreated()) return;
-        const instance = this.instance!;
-
-        instance.setIsLoadingScene!(flag);
-    }
-    
-    private static IsCreated(): boolean {
-        if (this.instance === undefined){
-            console.log('FALSE: Instance of TextureMng is not created !!!');
-            return false;
-        }
-        return true;
     }
 } 
 

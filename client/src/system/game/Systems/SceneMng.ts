@@ -1,10 +1,12 @@
 import { WebGLRenderer, Color, Clock, PerspectiveCamera, sRGBEncoding } from 'three'
 
-import { LoadMng, ModelDataMng } from '../Systems/LoadMng'
+import { ModelDataMng } from '../Systems/LoadMng'
 
 import IScene from '../Scenes/IScene'
 import GameScene from '../Scenes/GameScene'
 import { GAME_MODE } from '../../../common/enum/gamemode'
+import { Room } from 'colyseus.js'
+import UIController from './UIController'
 
 export default class SceneMng {
     private renderer: WebGLRenderer
@@ -25,8 +27,8 @@ export default class SceneMng {
         this.scene = new GameScene(this);
     }
 
-    async Init(container: HTMLDivElement, gameMode: GAME_MODE): Promise<boolean> {
-        LoadMng.EnableLoadingScene(true);
+    async Init(container: HTMLDivElement, gameMode: GAME_MODE, room?: Room): Promise<boolean> {
+        UIController.EnableLoadingScene(true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
         window.addEventListener('resize', this.onResizeWindow.bind(this));
@@ -35,22 +37,27 @@ export default class SceneMng {
         ModelDataMng.LoadAsync('./assets/factory/eve2.glb', 'eve2');
         ModelDataMng.LoadAsync('./assets/factory/swat-guy.glb', 'swat-guy');
         ModelDataMng.LoadAsync('./assets/factory/swat-guy2.glb', 'swat-guy2');
-        
+
         switch (gameMode) {
             case GAME_MODE.SINGE:
-                await this.scene.Init();
-                break;
+                await this.scene.InitSingleplayer();
+                this.Run();
+                UIController.EnableLoadingScene(false);
+                return true;
             case GAME_MODE.MULTIPLAYER:
-                break;
+                if (!room) return false;
+                await this.scene.InitMultiplayer(room);
+                UIController.EnableLoadingScene(false);
+                UIController.EnableWaitAllConnectedScene(true);
+                room.onMessage('allInitCompleted', () => {
+                    this.Run();
+                    UIController.EnableWaitAllConnectedScene(true);
+                })
+                return true;
             default:
                 console.error('ERROR: Invalid game mode !');
-                break;
+                return false;
         }
-
-        this.Run();
-        LoadMng.EnableLoadingScene(false);
-
-        return true;
     }
 
     Release(): void {
@@ -81,13 +88,13 @@ export default class SceneMng {
                 scene => {
                     this.scene = scene;
                     this.Run();
-                    LoadMng.EnableLoadingScene(false);
+                    UIController.EnableLoadingScene(false);
                 }
             );
 
             // Stop loop and wait until change scene set up is done
             this.Stop();
-            LoadMng.EnableLoadingScene(true);
+            UIController.EnableLoadingScene(true);
             return;
         }
 

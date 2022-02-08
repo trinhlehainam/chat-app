@@ -1,3 +1,4 @@
+import { Room } from 'colyseus.js'
 import {Camera, Scene} from 'three'
 
 import SceneMng from '../Systems/SceneMng'
@@ -7,23 +8,21 @@ export default abstract class IScene {
     protected camera: Camera
     protected scene: Scene
     protected sceneMng: SceneMng
+    protected room?: Room
 
     private isEnable: boolean
     private isChange: boolean
 
     constructor(sceneMng: SceneMng){
         this.sceneMng = sceneMng;
-
         this.scene = new Scene();
-
         this.camera = new Camera();
-
         this.isEnable = true; 
-
         this.isChange = false;
     }
 
-    abstract Init(): Promise<boolean>;
+    abstract InitSingleplayer(): Promise<boolean>;
+    abstract InitMultiplayer(room: Room): Promise<boolean>;
     abstract Release(): void;
     abstract ProcessInput(): void;
     abstract Update(deltaTime_s: number): void;

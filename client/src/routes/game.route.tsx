@@ -23,7 +23,8 @@ const Game = () => {
         const message: InitMessage = {
             container: ref.current,
             setIsLoadingResource: setIsLoadingResource,
-            gameMode: gameMode
+            gameMode: gameMode,
+            room: room
         };
 
         EventController.emit('init', message);
@@ -32,7 +33,7 @@ const Game = () => {
             GameApp.Destroy();
             EventController.Destroy();
         }
-    }, [ref, gameMode]);
+    }, [ref, gameMode, room]);
 
     return (
         <div

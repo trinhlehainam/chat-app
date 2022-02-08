@@ -3,6 +3,7 @@ import { LoadMng } from './Systems/LoadMng';
 
 import EventController from '../EventController';
 import { InitMessage } from '../../common/message/messages';
+import UIController from './Systems/UIController';
 
 export default class GameApp {
     private static instance?: GameApp
@@ -19,6 +20,7 @@ export default class GameApp {
     static Destroy(): void {
         if (this.instance) {
             this.instance.sceneMng.Release();
+            UIController.Destroy();
             LoadMng.Destroy();
 
             delete this.instance;
@@ -29,10 +31,11 @@ export default class GameApp {
     private constructor(){
         this.sceneMng = new SceneMng();
         LoadMng.Create();
+        UIController.Create();
 
         EventController.on('init', async (message: InitMessage) => {
-            LoadMng.SetLoadingSceneFunc(message.setIsLoadingResource);
-            await this.sceneMng.Init(message.container, message.gameMode);
+            UIController.SetLoadingSceneFunc(message.setIsLoadingResource);
+            await this.sceneMng.Init(message.container, message.gameMode, message.room);
         });
     }
 

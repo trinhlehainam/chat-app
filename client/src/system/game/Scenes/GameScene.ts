@@ -9,6 +9,7 @@ import SceneMng from '../Systems/SceneMng'
 
 import GameMng from '../Scripts/GameMng'
 import Player from '../Scripts/Player'
+import { Room } from 'colyseus.js'
 // import Enemy from '../Scripts/Enemy'
 
 export default class GameScene extends IScene {
@@ -51,7 +52,7 @@ export default class GameScene extends IScene {
 
         this.controls.maxPolarAngle = Math.PI / 4;
         this.controls.minPolarAngle = Math.PI / 4;
-        
+
         this.controls.maxAzimuthAngle = 0;
         this.controls.minAzimuthAngle = 0;
         //
@@ -70,19 +71,33 @@ export default class GameScene extends IScene {
 
     }
 
-    Init(): Promise<boolean> {
-        this.sceneMng.GetRenderer().setClearColor(0x00aaaa);
-        return new Promise(
-            async (resolve, reject) => {
-                // Wait until Player's resources are loaded before create Player
-                await ModelDataMng.GetAsync('eve', 'swat-guy');
-                this.gameMng = new GameMng(this.scene, this.camera);
-                this.player = new Player(this.scene, this.gameMng, this.camera);
-                //
-                resolve(true);
-                reject('INIT ERROR: Fail to initialize GameScene !!!');
-            }
-        );
+    InitSingleplayer(): Promise<boolean> {
+        return new Promise(async (resolve, reject) => {
+            this.sceneMng.GetRenderer().setClearColor(0x00aaaa);
+            // Wait until Game Scene's resources are loaded before create Player
+            await ModelDataMng.GetAsync('eve', 'swat-guy');
+            this.gameMng = new GameMng(this.scene, this.camera);
+            this.player = new Player(this.scene, this.gameMng, this.camera);
+            //
+            resolve(true);
+            reject('INIT ERROR: Fail to initialize GameScene !!!');
+        });
+    }
+
+    InitMultiplayer(room: Room): Promise<boolean> {
+        throw new Promise(async (resolve, reject) => {
+            this.sceneMng.GetRenderer().setClearColor(0x00aaaa);
+            this.room = room; 
+            // Wait until Game Scene's resources are loaded before create Player
+            await ModelDataMng.GetAsync('eve', 'swat-guy');
+            this.gameMng = new GameMng(this.scene, this.camera);
+            this.player = new Player(this.scene, this.gameMng, this.camera);
+            //
+            room.send('initCompleted');
+            
+            resolve(true);
+            reject('INIT ERROR: Fail to initialize GameScene !!!');
+        });
     }
 
     Update(deltaTime_s: number): void {
