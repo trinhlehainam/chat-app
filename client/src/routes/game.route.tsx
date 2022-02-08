@@ -9,21 +9,24 @@ import EventController from "../system/EventController";
 import GameApp from "../system/game/app";
 
 const Game = () => {
-    const { room, gameMode } = useContext(GlobalContext);
+    const { room, gameMode, playerNum } = useContext(GlobalContext);
 
     const [isLoadingResource, setIsLoadingResource] = useState(true);
+    const [isWaitingConnect, setIsWaitingConnect] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!ref.current || !gameMode) return;
+        if (!ref.current || !gameMode || !playerNum) return;
         EventController.Create();
         GameApp.Create();
 
         const message: InitMessage = {
             container: ref.current,
             setIsLoadingResource: setIsLoadingResource,
+            setIsWaitingConnect: setIsWaitingConnect,
             gameMode: gameMode,
+            playerNum: playerNum,
             room: room
         };
 
@@ -33,7 +36,7 @@ const Game = () => {
             GameApp.Destroy();
             EventController.Destroy();
         }
-    }, [ref, gameMode, room]);
+    }, [ref, gameMode, room, playerNum, setIsLoadingResource, setIsWaitingConnect]);
 
     return (
         <div

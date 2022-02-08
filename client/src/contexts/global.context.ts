@@ -13,6 +13,9 @@ interface Props {
 
     gameMode?: GAME_MODE,
     setGameMode: Dispatch<SetStateAction<GAME_MODE | undefined>>,
+
+    playerNum: number,
+    setPlayerNum?: Dispatch<SetStateAction<number>>,
 };
 
 const GlobalContext = createContext<Partial<Props>>({});

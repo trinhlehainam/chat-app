@@ -34,7 +34,7 @@ const Lobby = () => {
 
     const navigate = useNavigate();
 
-    const { client, room, setRoom, setInGameAuth, setGameMode } = useContext(GlobalContext);
+    const { client, room, setRoom, setInGameAuth, setGameMode, setPlayerNum } = useContext(GlobalContext);
 
     const context = {
         roomName, setRoomName,
@@ -266,11 +266,12 @@ const Lobby = () => {
                 setRoom && setRoom(gameRoom);
                 setInGameAuth && setInGameAuth(true);
                 setGameMode && setGameMode(GAME_MODE.MULTIPLAYER);
+                setPlayerNum && setPlayerNum(playerInfoMap.size);
                 navigate(PATH.GAME, { replace: true });
             });
 
         return () => { isMounted = false; };
-    }, [gameRoom, room, setRoom, navigate, setInGameAuth, setGameMode]);
+    }, [gameRoom, room, setRoom, navigate, setInGameAuth, setGameMode, setPlayerNum, playerInfoMap]);
 
     return (
         <LobbyContext.Provider value={context}>

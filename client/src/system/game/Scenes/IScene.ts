@@ -22,7 +22,7 @@ export default abstract class IScene {
     }
 
     abstract InitSingleplayer(): Promise<boolean>;
-    abstract InitMultiplayer(room: Room): Promise<boolean>;
+    abstract InitMultiplayer(room: Room, playerNum: number): Promise<boolean>;
     abstract Release(): void;
     abstract ProcessInput(): void;
     abstract Update(deltaTime_s: number): void;

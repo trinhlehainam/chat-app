@@ -27,7 +27,7 @@ export default class SceneMng {
         this.scene = new GameScene(this);
     }
 
-    async Init(container: HTMLDivElement, gameMode: GAME_MODE, room?: Room): Promise<boolean> {
+    async Init(container: HTMLDivElement, gameMode: GAME_MODE, playerNum: number, room?: Room): Promise<boolean> {
         UIController.EnableLoadingScene(true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
@@ -46,7 +46,7 @@ export default class SceneMng {
                 return true;
             case GAME_MODE.MULTIPLAYER:
                 if (!room) return false;
-                await this.scene.InitMultiplayer(room);
+                await this.scene.InitMultiplayer(room, playerNum);
                 UIController.EnableLoadingScene(false);
                 UIController.EnableWaitAllConnectedScene(true);
                 room.onMessage('allInitCompleted', () => {

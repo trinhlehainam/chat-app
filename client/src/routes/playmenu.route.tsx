@@ -17,7 +17,7 @@ const PlayMenu = () => {
         { text: 'Back', path: PATH.ROOT },
     ];
 
-    const { setInGameAuth, setGameMode } = useContext(GlobalContext);
+    const { setInGameAuth, setGameMode, setPlayerNum } = useContext(GlobalContext);
     const isPresent = useIsPresent();
     const isGame = useMatch(PATH.GAME);
 
@@ -28,8 +28,9 @@ const PlayMenu = () => {
 
         setInGameAuth && setInGameAuth(true);
         setGameMode && setGameMode(GAME_MODE.SINGE);
+        setPlayerNum && setPlayerNum(1);
 
-    }, [isPresent, isGame, setInGameAuth, setGameMode, navigate])
+    }, [isPresent, isGame, setInGameAuth, setGameMode, setPlayerNum, navigate])
 
     return (
         <div

@@ -84,17 +84,17 @@ export default class GameScene extends IScene {
         });
     }
 
-    InitMultiplayer(room: Room): Promise<boolean> {
-        throw new Promise(async (resolve, reject) => {
+    InitMultiplayer(room: Room, playerNum: number): Promise<boolean> {
+        return new Promise(async (resolve, reject) => {
             this.sceneMng.GetRenderer().setClearColor(0x00aaaa);
-            this.room = room; 
+            this.room = room;
             // Wait until Game Scene's resources are loaded before create Player
             await ModelDataMng.GetAsync('eve', 'swat-guy');
             this.gameMng = new GameMng(this.scene, this.camera);
             this.player = new Player(this.scene, this.gameMng, this.camera);
             //
             room.send('initCompleted');
-            
+
             resolve(true);
             reject('INIT ERROR: Fail to initialize GameScene !!!');
         });

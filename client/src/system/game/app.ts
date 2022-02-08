@@ -13,7 +13,7 @@ export default class GameApp {
     static Create(): GameApp {
         if (!this.instance)
             this.instance = new GameApp();
-        
+
         return this.instance;
     }
 
@@ -28,14 +28,15 @@ export default class GameApp {
         }
     }
 
-    private constructor(){
+    private constructor() {
         this.sceneMng = new SceneMng();
         LoadMng.Create();
         UIController.Create();
 
         EventController.on('init', async (message: InitMessage) => {
             UIController.SetLoadingSceneFunc(message.setIsLoadingResource);
-            await this.sceneMng.Init(message.container, message.gameMode, message.room);
+            UIController.SetWaitAllConnectedScene(message.setIsWaitingConnect);
+            await this.sceneMng.Init(message.container, message.gameMode, message.playerNum, message.room);
         });
     }
 

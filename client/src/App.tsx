@@ -25,6 +25,7 @@ const App = () => {
     const [gameMode, setGameMode] = useState<GAME_MODE>();
     const [activeGame, setActiveGame] = useState(false);
     //
+    const [playerNum, setPlayerNum] = useState(0);
 
     const path = useLocation().pathname;
 
@@ -38,6 +39,7 @@ const App = () => {
         room, setRoom,
         setInGameAuth,
         gameMode, setGameMode,
+        playerNum, setPlayerNum
     };
 
     const navigate = useNavigate();
