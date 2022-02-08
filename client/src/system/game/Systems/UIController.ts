@@ -2,7 +2,7 @@ export default class UIController {
     private static instance?: UIController
 
     private setLoadingScene?: Function
-    private setWaitAllConnectScene?: Function
+    private setWaitingAllOtherPlayer?: Function
 
     private constructor() {
     }
@@ -33,18 +33,18 @@ export default class UIController {
         instance.setLoadingScene!(flag);
     }
 
-    static SetWaitAllConnectedScene(func: Function): void {
+    static SetWaitingOtherPlayersScene(func: Function): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        instance.setWaitAllConnectScene = func;
+        instance.setWaitingAllOtherPlayer = func;
     }
 
     static EnableWaitAllConnectedScene(flag: boolean): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        instance.setWaitAllConnectScene!(flag);
+        instance.setWaitingAllOtherPlayer!(flag);
     }
 
     private static IsCreated(): boolean {
@@ -54,5 +54,4 @@ export default class UIController {
         }
         return true;
     }
-    
 }

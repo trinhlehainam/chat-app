@@ -3,28 +3,31 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { InitMessage } from "../common/message/messages";
 
 import LoadingResource from "../components/game/loadingresource.component";
+import WaitingOtherPlayers from "../components/game/waitingotherplayers.component";
 import GlobalContext from "../contexts/global.context";
 
 import EventController from "../system/EventController";
 import GameApp from "../system/game/app";
+import UIController from "../system/game/Systems/UIController";
 
 const Game = () => {
     const { room, gameMode, playerNum } = useContext(GlobalContext);
 
     const [isLoadingResource, setIsLoadingResource] = useState(true);
-    const [isWaitingConnect, setIsWaitingConnect] = useState(false);
+    const [isWaitingOtherPlayers, setIsWaitingOtherPlayers] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!ref.current || !gameMode || !playerNum) return;
         EventController.Create();
+        UIController.Create();
         GameApp.Create();
 
         const message: InitMessage = {
             container: ref.current,
             setIsLoadingResource: setIsLoadingResource,
-            setIsWaitingConnect: setIsWaitingConnect,
+            setIsWaitingOtherPlayers: setIsWaitingOtherPlayers,
             gameMode: gameMode,
             playerNum: playerNum,
             room: room
@@ -34,9 +37,10 @@ const Game = () => {
 
         return () => {
             GameApp.Destroy();
+            UIController.Destroy();
             EventController.Destroy();
         }
-    }, [ref, gameMode, room, playerNum, setIsLoadingResource, setIsWaitingConnect]);
+    }, [ref, gameMode, room, playerNum, setIsLoadingResource, setIsWaitingOtherPlayers]);
 
     return (
         <div
@@ -44,6 +48,7 @@ const Game = () => {
             className="relative flex justify-center items-center min-h-screen"
         >
             {isLoadingResource && <LoadingResource />}
+            {isWaitingOtherPlayers && <WaitingOtherPlayers />}
         </div>
     )
 }

@@ -20,7 +20,6 @@ export default class GameApp {
     static Destroy(): void {
         if (this.instance) {
             this.instance.sceneMng.Release();
-            UIController.Destroy();
             LoadMng.Destroy();
 
             delete this.instance;
@@ -31,11 +30,10 @@ export default class GameApp {
     private constructor() {
         this.sceneMng = new SceneMng();
         LoadMng.Create();
-        UIController.Create();
 
         EventController.on('init', async (message: InitMessage) => {
             UIController.SetLoadingSceneFunc(message.setIsLoadingResource);
-            UIController.SetWaitAllConnectedScene(message.setIsWaitingConnect);
+            UIController.SetWaitingOtherPlayersScene(message.setIsWaitingOtherPlayers);
             await this.sceneMng.Init(message.container, message.gameMode, message.playerNum, message.room);
         });
     }
