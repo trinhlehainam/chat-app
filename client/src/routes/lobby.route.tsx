@@ -11,6 +11,7 @@ import NavButtons from '../components/lobby/navbuttons.component';
 import PlayerCards, { PlayerInfo, PlayerInfoMap } from '../components/lobby/playercards.component';
 import LobbyTitle from '../components/lobby/title.component';
 import { Room } from 'colyseus.js';
+import { GAME_MODE } from '../common/enum/gamemode';
 
 const MemoTitle = memo(LobbyTitle);
 const MemoNavButtons = memo(NavButtons);
@@ -32,7 +33,7 @@ const Lobby = () => {
 
     const navigate = useNavigate();
 
-    const { client, room, setRoom, setInGameAuth } = useContext(GlobalContext);
+    const { client, room, setRoom, setInGameAuth, setGameMode } = useContext(GlobalContext);
 
     const context = {
         roomName, setRoomName,
@@ -263,11 +264,12 @@ const Lobby = () => {
 
                 setRoom && setRoom(gameRoom);
                 setInGameAuth && setInGameAuth(true);
+                setGameMode && setGameMode(GAME_MODE.MULTIPLAYER);
                 navigate('/game', { replace: true });
             });
 
         return () => { isMounted = false; };
-    }, [gameRoom, room, setRoom, navigate, setInGameAuth]);
+    }, [gameRoom, room, setRoom, navigate, setInGameAuth, setGameMode]);
 
     return (
         <LobbyContext.Provider value={context}>

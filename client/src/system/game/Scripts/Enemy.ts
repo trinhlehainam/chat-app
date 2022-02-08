@@ -74,6 +74,7 @@ export default class Enemy {
         const dir = diff.clone().normalize();
         transform.position.add(dir.multiplyScalar(speed));
 
+        // Rotate character to move direction
         const qua = new THREE.Quaternion();
         let forward = transform.forward;
         qua.setFromUnitVectors(forward, dir);

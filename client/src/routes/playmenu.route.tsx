@@ -8,6 +8,7 @@ import { PATH } from '../common/enum/path';
 import GlobalContext from '../contexts/global.context';
 
 import Menu from '../components/menu.component';
+import { GAME_MODE } from '../common/enum/gamemode';
 
 const PlayMenu = () => {
     const playMenu = [
@@ -16,7 +17,7 @@ const PlayMenu = () => {
         { text: 'Back', path: PATH.ROOT },
     ];
 
-    const { setInGameAuth } = useContext(GlobalContext);
+    const { setInGameAuth, setGameMode } = useContext(GlobalContext);
     const isPresent = useIsPresent();
     const isGame = useMatch(PATH.GAME);
 
@@ -26,8 +27,9 @@ const PlayMenu = () => {
         if (isPresent) return;
 
         setInGameAuth && setInGameAuth(true);
+        setGameMode && setGameMode(GAME_MODE.SINGE);
 
-    }, [isPresent, isGame, setInGameAuth, navigate])
+    }, [isPresent, isGame, setInGameAuth, setGameMode, navigate])
 
     return (
         <div

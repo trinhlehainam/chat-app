@@ -4,6 +4,7 @@ import { LoadMng, ModelDataMng } from '../Systems/LoadMng'
 
 import IScene from '../Scenes/IScene'
 import GameScene from '../Scenes/GameScene'
+import { GAME_MODE } from '../../../common/enum/gamemode'
 
 export default class SceneMng {
     private renderer: WebGLRenderer
@@ -24,7 +25,7 @@ export default class SceneMng {
         this.scene = new GameScene(this);
     }
 
-    async Init(container: HTMLDivElement): Promise<boolean> {
+    async Init(container: HTMLDivElement, gameMode: GAME_MODE): Promise<boolean> {
         LoadMng.EnableLoadingScene(true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
@@ -34,8 +35,18 @@ export default class SceneMng {
         ModelDataMng.LoadAsync('./assets/factory/eve2.glb', 'eve2');
         ModelDataMng.LoadAsync('./assets/factory/swat-guy.glb', 'swat-guy');
         ModelDataMng.LoadAsync('./assets/factory/swat-guy2.glb', 'swat-guy2');
+        
+        switch (gameMode) {
+            case GAME_MODE.SINGE:
+                await this.scene.Init();
+                break;
+            case GAME_MODE.MULTIPLAYER:
+                break;
+            default:
+                console.error('ERROR: Invalid game mode !');
+                break;
+        }
 
-        await this.scene.Init();
         this.Run();
         LoadMng.EnableLoadingScene(false);
 

@@ -2,6 +2,7 @@ import { Client, Room } from "colyseus.js";
 import { AnimatePresence } from "framer-motion";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { GAME_MODE } from "./common/enum/gamemode";
 
 import { HOME_PATH, PATH } from "./common/enum/path";
 
@@ -18,9 +19,12 @@ const MemoHome = memo(Home);
 const App = () => {
     const [client, setClient] = useState<Client>();
     const [room, setRoom] = useState<Room>();
+    
+    // NOTE: Checking if user enters game page correctly
     const [inGameAuth, setInGameAuth] = useState(false);
-
+    const [gameMode, setGameMode] = useState<GAME_MODE>();
     const [activeGame, setActiveGame] = useState(false);
+    //
 
     const path = useLocation().pathname;
 
@@ -30,11 +34,10 @@ const App = () => {
     const isPathValid = Object.values(PATH).includes(path as PATH);
 
     const roomContext = {
-        client,
-        setClient,
-        room,
-        setRoom,
-        setInGameAuth
+        client, setClient,
+        room, setRoom,
+        setInGameAuth,
+        gameMode, setGameMode,
     };
 
     const navigate = useNavigate();

@@ -32,7 +32,7 @@ export default class GameApp {
 
         EventController.on('init', async (message: InitMessage) => {
             LoadMng.SetLoadingSceneFunc(message.setIsLoadingResource);
-            await this.sceneMng.Init(message.container);
+            await this.sceneMng.Init(message.container, message.gameMode);
         });
     }
 

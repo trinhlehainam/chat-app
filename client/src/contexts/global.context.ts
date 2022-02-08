@@ -1,5 +1,6 @@
 import { Client, Room } from "colyseus.js";
 import { Dispatch, SetStateAction, createContext } from "react";
+import { GAME_MODE } from "../common/enum/gamemode";
 
 interface Props {
     client?: Client,
@@ -9,6 +10,9 @@ interface Props {
     setRoom: Dispatch<SetStateAction<Room | undefined>>,
 
     setInGameAuth: Dispatch<SetStateAction<boolean>>,
+
+    gameMode?: GAME_MODE,
+    setGameMode: Dispatch<SetStateAction<GAME_MODE | undefined>>,
 };
 
 const GlobalContext = createContext<Partial<Props>>({});

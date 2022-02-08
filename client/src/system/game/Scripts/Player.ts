@@ -71,7 +71,7 @@ export default class Player {
         this.actions[this.currentActionKey].play();
         const transform = this.enitty.transform;
         transform.SetThreeObject(this.model);
-        transform.scale.multiplyScalar(3);
+        transform.scale.multiplyScalar(6);
 
         this.scene.add(this.model);
 
@@ -127,10 +127,6 @@ export default class Player {
         }
 
         let cursor: boolean = false;
-        if (this.constroller.IsPressed(INPUT_ID.SHIFT)) {
-            cursor = true;
-        }
-
         if (this.constroller.IsPressed(INPUT_ID.ADD)) {
             cursor = true;
         }
