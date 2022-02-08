@@ -20,6 +20,7 @@ import JoinMessageBox from "../components/rooms/joinerrorbox.component";
 import FindBox from "../components/rooms/findbox.component";
 import RoomCancelButton from "../components/rooms/cancelbutton.component";
 import AvailableRooms from "../components/rooms/availablerooms.component";
+import { PATH } from "../common/enum/path";
 
 const MemoBorder = memo(RoomBorder);
 const MemoTitle = memo(RoomTitle);
@@ -51,7 +52,7 @@ const Rooms = () => {
         client && client.joinById(roomId)
             .then((room) => {
                 setRoom && setRoom(room);
-                navigate('/lobby', { replace: true })
+                navigate(PATH.LOBBY, { replace: true })
             })
             .catch((e) => {
                 setJoinErrorMessage(e.message);
@@ -88,7 +89,7 @@ const Rooms = () => {
     }, [client, setRoom, refresh]);
 
     const navigateBack = useCallback(() => {
-        navigate('/play', { replace: true });
+        navigate(PATH.PLAY_MEMU, { replace: true });
     }, [navigate]);
 
     // TODO: layout close button

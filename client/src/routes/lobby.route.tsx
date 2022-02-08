@@ -12,6 +12,7 @@ import PlayerCards, { PlayerInfo, PlayerInfoMap } from '../components/lobby/play
 import LobbyTitle from '../components/lobby/title.component';
 import { Room } from 'colyseus.js';
 import { GAME_MODE } from '../common/enum/gamemode';
+import { PATH } from '../common/enum/path';
 
 const MemoTitle = memo(LobbyTitle);
 const MemoNavButtons = memo(NavButtons);
@@ -43,7 +44,7 @@ const Lobby = () => {
     // NOTE: return to home page if client hasn't connected to any room
     useEffect(() => {
         if (!room) {
-            navigate('/', { replace: true });
+            navigate(PATH.ROOT, { replace: true });
             return;
         }
     }, [room, navigate]);
@@ -265,7 +266,7 @@ const Lobby = () => {
                 setRoom && setRoom(gameRoom);
                 setInGameAuth && setInGameAuth(true);
                 setGameMode && setGameMode(GAME_MODE.MULTIPLAYER);
-                navigate('/game', { replace: true });
+                navigate(PATH.GAME, { replace: true });
             });
 
         return () => { isMounted = false; };

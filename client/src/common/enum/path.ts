@@ -1,6 +1,6 @@
 enum HOME_PATH {
     ROOT = '/',
-    PLAY_MEMU = '/play',
+    PLAY_MEMU = '/playmenu',
     LOGIN = '/login',
     SETTING = '/setting',
     ROOMS = '/rooms',
@@ -9,7 +9,7 @@ enum HOME_PATH {
 
 enum PATH {
     ROOT = '/',
-    PLAY_MEMU = '/play',
+    PLAY_MEMU = '/playmenu',
     LOGIN = '/login',
     SETTING = '/setting',
     ROOMS = '/rooms',

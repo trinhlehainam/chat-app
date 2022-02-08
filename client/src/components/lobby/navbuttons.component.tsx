@@ -5,6 +5,7 @@ import cx from 'classnames'
 import GlobalContext from "../../contexts/global.context";
 import LobbyButton from "./button.component";
 import { PlayerInfoMap } from "./playercards.component";
+import { PATH } from "../../common/enum/path";
 
 const MemoButton = memo(LobbyButton);
 
@@ -49,7 +50,7 @@ const NavButtons: FC<Props> = ({ classname, setInfoState, myId, playerInfoMap, u
             .then(() => {
                 setRoom && setRoom(undefined);
             });
-        navigate('/rooms', { replace: true })
+        navigate(PATH.ROOMS, { replace: true })
     }, [setRoom, navigate, room]);
 
     const start = useCallback(() => {
