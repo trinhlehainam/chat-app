@@ -1,10 +1,12 @@
 export default class UIController {
     private static instance?: UIController
 
+    private eventMap: Map<string, Function>
     private setLoadingScene?: Function
     private setWaitingAllOtherPlayer?: Function
 
     private constructor() {
+        this.eventMap = new Map();
     }
 
     static Create(): void {

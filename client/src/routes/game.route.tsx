@@ -8,7 +8,7 @@ import GlobalContext from "../contexts/global.context";
 
 import EventController from "../system/EventController";
 import GameApp from "../system/game/app";
-import UIController from "../system/game/Systems/UIController";
+import UIController from "../system/UIController";
 
 const Game = () => {
     const { room, gameMode, playerNum } = useContext(GlobalContext);

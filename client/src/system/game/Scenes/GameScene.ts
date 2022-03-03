@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-// import Stats from 'three/examples/jsm/libs/stats.module'
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 import { ModelDataMng } from '../Systems/LoadMng'
 
@@ -18,7 +18,7 @@ export default class GameScene extends IScene {
     private controls: OrbitControls
 
     // DEBUG:
-    // private stats: Stats
+    private stats: Stats
 
     constructor(sceneMng: SceneMng) {
         super(sceneMng);
@@ -57,13 +57,13 @@ export default class GameScene extends IScene {
         this.controls.minAzimuthAngle = 0;
         //
 
-        /* this.stats = Stats();
-        document.body.appendChild(this.stats.domElement); */
+        this.stats = Stats();
+        document.body.appendChild(this.stats.domElement);
 
     }
 
     Release(): void {
-        // document.body.removeChild(this.stats.domElement);
+        document.body.removeChild(this.stats.domElement);
         this.player?.release();
     }
 
@@ -111,7 +111,7 @@ export default class GameScene extends IScene {
     Render(): void {
         this.gameMng?.Render();
         this.player?.render();
-        // this.stats.update();
+        this.stats.update();
     }
 
     ChangeScene(scene: IScene): Promise<IScene> {

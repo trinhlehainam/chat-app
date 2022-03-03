@@ -6,7 +6,7 @@ import IScene from '../Scenes/IScene'
 import GameScene from '../Scenes/GameScene'
 import { GAME_MODE } from '../../../common/enum/gamemode'
 import { Room } from 'colyseus.js'
-import UIController from './UIController'
+import UIController from '../../UIController'
 
 export default class SceneMng {
     private renderer: WebGLRenderer

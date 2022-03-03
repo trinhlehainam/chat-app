@@ -3,7 +3,7 @@ import { LoadMng } from './Systems/LoadMng';
 
 import EventController from '../EventController';
 import { InitMessage } from '../../common/message/messages';
-import UIController from './Systems/UIController';
+import UIController from '../UIController';
 
 export default class GameApp {
     private static instance?: GameApp
