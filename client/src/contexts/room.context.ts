@@ -19,7 +19,7 @@ interface Props {
     refresh: Function,
     join: Function,
     find: Function
-    cancelMessage: Function,
+    closeJoinErrorBox: Function,
 }
 
 const RoomContext = createContext<Partial<Props>>({});

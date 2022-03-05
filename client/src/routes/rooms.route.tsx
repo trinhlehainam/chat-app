@@ -16,7 +16,7 @@ import RoomLine3 from "../svg/room/roomline-3.svg";
 import RoomTitle from "../components/rooms/title.component";
 import NavButtons from "../components/rooms/navbuttons.component";
 import CreateBox from "../components/rooms/createbox.component";
-import JoinMessageBox from "../components/rooms/joinerrorbox.component";
+import JoinErrorBox from "../components/rooms/joinerrorbox.component";
 import FindBox from "../components/rooms/findbox.component";
 import RoomCancelButton from "../components/rooms/cancelbutton.component";
 import AvailableRooms from "../components/rooms/availablerooms.component";
@@ -60,7 +60,7 @@ const Rooms = () => {
             });
     }, [client, setRoom, navigate, setJoinError, setJoinErrorMessage]);
 
-    const cancelMessage = useCallback(() => {
+    const closeJoinErrorBox = useCallback(() => {
         setJoinError(true);
         refresh();
     }, [setJoinError, refresh]);
@@ -71,7 +71,7 @@ const Rooms = () => {
         isCreateState, setCreateState,
         isFindState, setFindState,
         roomId, setRoomId,
-        refresh, join, cancelMessage,
+        refresh, join, closeJoinErrorBox,
     };
 
     useEffect(() => {
@@ -103,7 +103,7 @@ const Rooms = () => {
                     "text-yellow-custom"
                 )}
             >
-                {!isJoinError && <JoinMessageBox />}
+                {!isJoinError && <JoinErrorBox />}
                 {isCreateState && <MemoCreateBox />}
                 {isFindState && <FindBox />}
                 <div
