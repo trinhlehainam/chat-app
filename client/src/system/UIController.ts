@@ -1,10 +1,10 @@
 export default class UIController {
     private static instance?: UIController
 
-    private overlayBox: Map<string, Function>
+    private overlayBoxMap: Map<string, Function>
 
     private constructor() {
-        this.overlayBox = new Map();
+        this.overlayBoxMap = new Map();
     }
 
     static Create(): void {
@@ -23,19 +23,19 @@ export default class UIController {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        if (instance.overlayBox.has(eventName)) {
+        if (instance.overlayBoxMap.has(eventName)) {
             console.log(`WARN: ${eventName} is already registered !`);
             return;
         }
 
-        instance.overlayBox.set(eventName, toggleLoadingFunc);
+        instance.overlayBoxMap.set(eventName, toggleLoadingFunc);
     }
 
     static SetShowOverlayBox(eventName: string, flag: boolean): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        const event = instance.overlayBox.get(eventName);
+        const event = instance.overlayBoxMap.get(eventName);
         if (!event) {
             console.log(`WARN: ${eventName} has not registered yet !`);
             return;
