@@ -28,7 +28,7 @@ export default class SceneMng {
     }
 
     async Init(container: HTMLDivElement, gameMode: GAME_MODE, playerNum: number, room?: Room): Promise<boolean> {
-        UIController.EnableLoadingScene(true);
+        UIController.SetShowOverlayBox("LoadingResources", true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
         window.addEventListener('resize', this.onResizeWindow.bind(this));
@@ -42,16 +42,16 @@ export default class SceneMng {
             case GAME_MODE.SINGE:
                 await this.scene.InitSingleplayer();
                 this.Run();
-                UIController.EnableLoadingScene(false);
+                UIController.SetShowOverlayBox("LoadingResources", false);
                 return true;
             case GAME_MODE.MULTIPLAYER:
                 if (!room) return false;
                 await this.scene.InitMultiplayer(room, playerNum);
-                UIController.EnableLoadingScene(false);
-                UIController.EnableWaitAllConnectedScene(true);
+                UIController.SetShowOverlayBox("LoadingResources", false);
+                UIController.SetShowOverlayBox("WaitingOtherPlayers", true);
                 room.onMessage('allInitCompleted', () => {
                     this.Run();
-                    UIController.EnableWaitAllConnectedScene(true);
+                    UIController.SetShowOverlayBox("WaitingOtherPlayers", false);
                 })
                 return true;
             default:
@@ -88,13 +88,13 @@ export default class SceneMng {
                 scene => {
                     this.scene = scene;
                     this.Run();
-                    UIController.EnableLoadingScene(false);
+                    UIController.SetShowOverlayBox("LoadingResources", false);
                 }
             );
 
             // Stop loop and wait until change scene set up is done
             this.Stop();
-            UIController.EnableLoadingScene(true);
+            UIController.SetShowOverlayBox("LoadingResources", true);
             return;
         }
 

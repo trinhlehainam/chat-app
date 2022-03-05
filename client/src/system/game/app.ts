@@ -32,8 +32,8 @@ export default class GameApp {
         LoadMng.Create();
 
         EventController.on('init', async (message: InitMessage) => {
-            UIController.SetLoadingSceneFunc(message.setIsLoadingResource);
-            UIController.SetWaitingOtherPlayersScene(message.setIsWaitingOtherPlayers);
+            UIController.RegisterOverlayBox("LoadingResources", message.setIsLoadingResource);
+            UIController.RegisterOverlayBox("WaitingOtherPlayers", message.setIsLoadingResource);
             await this.sceneMng.Init(message.container, message.gameMode, message.playerNum, message.room);
         });
     }

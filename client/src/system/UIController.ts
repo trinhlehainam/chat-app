@@ -1,12 +1,10 @@
 export default class UIController {
     private static instance?: UIController
 
-    private eventMap: Map<string, Function>
-    private setLoadingScene?: Function
-    private setWaitingAllOtherPlayer?: Function
+    private overlayBox: Map<string, Function>
 
     private constructor() {
-        this.eventMap = new Map();
+        this.overlayBox = new Map();
     }
 
     static Create(): void {
@@ -21,32 +19,29 @@ export default class UIController {
         }
     }
 
-    static SetLoadingSceneFunc(func: Function): void {
+    static RegisterOverlayBox(eventName: string, toggleLoadingFunc: Function): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        instance.setLoadingScene = func;
+        if (instance.overlayBox.has(eventName)) {
+            console.log(`WARN: ${eventName} is already registered !`);
+            return;
+        }
+
+        instance.overlayBox.set(eventName, toggleLoadingFunc);
     }
 
-    static EnableLoadingScene(flag: boolean): void {
+    static SetShowOverlayBox(eventName: string, flag: boolean): void {
         if (!this.IsCreated()) return;
         const instance = this.instance!;
 
-        instance.setLoadingScene!(flag);
-    }
+        const event = instance.overlayBox.get(eventName);
+        if (!event) {
+            console.log(`WARN: ${eventName} has not registered yet !`);
+            return;
+        }
 
-    static SetWaitingOtherPlayersScene(func: Function): void {
-        if (!this.IsCreated()) return;
-        const instance = this.instance!;
-
-        instance.setWaitingAllOtherPlayer = func;
-    }
-
-    static EnableWaitAllConnectedScene(flag: boolean): void {
-        if (!this.IsCreated()) return;
-        const instance = this.instance!;
-
-        instance.setWaitingAllOtherPlayer!(flag);
+        event(flag);
     }
 
     private static IsCreated(): boolean {
