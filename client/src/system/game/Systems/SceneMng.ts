@@ -7,6 +7,7 @@ import GameScene from '../Scenes/GameScene'
 import { GAME_MODE } from '../../../common/enum/gamemode'
 import { Room } from 'colyseus.js'
 import UIController from '../../UIController'
+import { UI_EVENT } from '../../../common/enum/uievent'
 
 export default class SceneMng {
     private renderer: WebGLRenderer
@@ -28,7 +29,7 @@ export default class SceneMng {
     }
 
     async Init(container: HTMLDivElement, gameMode: GAME_MODE, playerNum: number, room?: Room): Promise<boolean> {
-        UIController.SetShowOverlayBox("LoadingResources", true);
+        UIController.SetShowOverlayBox(UI_EVENT.LOADING_RESOURCES, true);
         this.container = container;
         this.container.appendChild(this.renderer.domElement);
         window.addEventListener('resize', this.onResizeWindow.bind(this));
@@ -42,16 +43,16 @@ export default class SceneMng {
             case GAME_MODE.SINGE:
                 await this.scene.InitSingleplayer();
                 this.Run();
-                UIController.SetShowOverlayBox("LoadingResources", false);
+                UIController.SetShowOverlayBox(UI_EVENT.LOADING_RESOURCES, false);
                 return true;
             case GAME_MODE.MULTIPLAYER:
                 if (!room) return false;
                 await this.scene.InitMultiplayer(room, playerNum);
-                UIController.SetShowOverlayBox("LoadingResources", false);
-                UIController.SetShowOverlayBox("WaitingOtherPlayers", true);
+                UIController.SetShowOverlayBox(UI_EVENT.LOADING_RESOURCES, false);
+                UIController.SetShowOverlayBox(UI_EVENT.WAITING_OTHER_PLAYERS, true);
                 room.onMessage('allInitCompleted', () => {
                     this.Run();
-                    UIController.SetShowOverlayBox("WaitingOtherPlayers", false);
+                    UIController.SetShowOverlayBox(UI_EVENT.WAITING_OTHER_PLAYERS, false);
                 })
                 return true;
             default:
@@ -88,13 +89,13 @@ export default class SceneMng {
                 scene => {
                     this.scene = scene;
                     this.Run();
-                    UIController.SetShowOverlayBox("LoadingResources", false);
+                    UIController.SetShowOverlayBox(UI_EVENT.LOADING_RESOURCES, false);
                 }
             );
 
             // Stop loop and wait until change scene set up is done
             this.Stop();
-            UIController.SetShowOverlayBox("LoadingResources", true);
+            UIController.SetShowOverlayBox(UI_EVENT.LOADING_RESOURCES, true);
             return;
         }
 
